@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { random } from "../Helper/Utils";
-import { calculate } from "../Helper/SkillCalculator";
 import { isEqual } from "lodash";
 import monsters from "../Content/Monsters";
+import {calculate} from "../Helper/SkillCalculator";
 
 const CELLTYPE = ["chest", "monster", "empty"];
 const CELL = {
@@ -182,7 +182,6 @@ export const useDungeon = (size = 5, depth = 1) => {
               case "empty":
                 break;
               case "chest":
-                //player.gold = player.gold + floor[offset].content;
                 newCells[offset].content = 0;
                 break;
               case "monster":

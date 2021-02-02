@@ -1,22 +1,20 @@
 import React from "react";
-import Character from "./Character";
+
+import { useDungeon } from "./useDungeon";
+import { useCharacter } from "./useCharacter";
+import { usePlayer } from "./usePlayer";
+
+import { Character } from "./Character";
 import { Floor } from "./Floor";
 import { Cell } from "./Cell";
 
 import colors from "../Helper/Colors";
-import characters from "../Content/Characters";
-import { calculate } from "../Helper/SkillCalculator";
-import { useDungeon } from "./useDungeon";
 
-export const Game = () => {
+export const Game = ({selectedCharacter = 0}) => {
     const size = 5;
     let { floor, openClosedCell } = useDungeon(size, 1);
-
-    let character = Object.assign({}, characters[0]);
-    character = calculate(character);
-    let player = {
-        gold: 0
-    };
+    let { character } = useCharacter(selectedCharacter);
+    let { player, addGold } = usePlayer();
 
     return (
         <div
@@ -36,6 +34,7 @@ export const Game = () => {
                         openCell={() => openClosedCell(cellValue.x, cellValue.y)}
                         offset={cellOffset}
                         cellValue={cellValue}
+                        addGold={() => addGold(cellValue.content)}
                     />
                 ))}
             </Floor>
