@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import colors from "../Helper/Colors";
-import char1 from "../Assets/char1.jpg";
+import char1 from "../Assets/Thief.jpg";
 
 class Character extends Component {
   render() {
     return (
       <div style={style}>
-        <div style={{ height: "256px" }}>
+        <div style={{ height: "256px", width: "256px" }}>
           <img src={char1} height="256" width="256" alt="Character icon" />
         </div>
         <div>
@@ -152,8 +152,9 @@ class Character extends Component {
 const style = {
   backgroundColor: colors.teal,
   display: "flex",
-  width: "256px",
-  minHeight: "100%",
+  justifyContent: "space-evenly",
+  width: "100%",
+  minHeight: "256px",
   zIndex: 5
 };
 

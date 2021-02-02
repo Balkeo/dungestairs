@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import colors from "../Helper/Colors";
-import openedChest from "../Assets/opened-chest.png";
-import closedChest from "../Assets/closed-chest.png";
+import openedChest from "../Assets/Chest-opened.png";
+import closedChest from "../Assets/Chest-closed.png";
 
 function useHover() {
   const [hover, setHover] = useState(false);
@@ -52,7 +52,7 @@ export const Cell = ({
           !canClick && !isOpen
             ? colors.red
             : isOpen
-            ? "#3E5770"
+            ? /*"#3E5770"*/ colors.cyan
             : (isHovered || canClick) && !isHovered
             ? "#34495e"
             : "#3E5770",
@@ -60,31 +60,39 @@ export const Cell = ({
         fontSize: "1em",
         fontWeight: "bold",
         fontFamily: "Helvetica, sans-serif",
-        cursor: isOpen ? "default" : canClick ? "pointer" : "default"
+        cursor: isOpen ? "default" : canClick ? "pointer" : "default",
+        width: "100px",
+        height: "100px"
       }}
     >
       {isOpen ? (
         <>
           {cellValue.type === "monster" ? (
-            <>
+              <div
+                  className="Cell"
+                  style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center"
+                  }}>
               <img
                 alt={cellValue.type}
                 src={cellValue.content.icon}
-                width={130}
-                height={130}
+                width={80}
+                height={80}
               />
               <progress
                 max={cellValue.content.maxHp}
                 value={cellValue.content.hp}
-                style={{ width: "150px" }}
+                style={{ width: "100px" }}
               />
-            </>
+            </div>
           ) : cellValue.type === "chest" ? (
             <img
               alt={cellValue.type}
               src={cellValue.content > 0 ? closedChest : openedChest}
-              width={149.6}
-              height={149.6}
+              width={80}
+              height={80}
             />
           ) : cellValue.type !== "empty" ? (
             cellValue.type

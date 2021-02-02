@@ -9,36 +9,37 @@ import { calculate } from "../Helper/SkillCalculator";
 import { useDungeon } from "./useDungeon";
 
 export const Game = () => {
-  const size = 5;
-  let { floor, openClosedCell } = useDungeon(size, 1);
+    const size = 5;
+    let { floor, openClosedCell } = useDungeon(size, 1);
 
-  let character = Object.assign({}, characters[0]);
-  character = calculate(character);
-  let player = {
-    gold: 0
-  };
+    let character = Object.assign({}, characters[0]);
+    character = calculate(character);
+    let player = {
+        gold: 0
+    };
 
-  return (
-    <div
-      style={{
-        backgroundColor: colors.light,
-        display: "flex",
-        flexDirection: "column"
-      }}
-    >
-      <Floor size={size}>
-        {floor.map((cellValue, cellOffset) => (
-          <Cell
-            key={cellOffset}
-            canClick={cellValue.canClick}
-            isOpen={cellValue.isOpen}
-            openCell={() => openClosedCell(cellValue.x, cellValue.y)}
-            offset={cellOffset}
-            cellValue={cellValue}
-          />
-        ))}
-      </Floor>
-      <Character player={player} character={character} />
-    </div>
-  );
+    return (
+        <div
+            style={{
+                backgroundColor: colors.light,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around"
+            }}
+        >
+            <Floor size={size}>
+                {floor.map((cellValue, cellOffset) => (
+                    <Cell
+                        key={cellOffset}
+                        canClick={cellValue.canClick}
+                        isOpen={cellValue.isOpen}
+                        openCell={() => openClosedCell(cellValue.x, cellValue.y)}
+                        offset={cellOffset}
+                        cellValue={cellValue}
+                    />
+                ))}
+            </Floor>
+            <Character player={player} character={character} />
+        </div>
+    );
 };
