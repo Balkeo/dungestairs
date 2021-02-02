@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import Game from "./Components/Game";
+import "./styles.css";
+import { Game } from "./Dungeon/Game";
 
 class App extends Component {
   render() {
-    return (
-      <div className="App">
-        <Game />
-      </div>
-    );
+    return <div className="App">{/*<Game />*/}</div>;
   }
 }
 
