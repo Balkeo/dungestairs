@@ -17,7 +17,7 @@ export const useCharacter = (selectedCharacter = 0) => {
                 ...previousCharacter,
                 hp: previousCharacter.hp - damage
             };
-            if (newCharacter.hp < 0) {
+            if (newCharacter.hp <= 0) {
                 newCharacter.hp = 0;
             }
             return newCharacter;

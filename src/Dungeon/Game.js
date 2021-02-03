@@ -12,7 +12,7 @@ import colors from "../Helper/Colors";
 
 export const Game = ({selectedCharacter = 0}) => {
     const size = 5;
-    let { floor, openClosedCell } = useDungeon(size, 1);
+    let { floor, openClosedCell, depth } = useDungeon(size);
     let { character, takeDamage } = useCharacter(selectedCharacter);
     let { player, addGold } = usePlayer();
 
@@ -22,10 +22,13 @@ export const Game = ({selectedCharacter = 0}) => {
                 backgroundColor: colors.light,
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "space-around"
+                justifyContent: "space-between",
+                height: "100%"
+                /*backgroundImage: `url(${Stone})`,
+                backgroundRepeat: "repeat"*/
             }}
         >
-            <Floor size={size}>
+            <Floor size={size} depth={depth}>
                 {floor.map((cellValue, cellOffset) => (
                     <Cell
                         key={cellOffset}

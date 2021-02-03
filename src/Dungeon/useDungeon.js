@@ -88,31 +88,24 @@ const generateCells = (size, depth) => {
   return cells;
 };
 
-export const useDungeon = (size = 5, depth = 1) => {
+export const useDungeon = (size = 5, dungeonDepth = 1) => {
+  let [depth, setDepth] = useState(() => dungeonDepth);
   let [cells, setCells] = useState(() => generateCells(size, depth));
 
   const assertCellExist = (x, y) => {
-    if (x < 0 || y < 0 || x > 5 || y > 5) {
-      // console.error(`POS ERROR for ${x} and ${y}`);
+    if (x < 0 || y < 0 || x >= size || y >= size) {
       return false;
     }
     let offset = y * 5 + x;
-    if (typeof cells[offset] === "undefined") {
-    // console.error(`CELL UNDEFINED for offset ${offset}`);
-      return false;
-    }
-    return true;
+    return typeof cells[offset] !== "undefined";
   };
 
   const isOpen = (cell) => {
     return cell.isOpen;
   };
 
-  const isNotMonsterCell = (cell) => {
-    if (cell.type !== "monster") {
-      return true;
-    }
-    return cell.content.hp <= 0;
+  const isMonsterCell = (cell) => {
+    return isOpen(cell) && cell.type === "monster" && cell.content.hp > 0;
   };
 
   const getAdjacentCells = (cell) => {
@@ -141,15 +134,24 @@ export const useDungeon = (size = 5, depth = 1) => {
   }
 
   const canClickOnCell = (cell) => {
-    let canClick = false;
     if (cell.canClick) {
       return true;
     }
+    let canClick = false;
+    let haveMonsterInAdjacentCells = false;
     let adjacentCells = getAdjacentCells(cell);
     adjacentCells.map((adjacentCell) => {
-      canClick = canClick || (isOpen(adjacentCell) && isNotMonsterCell(adjacentCell));
+      if (isMonsterCell(adjacentCell)) {
+        haveMonsterInAdjacentCells = true;
+      }
+      if (isOpen(adjacentCell)) {
+        canClick = true;
+      }
       return adjacentCell;
     });
+    if (haveMonsterInAdjacentCells) {
+      return false;
+    }
 
     return canClick;
   };
@@ -191,7 +193,8 @@ export const useDungeon = (size = 5, depth = 1) => {
                 newCells[offset].content = monsterTakeDamage(newCells[offset].content, characterDamage);
                 break;
               case "Key":
-                newCells = generateCells(size, depth + 1);
+                setDepth(depth + 1)
+                newCells = generateCells(size, depth);
                 break;
               default:
                 break;
@@ -214,5 +217,5 @@ export const useDungeon = (size = 5, depth = 1) => {
   }, [cells]);
 
 
-  return { floor: cells, openClosedCell };
+  return { floor: cells, openClosedCell, depth };
 };
