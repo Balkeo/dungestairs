@@ -10,6 +10,8 @@ export const Cell = ({
     offset = 0,
     cellValue = {},
     addGold,
+    character,
+    takeDamage
 }) => {
 
     const [isHovered, setHover] = useState(false);
@@ -28,8 +30,20 @@ export const Cell = ({
                      if (canClick) {
                          if (cellValue.isOpen && cellValue.type === "chest") {
                              addGold(cellValue.content);
+                             openCell(cellValue.x, cellValue.y);
                          }
-                         openCell(cellValue.x, cellValue.y);
+                         if (cellValue.isOpen && cellValue.type === "monster") {
+                             let monster = cellValue.content;
+                             if (character.spd < monster.spd) {
+                                 takeDamage(monster.atq);
+                                 openCell(cellValue.x, cellValue.y, character.atq);
+                             } else {
+                                 openCell(cellValue.x, cellValue.y, character.atq);
+                                 takeDamage(monster.atq);
+                             }
+                         } else {
+                             openCell(cellValue.x, cellValue.y);
+                         }
                      }
                 }
             }

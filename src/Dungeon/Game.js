@@ -13,7 +13,7 @@ import colors from "../Helper/Colors";
 export const Game = ({selectedCharacter = 0}) => {
     const size = 5;
     let { floor, openClosedCell } = useDungeon(size, 1);
-    let { character } = useCharacter(selectedCharacter);
+    let { character, takeDamage } = useCharacter(selectedCharacter);
     let { player, addGold } = usePlayer();
 
     return (
@@ -31,10 +31,12 @@ export const Game = ({selectedCharacter = 0}) => {
                         key={cellOffset}
                         canClick={cellValue.canClick}
                         isOpen={cellValue.isOpen}
-                        openCell={() => openClosedCell(cellValue.x, cellValue.y)}
+                        openCell={() => openClosedCell(cellValue.x, cellValue.y, character.atq)}
                         offset={cellOffset}
                         cellValue={cellValue}
                         addGold={() => addGold(cellValue.content)}
+                        character={character}
+                        takeDamage={cellValue.type === "monster" ? () => takeDamage(cellValue.content.atq) : null}
                     />
                 ))}
             </Floor>

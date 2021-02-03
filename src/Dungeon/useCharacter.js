@@ -13,12 +13,16 @@ export const useCharacter = (selectedCharacter = 0) => {
 
     const takeDamage = (damage = 0) => {
         setCharacter((previousCharacter) => {
-            return {
+            let newCharacter = {
                 ...previousCharacter,
                 hp: previousCharacter.hp - damage
             };
+            if (newCharacter.hp < 0) {
+                newCharacter.hp = 0;
+            }
+            return newCharacter;
         });
     }
 
-    return { character };
+    return { character, takeDamage };
 }

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { random } from "../Helper/Utils";
 import { isEqual } from "lodash";
-import monsters from "../Content/Monsters";
-import {calculate} from "../Helper/SkillCalculator";
+import { useMonster } from "./useMonster"
 
 const CELLTYPE = ["chest", "monster", "empty"];
 const CELL = {
@@ -19,10 +18,7 @@ const getChestContent = () => {
 };
 
 const initMonsterCell = (depth = 1) => {
-  let monster = Object.assign({}, monsters[random(monsters.length)]);
-  monster = { ...monster, level: depth };
-  monster = calculate(monster);
-  return monster;
+  return useMonster(depth);
 };
 
 const setContent = (type, depth) => {
@@ -167,8 +163,15 @@ export const useDungeon = (size = 5, depth = 1) => {
     return cells;
   };
 
+  const monsterTakeDamage = (monster, damage = 0) => {
+    return {
+      ...monster,
+      hp: monster.hp - damage
+    };
+  }
+
   const openClosedCell = useCallback(
-      (x, y) => {
+      (x, y, characterDamage = 0) => {
         let offset = y * 5 + x;
         if (!assertCellExist(x, y)) {
           return;
@@ -185,7 +188,7 @@ export const useDungeon = (size = 5, depth = 1) => {
                 newCells[offset].content = 0;
                 break;
               case "monster":
-                //fight(x, y);
+                newCells[offset].content = monsterTakeDamage(newCells[offset].content, characterDamage);
                 break;
               case "Key":
                 newCells = generateCells(size, depth + 1);
