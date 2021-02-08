@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import colors from "../Helper/Colors";
 import openedChest from "../Assets/Chest-opened.png";
 import closedChest from "../Assets/Chest-closed.png";
+import openedCell from "../Assets/Opened-Cell.jpg";
+import closedCell from "../Assets/Closed-Cell.jpg";
+import blocked from "../Assets/cant-open.png";
 
 export const Cell = ({
     canClick = false,
@@ -11,7 +13,8 @@ export const Cell = ({
     cellValue = {},
     addGold,
     character,
-    takeDamage
+    takeDamage,
+    isBlocked
 }) => {
 
     const [isHovered, setHover] = useState(false);
@@ -54,61 +57,79 @@ export const Cell = ({
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor:
-                    !canClick && !isOpen
-                        ? colors.red
-                        : isOpen
-                        ? colors.cyan
-                        : (isHovered || canClick) && !isHovered
-                            ? "#34495e"
-                            : "#3E5770",
                 color: "#f8f8f3",
                 fontSize: "1em",
                 fontWeight: "bold",
                 fontFamily: "Helvetica, sans-serif",
-                cursor: isOpen ? "default" : canClick ? "pointer" : "default",
+                cursor: (isHovered && canClick) ? "pointer" : "default",
                 width: "100px",
-                height: "100px"
+                height: "100px",
+                backgroundImage: isOpen ? `url(${openedCell})` : `url(${closedCell})`,
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover'
             }}
         >
-            {isOpen ? (
-                <>
-                    {cellValue.type === "monster" ? (
-                        <div
-                            className="Cell"
-                            style={{
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center"
-                            }}>
-                            <img
-                                alt={cellValue.class}
-                                src={cellValue.content.icon}
-                                width={80}
-                                height={80}
-                            />
-                            <progress
-                                max={cellValue.content.maxHp}
-                                value={cellValue.content.hp}
-                                style={{ width: "100px" }}
-                            />
-                        </div>
-                    ) : cellValue.type === "chest" ? (
-                        <img
-                            alt={cellValue.type}
-                            src={cellValue.content > 0 ? closedChest : openedChest}
-                            width={80}
-                            height={80}
-                        />
-                    ) : cellValue.type !== "empty" ? (
-                        cellValue.type
-                    ) : (
-                        ""
-                    )}
-                </>
-            ) : (
-                ""
-            )}
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: '100%',
+                    width: '100%',
+                    backgroundColor: (isHovered && canClick) ? 'rgba(255, 255, 255, 0.3)' : ""
+                }}
+            >
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column-reverse",
+                        justifyContent: "",
+                        alignItems: "center",
+                        height: '90%',
+                        width: '90%',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        backgroundImage:
+                            !isOpen ? "" :
+                                cellValue.type === "monster" ? `url(${cellValue.content.icon})` :
+                                    cellValue.type === "chest" ? cellValue.content > 0 ? `url(${closedChest})` : `url(${openedChest})` :
+                                        ""
+                    }}
+                >
+                    {
+                        !isOpen ? "" :
+                            cellValue.type === "monster" ?
+                                <progress
+                                    max={cellValue.content.maxHp}
+                                    value={cellValue.content.hp}
+                                    style={{ width: "100px" }}
+                                /> :
+                                cellValue.type === "chest" ? "" :
+                                    cellValue.type === "empty" ? "" :
+                                        cellValue.type
+                    }
+                    {
+                        isBlocked ?
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column-reverse",
+                                    justifyContent: "",
+                                    alignItems: "center",
+                                    height: '90%',
+                                    width: '90%',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                    backgroundSize: 'cover',
+                                    backgroundImage: `url(${blocked})`
+                                }}>
+                            </div>
+                            : ""
+                    }
+                </div>
+            </div>
         </div>
     );
 };

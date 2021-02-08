@@ -1,89 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
-import { random } from "../Helper/Utils";
 import { isEqual } from "lodash";
-import { useMonster } from "./useMonster"
-
-const CELLTYPE = ["chest", "monster", "empty"];
-const CELL = {
-  x: 0,
-  y: 0,
-  isOpen: false,
-  type: "",
-  content: "",
-  canClick: false
-};
-
-const getChestContent = () => {
-  return 5 + random(10);
-};
-
-const initMonsterCell = (depth = 1) => {
-  return useMonster(depth);
-};
-
-const setContent = (type, depth) => {
-  switch (type) {
-    case "empty":
-      return "";
-    case "chest":
-      return getChestContent();
-    case "monster":
-      return initMonsterCell(depth);
-    default:
-      return;
-  }
-};
+import { generateCellForDepth, getEntranceCell, getKeyCell } from "./useCell"
 
 const generateCells = (size, depth) => {
-  const ENTRANCECELLPOSS = {
-    x: (size - 1) / 2,
-    y: size - 1
-  };
-  const ENTRANCECELL = {
-    type: "Entrance",
-    content: "",
-    canClick: false,
-    isOpen: true,
-    offset: ENTRANCECELLPOSS.y * size + ENTRANCECELLPOSS.x,
-    x: ENTRANCECELLPOSS.x,
-    y: ENTRANCECELLPOSS.y
-  };
-
-  let keyCell = {};
-  do {
-    keyCell = {
-      x: random(size),
-      y: random(size)
-    };
-  } while (keyCell.y * size + keyCell.x === ENTRANCECELL.offset);
-  let cells = [...new Array(size ** 2)].map(() => CELL);
+  let cells = [];
+  let entranceCell = getEntranceCell(size);
+  let keyCell = getKeyCell(size);
 
   for (let row = 0; row < size; row++) {
     for (let cell = 0; cell < size; cell++) {
       let offset = row * size + cell;
-      let type = CELLTYPE[random(3)];
-      cells[offset] = {
-        ...cells[offset],
-        type: type,
-        content: setContent(type, depth),
-        offset: offset,
-        x: cell,
-        y: row
-      }
+      cells[offset] = generateCellForDepth(depth, cell, row, size);
     }
   }
 
-  cells[ENTRANCECELL.offset] = ENTRANCECELL;
-  cells[keyCell.y * size + keyCell.x] = {
-    ...cells[keyCell.y * size + keyCell.x],
-    type: "Key",
-    content: "",
-    canClick: false,
-    isOpen: false,
-    offset: keyCell.y * size + keyCell.x,
-    x: keyCell.x,
-    y: keyCell.y
-  };
+  cells[entranceCell.offset] = entranceCell;
+  cells[keyCell.offset] = keyCell;
 
   return cells;
 };
@@ -105,8 +37,28 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   };
 
   const isMonsterCell = (cell) => {
-    return isOpen(cell) && cell.type === "monster" && cell.content.hp > 0;
+    return isOpen(cell) && cell.type === "monster";
   };
+
+  const isChestCell = (cell) => {
+    return isOpen(cell) && cell.type === "chest";
+  };
+
+  const isEmptyCell = (cell) => {
+    return isOpen(cell) && cell.type === "empty";
+  }
+
+  const isClearedCell = (cell) => {
+    if (isEmptyCell(cell)) {
+      return true;
+    }
+    if (isMonsterCell(cell)) {
+      return cell.content.hp <= 0;
+    }
+    if (isChestCell(cell)) {
+      return cell.content === 0;
+    }
+  }
 
   const getAdjacentCells = (cell) => {
     let x = cell.x;
@@ -133,15 +85,23 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
     return adjacentCells;
   }
 
+  const haveMonsterInAdjacentCells = (adjacentCells) => {
+    let haveMonsterInAdjacentCells = false;
+    adjacentCells.map((adjacentCell) => {
+      if (isMonsterCell(adjacentCell) && !isClearedCell(adjacentCell)) {
+        haveMonsterInAdjacentCells = true;
+      }
+      return adjacentCell;
+    });
+    return haveMonsterInAdjacentCells;
+  }
+
   const canClickOnCell = (cell) => {
-    if (cell.canClick) {
-      return true;
-    }
-    let canClick = false;
+    let canClick = cell.canClick;
     let haveMonsterInAdjacentCells = false;
     let adjacentCells = getAdjacentCells(cell);
     adjacentCells.map((adjacentCell) => {
-      if (isMonsterCell(adjacentCell)) {
+      if (isMonsterCell(adjacentCell) && !isClearedCell(adjacentCell)) {
         haveMonsterInAdjacentCells = true;
       }
       if (isOpen(adjacentCell)) {
@@ -153,13 +113,14 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
       return false;
     }
 
-    return canClick;
+    return canClick && !isClearedCell(cell);
   };
 
   const checkOpenStatusOfAllCells = () => {
     cells = cells.map((cellValue) => {
       var temp = Object.assign({}, cellValue);
       temp.canClick = canClickOnCell(cellValue);
+      temp.isBlocked = haveMonsterInAdjacentCells(getAdjacentCells(cellValue));
       return temp;
     });
     return cells;
@@ -182,6 +143,7 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
           let newCells = [...previousCells];
           if (!newCells[offset].isOpen) {
             newCells[offset].isOpen = true;
+            newCells[offset].canClick = isEmptyCell(newCells[offset])
           } else {
             switch (newCells[offset].type) {
               case "empty":

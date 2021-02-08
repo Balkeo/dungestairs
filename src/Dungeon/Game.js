@@ -40,6 +40,8 @@ export const Game = ({selectedCharacter = 0}) => {
                         addGold={() => addGold(cellValue.content)}
                         character={character}
                         takeDamage={cellValue.type === "monster" ? () => takeDamage(cellValue.content.atq) : null}
+                        isMonster={cellValue.type  === "monster" && cellValue.content.hp > 0}
+                        isBlocked={cellValue.isBlocked}
                     />
                 ))}
             </Floor>
