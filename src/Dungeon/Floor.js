@@ -1,42 +1,51 @@
-import React from "react";
-import colors from "../Helper/Colors";
+import React from 'react'
+import PropTypes from 'prop-types'
+import colors from '../Helper/Colors'
 
-export const Floor = ({ children, size, depth }) => {
+export const Floor = ({ children, size, depth, player }) => {
   return (
       <div
           style={{
-              display: "flex",
-              flexDirection: "column"
+            display: 'flex',
+            flexDirection: 'column'
           }}
       >
         <div
             style={{
-                margin: "auto",
-                marginTop: "15px",
-                backgroundColor: colors.grayDark,
-                color: colors.light,
-                lineHeight: "20px",
-                height: "20px",
-                width: "130px",
-                border: `1px solid ${colors.grayDark}`,
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px"
+              margin: 'auto',
+              marginTop: '15px',
+              backgroundColor: colors.grayDark,
+              color: colors.light,
+              lineHeight: '20px',
+              height: '20px',
+              border: `1px solid ${colors.grayDark}`,
+              borderTopLeftRadius: '10px',
+              borderTopRightRadius: '10px',
+              padding: '3px 5px'
             }}
-        >Depth : {depth}</div>
+        >
+            Gold : {player.gold ? player.gold : '0'} | Depth : {depth}
+        </div>
         <div
           style={{
-            display: "grid",
+            display: 'grid',
             gridTemplate: `repeat(${size}, 1fr) / repeat(${size}, 1fr)`,
-            gridGap: "12px",
+            gridGap: '12px',
             width: `${size * 110}px`,
             height: `${size * 110}px`,
-            padding: "12px",
+            padding: '12px',
             backgroundColor: colors.grayDark,
-            margin: "0 auto"
+            margin: '0 auto'
           }}
         >
           {children}
         </div>
       </div>
-  );
-};
+  )
+}
+Floor.propTypes = {
+  children: PropTypes.object,
+  size: PropTypes.number,
+  depth: PropTypes.number,
+  player: PropTypes.object
+}

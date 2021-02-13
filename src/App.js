@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import "./styles.css";
-import { Game } from "./Dungeon/Game";
+import React, { Component } from 'react'
+import './styles.css'
+import { Game } from './Dungeon/Game'
 
 class App extends Component {
-  render() {
+  render () {
     return <div className="App">
       <Game />
-    </div>;
+    </div>
   }
 }
 
-export default App;
+export default App

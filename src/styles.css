@@ -11,3 +11,8 @@ body, #root, .App {
 .App {
   text-align: center;
 }
+
+progress::-moz-progress-bar, progress::-webkit-progress-value, progress
+{
+  background: red;
+}

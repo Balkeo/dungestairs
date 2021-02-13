@@ -1,8 +1,10 @@
-import jexl from "jexl-sync";
+import jexl from 'jexl-sync'
 
-export function calculate(character) {
-  character.skills.forEach(function (item) {
-    character[item.type] = jexl.eval(item.effect, character)
+export function calculate (character) {
+  character.skills.forEach(function (skill) {
+    skill.effetcs.forEach(function (effect) {
+      character[effect.target] = jexl.eval(effect.effect, character)
+    })
   })
-  return character;
+  return character
 }

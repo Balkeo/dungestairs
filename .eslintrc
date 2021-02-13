@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "react-app",
+    "standard",
+    "standard-react",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react",
+    "prettier/standard",
+    "plugin:flowtype/recommended"
+  ],
+  "plugins": ["flowtype"],
+  "rules": {
+    "camelcase": [
+      "error",
+      {
+        "properties": "never",
+        "allow": ["UNSAFE_componentWillReceiveProps"]
+      }
+    ],
+    "curly": ["error", "all"],
+    "react/jsx-fragments": ["error", "element"],
+    "react/jsx-handler-names": "off",
+    "react/prop-types": "off",
+    "import/no-anonymous-default-export": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "16.11",
+      "flowVersion": "0.112"
+    }
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  }
+}
