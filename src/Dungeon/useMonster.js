@@ -1,4 +1,4 @@
-import monsters from '../Content/Monsters'
+import monsters from './Content/Monsters'
 import { calculate } from '../Helper/SkillCalculator'
 import { random } from '../Helper/Utils'
 

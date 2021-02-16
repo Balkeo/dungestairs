@@ -127,10 +127,14 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   }
 
   const monsterTakeDamage = (monster, damage = 0) => {
-    return {
+    const newMonster = {
       ...monster,
       hp: monster.hp - damage
     }
+    if (newMonster.hp <= 0) {
+      newMonster.hp = 0
+    }
+    return newMonster
   }
 
   const openClosedCell = useCallback(

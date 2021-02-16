@@ -6,7 +6,7 @@ import closedChest from '../Assets/Chest-closed.png'
 import openedCell from '../Assets/Opened-Cell.jpg'
 import closedCell from '../Assets/Closed-Cell.jpg'
 import blocked from '../Assets/cant-open.png'
-import colors from '../Helper/Colors'
+import Colors from '../Helper/Colors'
 
 export const Cell = ({
   cellValue,
@@ -54,7 +54,7 @@ export const Cell = ({
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              color: colors.light,
+              color: Colors.white75,
               fontSize: '1em',
               fontWeight: 'bold',
               fontFamily: 'Helvetica, sans-serif',
@@ -113,8 +113,9 @@ export const Cell = ({
                               ? ''
                               : cellValue.type === 'monster'
                                 ? <Gauge
-                                        actual={cellValue.content.hp}
-                                        max={cellValue.content.maxHp}
+                                        value={cellValue.content.hp}
+                                        maxValue={cellValue.content.maxHp}
+                                        showValue={false}
                                     />
                                 : cellValue.type === 'chest'
                                   ? ''
@@ -149,7 +150,7 @@ export const Cell = ({
 Cell.propTypes = {
   cellValue: PropTypes.object,
   character: PropTypes.object,
-  openCell: PropTypes.function,
-  addGold: PropTypes.function,
-  takeDamage: PropTypes.function
+  openCell: PropTypes.func,
+  addGold: PropTypes.func,
+  takeDamage: PropTypes.func
 }

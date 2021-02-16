@@ -30,8 +30,8 @@ const CELL = {
   isBlocked: false
 }
 
-const getChestContent = () => {
-  return 5 + random(10)
+const getChestContent = (depth = 1) => {
+  return depth + random(5)
 }
 
 const initMonsterCell = (depth = 1) => {
@@ -43,7 +43,7 @@ const setContent = (type, depth) => {
     case 'empty':
       return ''
     case 'chest':
-      return getChestContent()
+      return getChestContent(depth)
     case 'monster':
       return initMonsterCell(depth)
     default:

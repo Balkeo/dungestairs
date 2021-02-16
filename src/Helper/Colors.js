@@ -1,45 +1,65 @@
-const blue = '#007bff'
-const indigo = '#6610f2'
-const purple = '#6f42c1'
-const pink = '#e83e8c'
-const red = '#dc3545'
-const orange = '#fd7e14'
-const yellow = '#ffc107'
-const green = '#28a745'
-const teal = '#20c997'
-const cyan = '#17a2b8'
-const white = '#fff'
-const gray = '#6c757d'
-const grayDark = '#343a40'
-const primary = '#007bff'
-const success = '#28a745'
-const info = '#17a2b8'
-const warning = '#ffc107'
-const danger = '#dc3545'
-const light = '#f8f9fa'
-const dark = '#343a40'
+const background = '#2f2f2f'
+const blue = '#00ccff'
+const blueLight = '#00DBFF'
+const yellow = '#ffd050'
+const yellowLight = '#FFDE67'
+const green = '#2ec973'
+const green75 = 'rgba(46,201,115,0.75)'
+const greenLight = '#3BD995'
+const red = '#ff2d55'
+const pink = '#d577ed'
+const pinkLight = '#E19AF2'
+const grey = '#8e8e8e'
+const greyLight = '#AFAFAF'
+const dark1 = '#444444'
+const dark2 = '#3d3d3d'
+const dark3 = '#181818'
+const brown1 = '#2f2f2f'
+const brown2 = '#272727'
+const carbon = '#1f1f1f'
+const white5 = 'rgba(255,255,255,0.05)'
+const white10 = 'rgba(255,255,255,0.1)'
+const white20 = 'rgba(255,255,255,0.2)'
+const white30 = 'rgba(255,255,255,0.3)'
+const white50 = 'rgba(255,255,255,0.5)'
+const white75 = 'rgba(255,255,255,0.75)'
+const white100 = 'rgba(255,255,255,1)'
+const black10 = 'rgba(0,0,0,0.1)'
+const black20 = 'rgba(0,0,0,0.2)'
+const black30 = 'rgba(0,0,0,0.3)'
+const black50 = 'rgba(0,0,0,0.5)'
 
-const colors = {
+const Colors = {
+  background,
   blue,
-  indigo,
-  purple,
-  pink,
-  red,
-  orange,
+  blueLight,
   yellow,
+  yellowLight,
   green,
-  teal,
-  cyan,
-  white,
-  gray,
-  grayDark,
-  primary,
-  success,
-  info,
-  warning,
-  danger,
-  light,
-  dark
+  greenLight,
+  green75,
+  red,
+  pink,
+  pinkLight,
+  grey,
+  greyLight,
+  dark1,
+  dark2,
+  dark3,
+  brown1,
+  brown2,
+  carbon,
+  white5,
+  white10,
+  white20,
+  white30,
+  white50,
+  white75,
+  white100,
+  black10,
+  black20,
+  black30,
+  black50
 }
 
-export default colors
+export default Colors

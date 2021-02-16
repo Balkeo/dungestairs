@@ -1,24 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import colors from '../Helper/Colors'
+import Colors from '../Helper/Colors'
 
 export const Floor = ({ children, size, depth, player }) => {
   return (
       <div
           style={{
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            width: '100%'
           }}
       >
         <div
             style={{
-              margin: 'auto',
-              marginTop: '15px',
-              backgroundColor: colors.grayDark,
-              color: colors.light,
+              margin: '15px auto 0',
+              backgroundColor: Colors.carbon,
+              color: Colors.white75,
               lineHeight: '20px',
               height: '20px',
-              border: `1px solid ${colors.grayDark}`,
+              border: `1px solid ${Colors.carbon}`,
               borderTopLeftRadius: '10px',
               borderTopRightRadius: '10px',
               padding: '3px 5px'
@@ -34,7 +34,7 @@ export const Floor = ({ children, size, depth, player }) => {
             width: `${size * 110}px`,
             height: `${size * 110}px`,
             padding: '12px',
-            backgroundColor: colors.grayDark,
+            backgroundColor: Colors.carbon,
             margin: '0 auto'
           }}
         >

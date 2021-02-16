@@ -2,31 +2,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useDungeon } from './useDungeon'
-import { useCharacter } from './useCharacter'
-import { usePlayer } from './usePlayer'
+import { useCharacter } from './Character/useCharacter'
 
-import { Character } from './Character'
+import Character from './Character'
 import { Floor } from './Floor'
 import { Cell } from './Cell'
 
-import colors from '../Helper/Colors'
-
-export const Game = ({ selectedCharacter = 0 }) => {
+export const Game = ({
+  player = {},
+  addGold
+}) => {
   const size = 5
   const { floor, openClosedCell, depth } = useDungeon(size)
-  const { character, takeDamage } = useCharacter(selectedCharacter)
-  const { player, addGold } = usePlayer()
+  const { character, takeDamage } = useCharacter(player.selectedCharacter)
 
   return (
         <div
             style={{
-              backgroundColor: colors.light,
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
               height: '100%'
             }}
         >
+            <Character character={character} />
             <Floor size={size} depth={depth} player={player}>
                 {floor.map((cellValue, cellOffset) => (
                     <Cell
@@ -39,10 +36,10 @@ export const Game = ({ selectedCharacter = 0 }) => {
                     />
                 ))}
             </Floor>
-            <Character character={character} />
         </div>
   )
 }
 Game.propTypes = {
-  selectedCharacter: PropTypes.number
+  player: PropTypes.object,
+  addGold: PropTypes.func
 }

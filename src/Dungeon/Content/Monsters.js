@@ -1,5 +1,5 @@
-import Zombie from '../Assets/Zombie.png'
-import Skeleton from '../Assets/Skeleton.png'
+import Zombie from '../../Assets/Zombie.png'
+import Skeleton from '../../Assets/Skeleton.png'
 
 const monsters = [
   {
@@ -7,8 +7,8 @@ const monsters = [
     icon: Skeleton,
     hp: 2,
     maxHp: 2,
-    atq: 3,
-    spd: 3,
+    atq: 2,
+    spd: 2,
     level: 1,
     items: [],
     skills: [

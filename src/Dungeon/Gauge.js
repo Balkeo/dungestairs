@@ -2,20 +2,43 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export const Gauge = ({
-  actual = 0,
-  max = 0
+  value = 0,
+  maxValue = 0,
+  showValue = false
 }) => {
   return (
-        <progress
-            max={max}
-            value={actual}
-            style={{
-              width: '100%'
-            }}
-        />
+    <div
+      style={{
+        width: '100%',
+        height: '20px',
+        position: 'relative'
+      }}
+    >
+      <progress
+        max={maxValue}
+        value={value}
+        style={{
+          width: '100%',
+          height: '20px'
+        }}
+      />
+      {showValue
+        ? <div
+        style={{
+          position: 'absolute',
+          top: '0',
+          width: '100%',
+          height: '20px'
+        }}
+      >
+        {value} / {maxValue}
+      </div>
+        : ''}
+    </div>
   )
 }
 Gauge.propTypes = {
-  actual: PropTypes.number,
-  max: PropTypes.number
+  value: PropTypes.number.isRequired,
+  maxValue: PropTypes.number.isRequired,
+  showValue: PropTypes.bool
 }

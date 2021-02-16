@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import characters from '../Content/Characters'
-import { calculate } from '../Helper/SkillCalculator'
+import characters from './Characters'
+import { calculate } from '../../Helper/SkillCalculator'
 
 export const useCharacter = (selectedCharacter = 0) => {
   const selectCharacter = () => {
@@ -13,7 +13,8 @@ export const useCharacter = (selectedCharacter = 0) => {
 
   const takeDamage = (monster = {}) => {
     if (monster.hp > 0) {
-      const damage = monster.atq
+      let damage = monster.atq - character.stats.def
+      damage = damage < 0 ? 0 : damage
       setCharacter((previousCharacter) => {
         const newCharacter = {
           ...previousCharacter,
