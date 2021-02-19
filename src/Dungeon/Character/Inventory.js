@@ -1,46 +1,68 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
+import styled from 'styled-components'
+import DashedSeparator from '../../Guideline/DashedSeparator'
+import { Item } from './Item'
+
+const Wrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 256px;
+`
+
+const Row = styled.div`
+  min-height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+`
+
+const Name = styled.div`
+  font-size: 16px;
+  line-height: 18px;
+  color: ${Colors.white100};
+`
+const Separator = styled(DashedSeparator)`
+  margin-top: 15px;
+  margin-bottom: 15px;
+`
 
 export const Inventory = ({
-  items = {}
+  items = []
 }) => {
+  const renderItems = () => {
+    const bag = []
+    for (let index = 0; index < 8; index++) {
+      bag.push(
+        <Item key={index} item={items[index]} />
+      )
+    }
+
+    return bag
+  }
+
   return (
-    <div style={{ height: '256px', width: '256px', display: 'flex', flexDirection: 'column' }}>
-      <div>Inventory :</div>
-      <div>
-        <div style={{ display: 'flex' }}>
-          <div
-            style={{
-              width: '61px',
-              height: '61px',
-              backgroundColor: Colors.white75,
-              marginRight: '4px',
-              marginBottom: '4px'
-            }}
-          >
-            { items.length > 0
-              ? items.map((itemValue, itemOffset) => {
-                return (
-                  <div
-                    key={itemOffset}
-                    style={{
-                      width: '61px',
-                      height: '61px',
-                      backgroundColor: Colors.white75,
-                      marginRight: '4px',
-                      marginBottom: '4px'
-                    }}
-                  >
-                    { itemValue[itemOffset] ?? '' }
-                  </div>
-                )
-              })
-              : '' }
-          </div>
+    <Wrapper>
+      <Row>
+        <Name>Inventory</Name>
+      </Row>
+      <Separator />
+      <Row>
+        <div style={{
+          boxSizing: 'border-box',
+          display: 'grid',
+          gridTemplate: 'repeat(2, 1fr) / repeat(4, 1fr)',
+          gridGap: '7px',
+          width: '256px',
+          padding: '7px'
+        }}>
+          {renderItems()}
         </div>
-      </div>
-    </div>
+      </Row>
+    </Wrapper>
   )
 }
 Inventory.propTypes = {

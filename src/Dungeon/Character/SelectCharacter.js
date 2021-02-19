@@ -7,6 +7,7 @@ import { Stats } from './Stats'
 import Button from '../../Guideline/Button'
 
 const CharacterGrid = styled.div`
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-auto-flow: row dense;
@@ -18,6 +19,8 @@ const CharacterGrid = styled.div`
 `
 
 const Character = styled.div`
+  box-sizing: border-box;
+  max-width: 256px;
   padding: 10px;
   background-color: ${Colors.dark1};
   border-radius: 5px;

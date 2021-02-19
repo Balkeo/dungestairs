@@ -8,12 +8,13 @@ export const Floor = ({ children, size, depth, player }) => {
           style={{
             display: 'flex',
             flexDirection: 'column',
+            justifyContent: 'center',
             width: '100%'
           }}
       >
         <div
             style={{
-              margin: '15px auto 0',
+              margin: '0 auto',
               backgroundColor: Colors.carbon,
               color: Colors.white75,
               lineHeight: '20px',

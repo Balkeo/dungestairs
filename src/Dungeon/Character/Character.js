@@ -24,7 +24,7 @@ const style = {
   backgroundColor: Colors.green,
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-evenly',
+  justifyContent: 'space-between',
   width: '256px',
   zIndex: 5
 }

@@ -6,11 +6,13 @@ import styled from 'styled-components'
 import DashedSeparator from '../../Guideline/DashedSeparator'
 
 const Wrapper = styled.div`
-  width: 200px;
+  box-sizing: border-box;
+  width: 230px;
   padding: 15px;
   border-radius: 8px;
   border: 1px solid ${Colors.black50};
   background: ${Colors.background};
+  margin: auto;
   margin-bottom: 5px;
   box-shadow: inset 0 0 8px ${Colors.black50};
 `
