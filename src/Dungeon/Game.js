@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { useDungeon } from './useDungeon'
-import { useCharacter } from './Character/useCharacter'
+import { useGame } from './useGame'
 
 import Character from './Character'
 import { Floor } from './Floor'
@@ -10,11 +9,10 @@ import { Cell } from './Cell'
 
 export const Game = ({
   player = {},
-  addGold
+  addGold,
+  removeSelectedCharacter
 }) => {
-  const size = 5
-  const { floor, openClosedCell, depth } = useDungeon(size)
-  const { character, takeDamage } = useCharacter(player.selectedCharacter)
+  const { size, floor, clickOnCell, depth, character } = useGame(player.selectedCharacter, removeSelectedCharacter)
 
   return (
         <div
@@ -29,10 +27,7 @@ export const Game = ({
                     <Cell
                         key={cellOffset}
                         cellValue={cellValue}
-                        character={character}
-                        openCell={() => openClosedCell(cellValue.x, cellValue.y, character.stats.atq)}
-                        addGold={() => addGold(cellValue.content)}
-                        takeDamage={cellValue.type === 'monster' ? () => takeDamage(cellValue.content) : null}
+                        onClick={() => clickOnCell(cellValue.x, cellValue.y, addGold)}
                     />
                 ))}
             </Floor>
@@ -41,5 +36,6 @@ export const Game = ({
 }
 Game.propTypes = {
   player: PropTypes.object,
-  addGold: PropTypes.func
+  addGold: PropTypes.func,
+  removeSelectedCharacter: PropTypes.func
 }

@@ -24,6 +24,15 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   const [depth, setDepth] = useState(() => dungeonDepth)
   let [cells, setCells] = useState(() => generateCells(size, depth))
 
+  const increaseDepth = () => {
+    setDepth(depth + 1)
+  }
+
+  const exitToNextDepth = () => {
+    increaseDepth()
+    setCells(generateCells(size, depth))
+  }
+
   const assertCellExist = (x, y) => {
     if (x < 0 || y < 0 || x >= size || y >= size) {
       return false
@@ -126,46 +135,25 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
     return cells
   }
 
-  const monsterTakeDamage = (monster, damage = 0) => {
-    const newMonster = {
-      ...monster,
-      hp: monster.hp - damage
+  const updateCell = (cell = {}) => {
+    const newCells = cells
+    const oldCell = cells[cell.offset]
+    if (!isEqual(oldCell, cell)) {
+      newCells[cell.offset] = cell
     }
-    if (newMonster.hp <= 0) {
-      newMonster.hp = 0
-    }
-    return newMonster
+    setCells(newCells)
   }
 
   const openClosedCell = useCallback(
-    (x, y, characterDamage = 0) => {
+    (x, y) => {
       const offset = y * 5 + x
       if (!assertCellExist(x, y)) {
         return
       }
       setCells((previousCells) => {
-        let newCells = [...previousCells]
-        if (!newCells[offset].isOpen) {
-          newCells[offset].isOpen = true
-          newCells[offset].canClick = isEmptyCell(newCells[offset])
-        } else {
-          switch (newCells[offset].type) {
-            case 'empty':
-              break
-            case 'chest':
-              newCells[offset].content = 0
-              break
-            case 'monster':
-              newCells[offset].content = monsterTakeDamage(newCells[offset].content, characterDamage)
-              break
-            case 'Key':
-              setDepth(depth + 1)
-              newCells = generateCells(size, depth)
-              break
-            default:
-              break
-          }
-        }
+        const newCells = [...previousCells]
+        newCells[offset].isOpen = true
+        newCells[offset].canClick = isEmptyCell(newCells[offset])
         return newCells
       })
     },
@@ -182,5 +170,5 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
     })
   }, [cells])
 
-  return { floor: cells, openClosedCell, depth }
+  return { floor: cells, openClosedCell, depth, exitToNextDepth, updateCell }
 }

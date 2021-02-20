@@ -66,5 +66,5 @@ export const Inventory = ({
   )
 }
 Inventory.propTypes = {
-  items: PropTypes.object
+  items: PropTypes.array
 }

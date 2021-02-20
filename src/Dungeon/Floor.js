@@ -45,7 +45,7 @@ export const Floor = ({ children, size, depth, player }) => {
   )
 }
 Floor.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.array,
   size: PropTypes.number,
   depth: PropTypes.number,
   player: PropTypes.object

@@ -1,5 +1,5 @@
 import { random } from '../Helper/Utils'
-import { useMonster } from './useMonster'
+import { useMonster } from './Monster/useMonster'
 
 const CELLTYPE = [
   {

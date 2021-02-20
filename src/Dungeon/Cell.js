@@ -10,10 +10,7 @@ import Colors from '../Helper/Colors'
 
 export const Cell = ({
   cellValue,
-  character,
-  openCell,
-  addGold,
-  takeDamage
+  onClick
 }) => {
   const [isHovered, setHover] = useState(false)
 
@@ -26,28 +23,7 @@ export const Cell = ({
 
   return (
         <div
-            onClick={
-                 () => {
-                   if (cellValue.canClick) {
-                     if (cellValue.isOpen && cellValue.type === 'chest') {
-                       addGold(cellValue.content)
-                       openCell(cellValue.x, cellValue.y)
-                     }
-                     if (cellValue.isOpen && cellValue.type === 'monster') {
-                       const monster = cellValue.content
-                       if (character.stats.spd < monster.spd) {
-                         takeDamage(monster)
-                         openCell(cellValue.x, cellValue.y, character.stats.atq)
-                       } else {
-                         openCell(cellValue.x, cellValue.y, character.stats.atq)
-                         takeDamage(monster)
-                       }
-                     } else {
-                       openCell(cellValue.x, cellValue.y)
-                     }
-                   }
-                 }
-            }
+            onClick={onClick}
             onMouseEnter={() => handleMouseOver()}
             onMouseLeave={() => handleMouseOut()}
             style={{
@@ -149,8 +125,5 @@ export const Cell = ({
 }
 Cell.propTypes = {
   cellValue: PropTypes.object,
-  character: PropTypes.object,
-  openCell: PropTypes.func,
-  addGold: PropTypes.func,
-  takeDamage: PropTypes.func
+  onClick: PropTypes.func
 }

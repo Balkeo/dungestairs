@@ -46,7 +46,7 @@ export const SelectCharacter = ({
             <Stats character={character}/>
             <Skills skills={character.skills}/>
             <Button onClick={() => selectCharacter(offset)}>
-              Select {character.class}
+              Select {character.type}
             </Button>
           </Character>
         )

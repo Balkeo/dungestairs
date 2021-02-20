@@ -6,12 +6,12 @@ import { usePlayer } from './Dungeon/usePlayer'
 import Colors from './Helper/Colors'
 
 const App = () => {
-  const { player, addGold, selectCharacter } = usePlayer()
+  const { player, addGold, selectCharacter, removeSelectedCharacter } = usePlayer()
 
   return (
     <div className="App" style={{ backgroundColor: Colors.brown1 }}>
       {player.selectedCharacter !== null
-        ? <Game player={player} addGold={addGold}/>
+        ? <Game player={player} addGold={addGold} removeSelectedCharacter={removeSelectedCharacter}/>
         : <MainMenu selectCharacter={selectCharacter} />
       }
     </div>

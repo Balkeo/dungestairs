@@ -1,6 +1,6 @@
-import monsters from './Content/Monsters'
-import { calculate } from '../Helper/SkillCalculator'
-import { random } from '../Helper/Utils'
+import monsters from './Monsters'
+import { calculate } from '../../Helper/SkillCalculator'
+import { random } from '../../Helper/Utils'
 
 export const useMonster = (depth = 1) => {
   const selectMonster = () => {

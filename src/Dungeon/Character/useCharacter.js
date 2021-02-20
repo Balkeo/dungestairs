@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isEqual } from 'lodash'
 
 import characters from './Characters'
 import { calculate } from '../../Helper/SkillCalculator'
@@ -11,22 +12,15 @@ export const useCharacter = (selectedCharacter = 0) => {
 
   const [character, setCharacter] = useState(() => selectCharacter())
 
-  const takeDamage = (monster = {}) => {
-    if (monster.hp > 0) {
-      let damage = monster.atq - character.stats.def
-      damage = damage < 0 ? 0 : damage
-      setCharacter((previousCharacter) => {
-        const newCharacter = {
-          ...previousCharacter,
-          hp: previousCharacter.hp - damage
-        }
-        if (newCharacter.hp <= 0) {
-          newCharacter.hp = 0
-        }
+  const updateCharacter = (newCharacter = {}) => {
+    setCharacter((previousCharacter) => {
+      if (!isEqual(previousCharacter, newCharacter)) {
         return newCharacter
-      })
-    }
+      } else {
+        return previousCharacter
+      }
+    })
   }
 
-  return { character, takeDamage }
+  return { character, updateCharacter }
 }

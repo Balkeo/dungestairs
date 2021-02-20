@@ -14,7 +14,7 @@ export const Stats = ({
       display: 'flex',
       flexDirection: 'column-reverse',
       justifyContent: 'space-between',
-      backgroundImage: `url(${character.profile})`,
+      backgroundImage: `url(${character.icon})`,
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',

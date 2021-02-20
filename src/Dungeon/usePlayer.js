@@ -27,5 +27,14 @@ export const usePlayer = () => {
     })
   }
 
-  return { player, addGold, selectCharacter }
+  const removeSelectedCharacter = () => {
+    setPlayer((previousPlayer) => {
+      return {
+        ...previousPlayer,
+        selectedCharacter: null
+      }
+    })
+  }
+
+  return { player, addGold, selectCharacter, removeSelectedCharacter }
 }
