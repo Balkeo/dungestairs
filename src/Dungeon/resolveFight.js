@@ -1,4 +1,4 @@
-// import { random } from '../Helper/Utils'
+import { rollDice } from '../Helper/Utils'
 
 const attack = (attacker = {}, defender = {}) => {
   if (attacker.hp > 0) {
@@ -17,7 +17,10 @@ const attack = (attacker = {}, defender = {}) => {
 }
 
 const attackRound = (character = {}, monster = {}) => {
-  if (character.stats.spd < monster.stats.spd) {
+  const characterSpd = rollDice(6, character.stats.spd)
+  const monsterSpd = rollDice(6, monster.stats.spd)
+  console.log(`Character ${characterSpd} VS Monster ${monsterSpd}`)
+  if (characterSpd < monsterSpd) {
     character = attack(monster, character)
     monster = attack(character, monster)
   } else {

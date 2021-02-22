@@ -12,3 +12,14 @@ export const EMPTY_CHARACTER = {
   items: [],
   skills: []
 }
+
+export const EMPTY_CELL = {
+  x: 0,
+  y: 0,
+  offset: 0,
+  type: '',
+  content: '',
+  isOpen: false,
+  canClick: false,
+  isBlocked: false
+}

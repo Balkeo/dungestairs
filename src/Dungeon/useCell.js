@@ -1,37 +1,52 @@
-import { random } from '../Helper/Utils'
+import { random, rollDice } from '../Helper/Utils'
 import { useMonster } from './Monster/useMonster'
+import { EMPTY_CELL } from './Content/constant'
 
-const CELLTYPE = [
-  {
-    type: 'empty',
-    availableFromFloor: 0
-  },
-  {
-    type: 'chest',
-    availableFromFloor: 0
-  },
-  {
-    type: 'monster',
-    availableFromFloor: 0
-  },
+const TYPES = [
   {
     type: 'trap',
-    availableFromFloor: 10
+    probability: 5
+  },
+  {
+    type: 'empty',
+    probability: 10
+  },
+  {
+    type: 'ally',
+    probability: 15
+  },
+  {
+    type: 'loot',
+    probability: 20
+  },
+  {
+    type: 'encounter',
+    probability: 50
   }
 ]
-const CELL = {
-  x: 0,
-  y: 0,
-  offset: 0,
-  type: '',
-  content: '',
-  isOpen: false,
-  canClick: false,
-  isBlocked: false
+
+const CELL_TYPE_FOR_TYPE = {
+  empty: [
+    'empty'
+  ],
+  encounter: [
+    'monster'
+  ],
+  loot: [
+    'chest'
+  ],
+  ally: [
+    'healer',
+    'mage',
+    'knight'
+  ],
+  trap: [
+    'trap'
+  ]
 }
 
 const getChestContent = (depth = 1) => {
-  return depth + random(5)
+  return depth + rollDice(6, depth)
 }
 
 const initMonsterCell = (depth = 1) => {
@@ -50,28 +65,41 @@ const setContent = (type, depth) => {
   }
 }
 
-const getCellTypesForDepth = (depth = 1) => {
-  const types = []
-  CELLTYPE.map((cellType) => {
-    if (depth >= cellType.availableFromFloor) {
-      types.push(cellType.type)
+const getType = () => {
+  let randomCellType = rollDice(100)
+  let type = null
+  TYPES.forEach((cellType) => {
+    if (type === null && randomCellType <= cellType.probability) {
+      type = cellType.type
+    } else {
+      randomCellType = randomCellType - cellType.probability
     }
-    return cellType
   })
-
-  return types
+  switch (type) {
+    case 'encounter':
+      return CELL_TYPE_FOR_TYPE.encounter
+    case 'loot':
+      return CELL_TYPE_FOR_TYPE.loot
+    case 'ally':
+      return CELL_TYPE_FOR_TYPE.ally
+    case 'trap':
+      return CELL_TYPE_FOR_TYPE.trap
+    case 'empty':
+    default :
+      return CELL_TYPE_FOR_TYPE.empty
+  }
 }
 
-const getTypeForDepthAndTypes = (depth = 1) => {
-  const types = getCellTypesForDepth(depth)
+const getCellType = () => {
+  const types = getType()
   return types[random(types.length)]
 }
 
 export const generateCellForDepth = (depth = 1, x = 0, y = 0, boardSize = 5) => {
-  const type = getTypeForDepthAndTypes(depth)
+  const type = getCellType()
 
   return {
-    ...CELL,
+    ...EMPTY_CELL,
     type: type,
     content: setContent(type, depth),
     offset: y * boardSize + x,
@@ -84,7 +112,7 @@ export const getEntranceCell = (boardSize = 5) => {
   const x = (boardSize - 1) / 2
   const y = boardSize - 1
   return {
-    ...CELL,
+    ...EMPTY_CELL,
     type: 'Entrance',
     content: '',
     isOpen: true,
@@ -104,7 +132,7 @@ export const getKeyCell = (boardSize = 5) => {
   } while (y * boardSize + x === entranceCell.offset)
 
   return {
-    ...CELL,
+    ...EMPTY_CELL,
     type: 'Key',
     content: '',
     offset: y * boardSize + x,
