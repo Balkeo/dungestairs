@@ -124,7 +124,7 @@ export const Skills = ({
             {'>'}
           </SkillSelector>
         </SkillSelectorWrapper>
-        <SkillSelectorWrapper show={true}>
+        <SkillSelectorWrapper show={upgradeCharacterSkill !== undefined}>
           <SkillUpgrador
             onClick={() => upgradeCharacterSkill(character, skill)}
           >
