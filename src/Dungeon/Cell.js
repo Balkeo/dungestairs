@@ -7,6 +7,26 @@ import openedCell from '../Assets/Opened-Cell.jpg'
 import closedCell from '../Assets/Closed-Cell.jpg'
 import blocked from '../Assets/cant-open.png'
 import Colors from '../Helper/Colors'
+import styled from 'styled-components'
+
+const Wraper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: ${Colors.white75};
+  font: 1em;
+  font-weight: bold;
+  font-family: Helvetica, sans-serif;
+  cursor: ${({ isHovered, cellValue }) => ((isHovered && cellValue.canClick) ? 'pointer' : 'default')};
+  width: 100%;
+  height: 100%;
+  background-image: ${({ cellValue }) => (
+    cellValue.isOpen ? `url(${openedCell})` : `url(${closedCell})`
+  )};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`
 
 export const Cell = ({
   cellValue,
@@ -22,26 +42,12 @@ export const Cell = ({
   }
 
   return (
-        <div
+        <Wraper
             onClick={onClick}
             onMouseEnter={() => handleMouseOver()}
             onMouseLeave={() => handleMouseOut()}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              color: Colors.white75,
-              fontSize: '1em',
-              fontWeight: 'bold',
-              fontFamily: 'Helvetica, sans-serif',
-              cursor: (isHovered && cellValue.canClick) ? 'pointer' : 'default',
-              width: '100px',
-              height: '100px',
-              backgroundImage: cellValue.isOpen ? `url(${openedCell})` : `url(${closedCell})`,
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover'
-            }}
+            isHovered={isHovered}
+            cellValue={cellValue}
         >
             <div
                 style={{
@@ -120,10 +126,12 @@ export const Cell = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </Wraper>
   )
 }
 Cell.propTypes = {
   cellValue: PropTypes.object,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  boardSize: PropTypes.number,
+  screenWidth: PropTypes.number
 }

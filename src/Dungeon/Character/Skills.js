@@ -8,6 +8,9 @@ import DashedSeparator from '../../Guideline/DashedSeparator'
 const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
+  @media only screen and (max-width: 768px) {
+    order: 3;
+  }
 `
 
 const Row = styled.div`

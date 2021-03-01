@@ -10,6 +10,9 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 256px;
+  @media only screen and (max-width: 768px) {
+    order: 1;
+  }
 `
 
 const Row = styled.div`
@@ -19,6 +22,7 @@ const Row = styled.div`
   align-content: center;
   justify-content: center;
   text-align: center;
+  margin: auto;
 `
 
 const Name = styled.div`
@@ -29,6 +33,16 @@ const Name = styled.div`
 const Separator = styled(DashedSeparator)`
   margin-top: 15px;
   margin-bottom: 15px;
+`
+
+const Bag = styled.div`
+  box-sizing: border-box;
+  display: grid;
+  grid-template: repeat(2, 1fr) / repeat(4, 1fr);
+  grid-gap: 7px;
+  width: 256px;
+  padding: 7px;
+  margin: auto;
 `
 
 export const Inventory = ({
@@ -54,16 +68,9 @@ export const Inventory = ({
       </Row>
       <Separator />
       <Row>
-        <div style={{
-          boxSizing: 'border-box',
-          display: 'grid',
-          gridTemplate: 'repeat(2, 1fr) / repeat(4, 1fr)',
-          gridGap: '7px',
-          width: '256px',
-          padding: '7px'
-        }}>
+        <Bag>
           {renderItems()}
-        </div>
+        </Bag>
       </Row>
     </Wrapper>
   )

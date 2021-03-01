@@ -8,6 +8,7 @@ import Colors from '../Helper/Colors'
 import Coin from '../Assets/Coin.png'
 
 const Wraper = styled.div`
+  box-sizing: border-box;
   width: 72px;
   height: 100%;
   padding: 16px;
@@ -15,7 +16,10 @@ const Wraper = styled.div`
   background-color: ${Colors.brown2};
   display: flex;
   flex-direction: column;
-  color: ${Colors.white50}
+  color: ${Colors.white50};
+  @media only screen and (max-width: 768px) {
+    height: 100%;
+  }
 `
 
 const Label = styled.span`

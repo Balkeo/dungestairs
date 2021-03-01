@@ -15,6 +15,26 @@ const Wrapper = styled.div`
   margin: auto;
   margin-bottom: 5px;
   box-shadow: inset 0 0 8px ${Colors.black50};
+  @media only screen and (max-width: 768px) {
+    padding: 10px;
+  }
+`
+
+const Icon = styled.div`
+  margin: auto;
+  width: 55px;
+  height: 55px;
+  margin-bottom: 15px;
+  background-color: ${Colors.white75};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: ${({ icon }) => (icon !== null ? `url(${icon})` : `url(${defaultSkill})`)};
+  @media only screen and (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+  }
 `
 
 const Row = styled.div`
@@ -41,6 +61,10 @@ const Details = styled.div`
 const Separator = styled(DashedSeparator)`
   margin-top: 15px;
   margin-bottom: 15px;
+  @media only screen and (max-width: 768px) {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 `
 
 export const Skill = ({
@@ -48,19 +72,7 @@ export const Skill = ({
 }) => {
   return (
     <Wrapper>
-      <div
-        style={{
-          margin: 'auto',
-          width: '55px',
-          height: '55px',
-          marginBottom: '15px',
-          backgroundColor: Colors.white75,
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundImage: skill.icon !== null ? `url(${skill.icon})` : `url(${defaultSkill})`
-        }}
-      />
+      <Icon icon={skill.icon} />
       <Row>
         <Name>{skill.name}</Name>
       </Row>

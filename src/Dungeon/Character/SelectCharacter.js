@@ -15,10 +15,13 @@ const CharacterGrid = styled.div`
   justify-items: center;
   align-items: center;
   width: 100%;
-  margin: auto 15px;
+  margin: auto;
   height: 100%;
   width: 100%;
   overflow: scroll;
+  @media only screen and (max-width: 768px) {
+    grid-gap: 0px;
+  }
 `
 
 const Character = styled.div`
@@ -28,12 +31,23 @@ const Character = styled.div`
   padding: 10px;
   background-color: ${Colors.dark1};
   border-radius: 5px;
+  margin-left: 15px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   box-shadow: 0 0 8px 0 ${Colors.black30}, inset 0 -2px 0 0 ${Colors.black10};
   transition: box-shadow 0.25s ease-in-out;
   &:hover {
     box-shadow: 0 0 16px 0 ${Colors.black50}, inset 0 -2px 0 0 ${Colors.black30};
+  }
+  @media only screen and (max-width: 768px) {
+    height: 95%;
+  }
+`
+
+const ButtonRow = styled.div`
+  @media only screen and (max-width: 768px) {
+    order: 99;
   }
 `
 
@@ -51,21 +65,23 @@ export const SelectCharacter = ({
           <Character key={offset}>
             <Stats character={character}/>
             <Skills skills={character.skills} upgradeCharacterSkill={upgradeCharacterSkill} character={offset}/>
-            <Button onClick={
-              () => {
-                character.price > 0
-                  ? buyCharacter(offset)
-                  : selectCharacter(offset)
-              }
-            }>
-              {
-                character.price > 0
-                  ? 'Buy '
-                  : 'Select '
-              }
-              {character.type}
-              { character.price > 0 ? ' ' + character.price + 'Gold' : ''}
-            </Button>
+            <ButtonRow>
+              <Button onClick={
+                () => {
+                  character.price > 0
+                    ? buyCharacter(offset)
+                    : selectCharacter(offset)
+                }
+              }>
+                {
+                  character.price > 0
+                    ? 'Buy '
+                    : 'Select '
+                }
+                {character.type}
+                { character.price > 0 ? ' ' + character.price + 'Gold' : ''}
+              </Button>
+            </ButtonRow>
           </Character>
         )
       })
