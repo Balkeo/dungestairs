@@ -1,0 +1,62 @@
+// @flow
+
+import Characters from "../Character/Characters";
+
+type SKILL_TYPE = {|
+  icon: ?string,
+  name: string,
+  level: number,
+  effects: [
+    {
+      target: string,
+      effect: string
+    }
+  ],
+  description: string,
+|}
+
+type ITEM_TYPE = {|
+  icon: ?string,
+  name: string,
+  target: string,
+  effect: string,
+  description: string,
+|}
+
+export type CHARACTER_TYPE = {|
+  type: string,
+  icon: string,
+  hp: number,
+  maxHp: number,
+  stats: {
+    atq: number,
+    def: number,
+    spd: number
+  },
+  level: number,
+  items: Array<ITEM_TYPE>,
+  skills: Array<SKILL_TYPE>,
+  price: number
+|}
+
+export type CELL_TYPE = {|
+  x: number,
+  y: number,
+  offset: number,
+  type: string,
+  content: number | {},
+  isOpen: boolean,
+  canClick: boolean,
+  isBlocked: boolean
+|}
+
+export type PLAYER_TYPE = {|
+  gold: number,
+  selectedCharacter: ?number,
+  inGame: boolean,
+  depth: {
+    max: number,
+    previous: number
+  },
+  characters: Array<CHARACTER_TYPE>
+|}

@@ -13,14 +13,18 @@ const CharacterGrid = styled.div`
   grid-auto-flow: row dense;
   grid-gap: 12px;
   justify-items: center;
+  align-items: center;
   width: 100%;
-  margin: auto;
-  padding-top: 20px;
+  margin: auto 15px;
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
 `
 
 const Character = styled.div`
   box-sizing: border-box;
   max-width: 256px;
+  height: 550px;
   padding: 10px;
   background-color: ${Colors.dark1};
   border-radius: 5px;
@@ -35,7 +39,9 @@ const Character = styled.div`
 
 export const SelectCharacter = ({
   characters = [],
-  selectCharacter
+  selectCharacter,
+  buyCharacter,
+  upgradeCharacterSkill
 }) => {
   return (
     <CharacterGrid>
@@ -44,9 +50,21 @@ export const SelectCharacter = ({
         return (
           <Character key={offset}>
             <Stats character={character}/>
-            <Skills skills={character.skills}/>
-            <Button onClick={() => selectCharacter(offset)}>
-              Select {character.type}
+            <Skills skills={character.skills} upgradeCharacterSkill={upgradeCharacterSkill} character={offset}/>
+            <Button onClick={
+              () => {
+                character.price > 0
+                  ? buyCharacter(offset)
+                  : selectCharacter(offset)
+              }
+            }>
+              {
+                character.price > 0
+                  ? 'Buy '
+                  : 'Select '
+              }
+              {character.type}
+              { character.price > 0 ? ' ' + character.price + 'Gold' : ''}
             </Button>
           </Character>
         )
@@ -57,5 +75,7 @@ export const SelectCharacter = ({
 }
 SelectCharacter.propTypes = {
   characters: PropTypes.array,
-  selectCharacter: PropTypes.func
+  selectCharacter: PropTypes.func,
+  buyCharacter: PropTypes.func,
+  upgradeCharacterSkill: PropTypes.func
 }

@@ -17,10 +17,10 @@ const createMonster = (
   skills = [
     {
       name: '',
-      effetcs: [
+      effects: [
         {
           target: 'hp',
-          effect: 'hp + 1 * (level - 1)'
+          effect: '1 * (level - 1)'
         }
       ],
       descriptons: ''
@@ -43,14 +43,14 @@ const createMonster = (
 const SKELETON = createMonster('Skeleton', Skeleton, 2, { atq: 2, spd: 2, def: 0 }, 1, [], [
   {
     name: 'HP',
-    effetcs: [
+    effects: [
       {
         target: 'hp',
-        effect: 'hp + 1 * (level - 1)'
+        effect: '1 * (level - 1)'
       },
       {
         target: 'maxHp',
-        effect: 'maxHp + 1 * (level - 1)'
+        effect: '1 * (level - 1)'
       }
     ],
     descriptons: ''
@@ -60,14 +60,14 @@ const SKELETON = createMonster('Skeleton', Skeleton, 2, { atq: 2, spd: 2, def: 0
 const ZOMBIE = createMonster('Zombie', Zombie, 3, { atq: 1, spd: 1, def: 0 }, 1, [], [
   {
     name: 'HP',
-    effetcs: [
+    effects: [
       {
         target: 'hp',
-        effect: 'hp + 2 * (level - 1)'
+        effect: '2 * (level - 1)'
       },
       {
         target: 'maxHp',
-        effect: 'maxHp + 2 * (level - 1)'
+        effect: '2 * (level - 1)'
       }
     ],
     descriptons: ''
@@ -77,24 +77,24 @@ const ZOMBIE = createMonster('Zombie', Zombie, 3, { atq: 1, spd: 1, def: 0 }, 1,
 const ALIEN = createMonster('Alien', Alien, 2, { atq: 1, spd: 1, def: 1 }, 1, [], [
   {
     name: 'HP',
-    effetcs: [
+    effects: [
       {
         target: 'hp',
-        effect: 'hp + 2 * (level - 1)'
+        effect: '2 * (level - 1)'
       },
       {
         target: 'maxHp',
-        effect: 'maxHp + 2 * (level - 1)'
+        effect: '2 * (level - 1)'
       }
     ],
     descriptons: ''
   }
 ])
 
-const monsters = [
+const Monsters = [
   SKELETON,
   ZOMBIE,
   ALIEN
 ]
 
-export default monsters
+export default Monsters

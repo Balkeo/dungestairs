@@ -54,8 +54,28 @@ const SkillSelector = styled.span`
   }
 `
 
+const SkillUpgrador = styled.span`
+  font-size: 14px;
+  line-height: 14px;
+  color: ${Colors.white20};
+  background: ${Colors.background};
+  transition: all 0.25s ease-in-out;
+  border: 1px solid ${Colors.white20};
+  border-radius: 5px;
+  vertical-align: baseline;
+  padding: 3px;
+  margin: 0 auto 5px;
+  &:hover {
+    cursor: pointer;
+    color: ${Colors.white75};
+    border: 1px solid ${Colors.white75};
+  }
+`
+
 export const Skills = ({
-  skills = {}
+  skills = {},
+  upgradeCharacterSkill,
+  character = 0
 }) => {
   const [skill, setSkill] = useState(() => 0)
 
@@ -104,10 +124,19 @@ export const Skills = ({
             {'>'}
           </SkillSelector>
         </SkillSelectorWrapper>
+        <SkillSelectorWrapper show={true}>
+          <SkillUpgrador
+            onClick={() => upgradeCharacterSkill(character, skill)}
+          >
+            Upgrade {skills[skill].cost}
+          </SkillUpgrador>
+        </SkillSelectorWrapper>
       </Row>
     </Wrapper>
   )
 }
 Skills.propTypes = {
-  skills: PropTypes.array
+  skills: PropTypes.array,
+  upgradeCharacterSkill: PropTypes.func,
+  character: PropTypes.number
 }

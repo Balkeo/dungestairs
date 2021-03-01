@@ -28,6 +28,8 @@ const black10 = 'rgba(0,0,0,0.1)'
 const black20 = 'rgba(0,0,0,0.2)'
 const black30 = 'rgba(0,0,0,0.3)'
 const black50 = 'rgba(0,0,0,0.5)'
+const black75 = 'rgba(0,0,0,0.75)'
+const black100 = 'rgba(0,0,0,1)'
 
 const Colors = {
   background,
@@ -59,7 +61,9 @@ const Colors = {
   black10,
   black20,
   black30,
-  black50
+  black50,
+  black75,
+  black100
 }
 
 export default Colors

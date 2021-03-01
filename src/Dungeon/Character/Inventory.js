@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
 import styled from 'styled-components'
 import DashedSeparator from '../../Guideline/DashedSeparator'
+import { InventorySlot } from './InventorySlot'
 import { Item } from './Item'
 
 const Wrapper = styled.div`
@@ -37,7 +38,9 @@ export const Inventory = ({
     const bag = []
     for (let index = 0; index < 8; index++) {
       bag.push(
-        <Item key={index} item={items[index]} />
+        <InventorySlot key={index}>
+          <Item item={items[index]} />
+        </InventorySlot>
       )
     }
 

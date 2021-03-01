@@ -8,20 +8,20 @@ const TYPES = [
     probability: 5
   },
   {
-    type: 'empty',
-    probability: 10
-  },
-  {
     type: 'ally',
-    probability: 15
+    probability: 5
   },
   {
     type: 'loot',
-    probability: 20
+    probability: 15
+  },
+  {
+    type: 'empty',
+    probability: 30
   },
   {
     type: 'encounter',
-    probability: 50
+    probability: 40
   }
 ]
 

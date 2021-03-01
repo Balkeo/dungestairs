@@ -10,7 +10,8 @@ export const EMPTY_CHARACTER = {
   },
   level: 0,
   items: [],
-  skills: []
+  skills: [],
+  price: 0
 }
 
 export const EMPTY_CELL = {
@@ -22,4 +23,15 @@ export const EMPTY_CELL = {
   isOpen: false,
   canClick: false,
   isBlocked: false
+}
+
+export const EMPTY_PLAYER = {
+  gold: 0,
+  selectedCharacter: null,
+  inGame: false,
+  depth: {
+    max: 0,
+    previous: 0
+  },
+  characters: []
 }

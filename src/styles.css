@@ -1,12 +1,10 @@
 html,
-body {
+body, #root, .App {
   margin: auto;
   font-family: "Roboto", sans-serif;
-}
-html,
-body, #root, .App {
   min-height: 100%;
   height: 100%;
+  background-color: #2f2f2f;
 }
 .App {
   text-align: center;
