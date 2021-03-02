@@ -12,6 +12,7 @@ const ModalOverlay = styled.div`
   height: 100vh;
   z-index: 1040;
   background-color: ${Colors.black50};
+  backdrop-filter: blur(8px);
 `
 
 const Wrapper = styled.div`
@@ -41,8 +42,9 @@ const _Modal = styled.div`
 
 const Header = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  color: ${Colors.white100};
 `
 
 const CloseButton = styled.div`
@@ -55,6 +57,7 @@ const CloseButton = styled.div`
 `
 
 export const Modal = ({
+  title,
   children,
   isShowing,
   hide
@@ -66,6 +69,11 @@ export const Modal = ({
       <Wrapper>
         <_Modal>
           <Header>
+            {
+              title !== null
+                ? title
+                : (<div />)
+            }
             <CloseButton onClick={hide}>
               <span>&times;</span>
             </CloseButton>
@@ -82,6 +90,7 @@ export const Modal = ({
   )
 }
 Modal.propTypes = {
+  title: PropTypes.object,
   children: PropTypes.array,
   isShowing: PropTypes.bool.isRequired,
   hide: PropTypes.func.isRequired

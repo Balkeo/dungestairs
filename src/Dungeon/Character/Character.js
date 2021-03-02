@@ -9,37 +9,45 @@ import Modal, { useModal } from '../../Guideline/Modal'
 
 const Wraper = styled.div`
   box-sizing: border-box;
-  background-color: ${Colors.green};
+  background-color: ${Colors.brown1};
+  color: ${Colors.white50};
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  width: 256px;
+  width: 100%;
   @media only screen and (max-width: 768px) {
-    flex-direction: row;
-    width: 100%;
     overflow: scroll;
     height: ${({ mobileHeight }) => (mobileHeight)};
-    background-color: ${Colors.brown1};
-    color: ${Colors.white50}
   }
 `
 
 export const Character = ({
   character,
   mobileHeight,
-  isMobile
+  isMobile,
+  depth,
+  player
 }) => {
   const { isShowing, toggle } = useModal()
 
   return (
       <Wraper
         mobileHeight={mobileHeight}
-        onClick={isMobile ? () => toggle() : null}
+        onClick={isMobile && !isShowing ? () => toggle() : null}
       >
-          <Stats character={character} mobileHeight={mobileHeight}/>
+        <Stats character={character} mobileHeight={mobileHeight}/>
         {
           isMobile
             ? <Modal
+              title={
+                (
+                  <>
+                    Gold : {player.gold ? player.gold : '0'}
+                    <br/>
+                    Depth : {depth}
+                  </>
+                )
+              }
               isShowing={isShowing}
               hide={toggle}
             >
@@ -59,5 +67,7 @@ export const Character = ({
 Character.propTypes = {
   character: PropTypes.object,
   mobileHeight: PropTypes.number,
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
+  depth: PropTypes.number,
+  player: PropTypes.object
 }

@@ -11,9 +11,10 @@ import useWindowDimensions from '../useWindowDimensions'
 
 const Wraper = styled.div`
   display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
   height: 100%;
   @media only screen and (max-width: 768px) {
-    flex-direction: column-reverse;
     justify-content: space-evenly;
   }
 `
@@ -29,7 +30,13 @@ export const Game = ({
 
   return (
         <Wraper>
-            <Character character={character} mobileHeight={height - width - 20} isMobile={isMobile} />
+            <Character
+              character={character}
+              mobileHeight={height - width - 20}
+              isMobile={isMobile}
+              player={player}
+              depth={depth}
+            />
             <Floor size={size} depth={depth} player={player}>
                 {floor.map((cellValue, cellOffset) => (
                     <Cell

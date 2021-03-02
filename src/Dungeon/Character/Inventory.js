@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
 import styled from 'styled-components'
-import DashedSeparator from '../../Guideline/DashedSeparator'
+import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 import { InventorySlot } from './InventorySlot'
 import { Item } from './Item'
 
@@ -10,9 +10,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 256px;
-  @media only screen and (max-width: 768px) {
-    order: 1;
-  }
+  order: 1;
 `
 
 const Row = styled.div`

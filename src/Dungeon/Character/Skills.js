@@ -3,14 +3,12 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Skill } from './Skill'
 import Colors from '../../Helper/Colors'
-import DashedSeparator from '../../Guideline/DashedSeparator'
+import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 
 const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
-  @media only screen and (max-width: 768px) {
-    order: 3;
-  }
+  order: 3;
 `
 
 const Row = styled.div`

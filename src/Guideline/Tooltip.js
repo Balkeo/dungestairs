@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Colors from '../Helper/Colors'
-import DashedSeparator from './DashedSeparator'
+import DashedSeparator from './Separator/DashedSeparator'
 
 const Tooltip = styled.div`
   position: relative;

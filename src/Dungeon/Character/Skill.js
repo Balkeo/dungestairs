@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
 import defaultSkill from '../../Assets/Skills.png'
 import styled from 'styled-components'
-import DashedSeparator from '../../Guideline/DashedSeparator'
+import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 
 const Wrapper = styled.div`
   box-sizing: border-box;

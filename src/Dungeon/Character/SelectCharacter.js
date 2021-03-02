@@ -34,7 +34,7 @@ const Character = styled.div`
   margin-left: 15px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   box-shadow: 0 0 8px 0 ${Colors.black30}, inset 0 -2px 0 0 ${Colors.black10};
   transition: box-shadow 0.25s ease-in-out;
   &:hover {
@@ -46,9 +46,7 @@ const Character = styled.div`
 `
 
 const ButtonRow = styled.div`
-  @media only screen and (max-width: 768px) {
-    order: 99;
-  }
+  order: 99;
 `
 
 export const SelectCharacter = ({
