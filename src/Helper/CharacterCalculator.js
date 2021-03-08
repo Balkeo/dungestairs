@@ -18,7 +18,7 @@ const getBaseCharacter = (characterType) => {
 const applySkills = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): CHARACTER_TYPE => {
   character.skills.forEach(function (skill, skillIndex) {
     skill.effects.forEach(function (effect) {
-      character[effect.target] = baseCharacter[effect.target] + jexl.eval(effect.effect, baseCharacter)
+      character[effect.target] = baseCharacter[effect.target] + jexl.eval(effect.effect, character)
     })
     character.skills[skillIndex].cost = skill.level * 50
   })
@@ -29,7 +29,7 @@ const applyItems = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): C
   for (let index = 0; index < 8; index++) {
     const item = character.items[index]
     if (typeof item !== 'undefined') {
-      character[item.target] = baseCharacter[item.target] + jexl.eval(item.effect, baseCharacter)
+      character[item.target] = baseCharacter[item.target] + jexl.eval(item.effect, character)
     }
   }
   return character

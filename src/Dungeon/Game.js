@@ -24,7 +24,7 @@ export const Game = ({
   addGold,
   removeSelectedCharacter
 }) => {
-  const { size, floor, clickOnCell, depth, character } = useGame(player.selectedCharacter, removeSelectedCharacter)
+  const { size, floor, clickOnCell, depth, character } = useGame(player, removeSelectedCharacter)
   const { width, height } = useWindowDimensions()
   const isMobile: boolean = (width <= 768)
 

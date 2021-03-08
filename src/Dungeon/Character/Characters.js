@@ -46,16 +46,33 @@ const PALADIN_SKILLS = [
   {
     icon: null,
     name: 'Holly Book',
-    level: 0,
+    level: 1,
     cost: 50,
     effects: [
       {
         target: 'hp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
       },
       {
         target: 'maxHp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
+      }
+    ],
+    description: 'With an hard training increase maximum hit point by 5'
+  },
+  {
+    icon: null,
+    name: 'Holly Book',
+    level: 1,
+    cost: 50,
+    effects: [
+      {
+        target: 'hp',
+        effect: '5 * (skills[0].level - 1)'
+      },
+      {
+        target: 'maxHp',
+        effect: '5 * (skills[0].level - 1)'
       }
     ],
     description: 'With an hard training increase maximum hit point by 5'
@@ -66,16 +83,16 @@ const THIEF_SKILLS = [
   {
     icon: null,
     name: "Assassin's cloak",
-    level: 0,
+    level: 1,
     cost: 50,
     effects: [
       {
         target: 'hp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
       },
       {
         target: 'maxHp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
       }
     ],
     description: ''
@@ -87,16 +104,16 @@ const MAGE_SKILLS = [
   {
     icon: null,
     name: 'Mage\'s staff',
-    level: 0,
+    level: 1,
     cost: 50,
     effects: [
       {
         target: 'hp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
       },
       {
         target: 'maxHp',
-        effect: '5 * skills[0].level'
+        effect: '5 * (skills[0].level - 1)'
       }
     ],
     description: ''

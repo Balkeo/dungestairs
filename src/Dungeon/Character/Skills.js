@@ -8,6 +8,7 @@ import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 const Wrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
+  height: 300px;
   order: 3;
 `
 
@@ -33,9 +34,9 @@ const Separator = styled(DashedSeparator)`
 const SkillSelectorWrapper = styled.div`
   box-sizing: border-box;
   padding: 0 15px;
-  display: ${({ show }) => (show ? 'flex' : 'none')};
+  display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
 `
 
 const SkillSelector = styled.span`
@@ -48,6 +49,7 @@ const SkillSelector = styled.span`
   border: 1px solid ${Colors.white20};
   border-radius: 50%;
   vertical-align: baseline;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
   &:hover {
     cursor: pointer;
     color: ${Colors.white75};
@@ -66,6 +68,7 @@ const SkillUpgrador = styled.span`
   vertical-align: baseline;
   padding: 3px;
   margin: 0 auto 5px;
+  display: ${({ show }) => (show ? 'flex' : 'none')};
   &:hover {
     cursor: pointer;
     color: ${Colors.white75};
@@ -76,7 +79,8 @@ const SkillUpgrador = styled.span`
 export const Skills = ({
   skills = {},
   upgradeCharacterSkill,
-  character = 0
+  character = 0,
+  wasBought = false
 }) => {
   const [skill, setSkill] = useState(() => 0)
 
@@ -110,27 +114,25 @@ export const Skills = ({
         <Skill
           skill={skills[skill]}
         />
-        <SkillSelectorWrapper
-          show={skills.length > 1}
-        >
+        <SkillSelectorWrapper>
           <SkillSelector
             onClick={() => prevSkill()}
+            show={skills.length > 1}
           >
             {'<'}
           </SkillSelector>
-          {skill + 1} / {skills.length}
-          <SkillSelector
-            onClick={() => nextSkill()}
-          >
-            {'>'}
-          </SkillSelector>
-        </SkillSelectorWrapper>
-        <SkillSelectorWrapper show={upgradeCharacterSkill !== undefined}>
           <SkillUpgrador
             onClick={() => upgradeCharacterSkill(character, skill)}
+            show={wasBought && upgradeCharacterSkill !== undefined}
           >
             Upgrade {skills[skill].cost}
           </SkillUpgrador>
+          <SkillSelector
+            onClick={() => nextSkill()}
+            show={skills.length > 1}
+          >
+            {'>'}
+          </SkillSelector>
         </SkillSelectorWrapper>
       </Row>
     </Wrapper>
@@ -139,5 +141,6 @@ export const Skills = ({
 Skills.propTypes = {
   skills: PropTypes.array,
   upgradeCharacterSkill: PropTypes.func,
-  character: PropTypes.number
+  character: PropTypes.number,
+  wasBought: PropTypes.bool
 }

@@ -14,7 +14,6 @@ const CharacterGrid = styled.div`
   grid-gap: 12px;
   justify-items: center;
   align-items: center;
-  width: 100%;
   margin: auto;
   height: 100%;
   width: 100%;
@@ -62,7 +61,12 @@ export const SelectCharacter = ({
         return (
           <Character key={offset}>
             <Stats character={character}/>
-            <Skills skills={character.skills} upgradeCharacterSkill={upgradeCharacterSkill} character={offset}/>
+            <Skills
+              skills={character.skills}
+              upgradeCharacterSkill={upgradeCharacterSkill}
+              character={offset}
+              wasBought={character.price === 0}
+            />
             <ButtonRow>
               <Button onClick={
                 () => {
