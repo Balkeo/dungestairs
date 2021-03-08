@@ -1,18 +1,53 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Characters from './Character/Characters'
 import { calculate } from '../Helper/CharacterCalculator'
 
-export const usePlayer = () => {
-  const [player, setPlayer] = useState(
-    {
-      gold: 0,
+const saveGame = (player) => {
+  try {
+    localStorage.setItem('_dungestairs', JSON.stringify(player))
+  } catch (err) {
+    console.log('Cannot access localStorage - browser may be old or storage may be corrupt')
+  }
+}
+
+const loadGame = () => {
+  const gameLoad = JSON.parse(localStorage.getItem('_dungestairs'))
+  if (gameLoad !== null) {
+    const player = {
+      ...gameLoad,
       selectedCharacter: null,
-      inGame: false,
-      depth: {
-        max: 0,
-        previous: 0
-      },
-      characters: Characters
+      inGame: false
+    }
+    player.characters = Object.assign(Characters, player.characters)
+    return player
+  }
+
+  return null
+}
+
+export const usePlayer = () => {
+  const loadedPlayer = loadGame()
+  console.log(loadedPlayer)
+  const [player, setPlayer] = useState(
+    () => {
+      if (loadedPlayer !== null) {
+        return {
+          ...loadedPlayer,
+          selectedCharacter: null,
+          inGame: false
+        }
+      } else {
+        return {
+          gold: 0,
+          selectedCharacter: null,
+          inGame: false,
+          depth: {
+            max: 0,
+            previous: 0
+          },
+          characters: Characters
+        }
+      }
     }
   )
 
@@ -92,13 +127,18 @@ export const usePlayer = () => {
         level: player.characters[character].skills[skill].level + 1
       }
       const newCharacter = {
-        ...player.characters[character],
-        price: 0
+        ...player.characters[character]
       }
       newCharacter.skills[skill] = newSkill
       updateCharacters(character, newCharacter)
     }
   }
+
+  useEffect(() => {
+    if (!player.inGame) {
+      saveGame(player)
+    }
+  })
 
   return { player, addGold, selectCharacter, removeSelectedCharacter, buyCharacter, upgradeCharacterSkill }
 }

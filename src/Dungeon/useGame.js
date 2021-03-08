@@ -3,14 +3,14 @@ import { useDungeon } from './useDungeon'
 import { useCharacter } from './Character/useCharacter'
 import { resolveFight } from './resolveFight'
 
-export const useGame = (selectedCharacter = 0, removeSelectedCharacter) => {
+export const useGame = (player = {}, removeSelectedCharacter) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
-  const { character, updateCharacter } = useCharacter(selectedCharacter)
+  const { character, updateCharacter } = useCharacter(player.characters[player.selectedCharacter])
 
   useEffect(() => {
     if (character.hp <= 0) {
-      removeSelectedCharacter()
+      removeSelectedCharacter(depth)
     }
   }, [character])
 

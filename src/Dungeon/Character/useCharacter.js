@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { isEqual } from 'lodash'
 
-import Characters from './Characters'
 import { calculate } from '../../Helper/CharacterCalculator'
 
-export const useCharacter = (selectedCharacter = 0) => {
+export const useCharacter = (selectedCharacter) => {
   const selectCharacter = () => {
-    const character = Object.assign({}, Characters[selectedCharacter])
+    const character = Object.assign({}, selectedCharacter)
     return calculate(character)
   }
 

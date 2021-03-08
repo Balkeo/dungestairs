@@ -45,22 +45,30 @@ const CELL_TYPE_FOR_TYPE = {
   ]
 }
 
-const getChestContent = (depth = 1) => {
-  return depth + rollDice(6, depth)
+const scaleDepthToLevel = (depth = 0) => {
+  const scale = parseInt(depth / 55)
+  let depthLevel = 1 + depth % 55
+  depthLevel = parseInt(Math.log(depthLevel))
+  return 1 + scale + depthLevel
 }
 
-const initMonsterCell = (depth = 1) => {
-  return useMonster(depth)
+const getChestContent = (level = 1) => {
+  return level + rollDice(6, level)
+}
+
+const initMonsterCell = (level = 1) => {
+  return useMonster(level)
 }
 
 const setContent = (type, depth) => {
+  const level = scaleDepthToLevel(depth)
   switch (type) {
     case 'empty':
       return ''
     case 'chest':
-      return getChestContent(depth)
+      return getChestContent(level)
     case 'monster':
-      return initMonsterCell(depth)
+      return initMonsterCell(level)
     default:
   }
 }
