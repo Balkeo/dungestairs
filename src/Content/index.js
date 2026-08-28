@@ -14,10 +14,10 @@ import { resolveIcon } from './assets'
 import spells from './spells.json'
 import passives from './passives.json'
 
-// Auto-discover every class definition in ./classes (webpack require.context).
-const classContext = require.context('./classes', false, /\.json$/)
-const rawClasses = classContext.keys().map((key) => {
-  const mod = classContext(key)
+// Auto-discover every class definition in ./classes (Vite import.meta.glob).
+const classModules = import.meta.glob('./classes/*.json', { eager: true })
+const rawClasses = Object.keys(classModules).map((key) => {
+  const mod = classModules[key]
   return mod && mod.default ? mod.default : mod
 })
 

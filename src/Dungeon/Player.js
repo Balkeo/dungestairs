@@ -1,8 +1,5 @@
-// @flow
-
 import React from 'react'
 import PropTypes from 'prop-types'
-import { PLAYER_TYPE } from './Content/constant'
 import styled from 'styled-components'
 import Colors from '../Helper/Colors'
 import Coin from '../Assets/Coin.png'
@@ -31,13 +28,9 @@ const Label = styled.span`
   margin: 0 auto;
 `
 
-type Props = {
-  player: PLAYER_TYPE
-}
-
 export const Player = ({
   player
-}: Props) => {
+}) => {
   return (
     <Wraper>
       <Label

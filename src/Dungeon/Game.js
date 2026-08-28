@@ -27,7 +27,7 @@ export const Game = ({
 }) => {
   const { size, floor, clickOnCell, depth, character, queuedSpell, queueSpell } = useGame(player, removeSelectedCharacter)
   const { width, height } = useWindowDimensions()
-  const isMobile: boolean = (width <= 768)
+  const isMobile = (width <= 768)
 
   return (
         <Wraper>

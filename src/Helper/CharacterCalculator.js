@@ -1,13 +1,11 @@
-// @flow
 import jexl from 'jexl-sync'
-import type { CHARACTER_TYPE } from '../Dungeon/Content/constant'
 import Characters from '../Dungeon/Character/Characters'
 import Monsters from '../Dungeon/Monster/Monsters'
 
 const getBaseCharacter = (characterType) => {
   const CharactersAndMonster = Characters.concat(Monsters)
   let baseCharacter = {}
-  CharactersAndMonster.forEach((character: CHARACTER_TYPE) => {
+  CharactersAndMonster.forEach((character) => {
     if (character.type === characterType) {
       baseCharacter = character
     }
@@ -37,7 +35,7 @@ const evalNumber = (expression, context) => {
   return typeof value === 'number' && !isNaN(value) ? value : 0
 }
 
-const applySkills = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): CHARACTER_TYPE => {
+const applySkills = (character, baseCharacter) => {
   character.skills.forEach(function (skill, skillIndex) {
     skill.effects.forEach(function (effect) {
       character[effect.target] = baseCharacter[effect.target] + jexl.eval(effect.effect, character)
@@ -47,7 +45,7 @@ const applySkills = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): 
   return character
 }
 
-const applyItems = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): CHARACTER_TYPE => {
+const applyItems = (character, baseCharacter) => {
   for (let index = 0; index < 8; index++) {
     const item = character.items[index]
     if (typeof item !== 'undefined') {
@@ -61,7 +59,7 @@ const applyItems = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): C
 // summed per target and applied as an absolute offset from the base value so
 // that calculate() stays idempotent when called repeatedly. "threshold" and
 // "trigger" passives are situational and resolved during combat instead.
-const applyPassives = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE): CHARACTER_TYPE => {
+const applyPassives = (character, baseCharacter) => {
   if (!Array.isArray(character.passives)) {
     return character
   }
@@ -78,7 +76,7 @@ const applyPassives = (character: CHARACTER_TYPE, baseCharacter: CHARACTER_TYPE)
   return character
 }
 
-export function calculate (character: CHARACTER_TYPE): CHARACTER_TYPE {
+export function calculate (character) {
   const baseCharacter = getBaseCharacter(character.type)
   // Defensive clone: stats and skills would otherwise be shared by reference
   // with the base config, so mutating them here would corrupt the template.
