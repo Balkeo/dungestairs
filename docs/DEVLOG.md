@@ -4,6 +4,26 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 6 — Polish mobile (Phase 2)
+
+**Corrigé**
+
+- **Portrait/stats surdimensionnés** — la taille du portrait dérivait d'un
+  `mobileHeight` (= `height - width - 20`) qui débordait ; remplacée par une
+  taille bornée (`min(64vw, 240px)`). La rangée `atq/def/spd` passe en `flex`
+  et ne se fait plus couper.
+- **Or & profondeur invisibles en jeu** — la barre d'info était `display:none`
+  sur mobile ; réaffichée (« Gold : N | Depth : N »).
+- **Boutons ⚙️/? qui recouvraient le jeu** — padding haut sur mobile pour
+  dégager la zone des boutons flottants.
+- **Sélection de classe** — `scroll-snap` horizontal pour swiper proprement
+  d'une classe à l'autre.
+
+**Vérifié** (390×844 + desktop 1200) — aucun débordement horizontal, stats
+complètes, or/profondeur visibles, desktop non régressé, zéro erreur console.
+
+---
+
 ## Sprint 5 — Sauvegardes versionnées & réglages (Phase 2)
 
 **Livré**

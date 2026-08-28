@@ -44,7 +44,7 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 
 - Versionnage des sauvegardes + migration *(Critique, S)* — ✅ livré (sprint 5)
 - Écran de réglages (mute, reset save) *(Critique, S)* — ✅ livré (sprint 5)
-- Polish mobile & responsive *(Critique, M)* — ⬜ à faire
+- Polish mobile & responsive *(Critique, M)* — ✅ livré (sprint 6)
 - Méta-progression & déblocages *(Important, M)* — ⬜ à faire
 - Passe artistique cohérente *(Important, L)* — ⬜ à faire
 - Page d'accueil / itch.io *(Important, S)* — ⬜ à faire

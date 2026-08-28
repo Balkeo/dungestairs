@@ -19,8 +19,8 @@ const Wraper = styled.div`
   border-radius: ${({ background }) => (background ? '0' : '10px')};
   order: 2;
   @media only screen and (max-width: 768px) {
-    width: ${({ mobileHeight }) => (mobileHeight !== null ? mobileHeight : 200)}px;
-    height: ${({ mobileHeight }) => (mobileHeight !== null ? mobileHeight : 200)}px;
+    width: min(64vw, 240px);
+    height: min(64vw, 240px);
   }
 `
 
@@ -40,13 +40,13 @@ export const Stats = ({
 }) => {
   return (
     <Wraper background={character.icon} mobileHeight={mobileHeight}>
-      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
         {
           Object.entries(character.stats).map(([stats, value]) => {
             return (
               <div
                 key={stats}
-                style={{ width: '85px' }}
+                style={{ flex: 1, minWidth: 0, textAlign: 'center' }}
               >
                 {stats} : {value}
               </div>
