@@ -54,6 +54,12 @@ export const glowPulse = keyframes`
   50% { transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 14px rgba(255, 208, 80, 1)); }
 `
 
+// Pulsing outline on enemies you can target with an armed spell.
+export const targetPulse = keyframes`
+  0%, 100% { opacity: 0.35; transform: scale(0.94); }
+  50% { opacity: 0.9; transform: scale(1.02); }
+`
+
 // Full-screen depth banner entrance.
 export const bannerPop = keyframes`
   0% { transform: scale(0.6); opacity: 0; }

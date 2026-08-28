@@ -10,6 +10,15 @@ body, #root, .App {
   text-align: center;
 }
 
+/* On phones the help/settings buttons float at the top-right; keep the game
+   and menu clear of them. */
+@media only screen and (max-width: 768px) {
+  .App {
+    padding-top: 54px;
+    box-sizing: border-box;
+  }
+}
+
 progress::-moz-progress-bar, progress::-webkit-progress-value, progress
 {
   background: red;

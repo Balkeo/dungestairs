@@ -1,4 +1,5 @@
 import Colors from '../Helper/Colors'
+import { rarityColor } from '../Content/rarity'
 
 // Turn combat engine events into floating-text descriptors ({ text, color,
 // size }) for a given side ('monster' or 'character').
@@ -29,4 +30,12 @@ export const eventsToTexts = (events = [], on) => {
 
 export const goldText = (amount) => {
   return { text: `+${amount}`, color: Colors.yellow, size: 18 }
+}
+
+export const itemText = (item) => {
+  return { text: `${item.glyph || ''} ${item.name}`.trim(), color: rarityColor(item.rarity), size: 14 }
+}
+
+export const plainText = (text, color = Colors.white100, size = 16) => {
+  return { text, color, size }
 }

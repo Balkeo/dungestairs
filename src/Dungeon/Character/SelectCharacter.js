@@ -19,6 +19,7 @@ const CharacterGrid = styled.div`
   height: 100%;
   width: 100%;
   overflow: scroll;
+  scroll-snap-type: x mandatory;
   @media only screen and (max-width: 768px) {
     grid-gap: 0px;
   }
@@ -32,6 +33,7 @@ const Character = styled.div`
   background-color: ${Colors.dark1};
   border-radius: 5px;
   margin-left: 15px;
+  scroll-snap-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

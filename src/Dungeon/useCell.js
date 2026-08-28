@@ -53,7 +53,7 @@ const scaleDepthToLevel = (depth = 0) => {
 }
 
 const getChestContent = (level = 1) => {
-  return level + rollDice(6, level)
+  return level * 2 + rollDice(6, level)
 }
 
 const initMonsterCell = (level = 1) => {

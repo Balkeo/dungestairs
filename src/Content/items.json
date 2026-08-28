@@ -1,0 +1,72 @@
+{
+  "rusty_dagger": {
+    "name": "Rusty Dagger",
+    "glyph": "🗡️",
+    "target": "stats.atq",
+    "effect": "1",
+    "rarity": "common",
+    "minDepth": 1,
+    "weight": 22,
+    "description": "+1 ATQ"
+  },
+  "buckler": {
+    "name": "Buckler",
+    "glyph": "🛡️",
+    "target": "stats.def",
+    "effect": "1",
+    "rarity": "common",
+    "minDepth": 1,
+    "weight": 20,
+    "description": "+1 DEF"
+  },
+  "swift_boots": {
+    "name": "Swift Boots",
+    "glyph": "🥾",
+    "target": "stats.spd",
+    "effect": "1",
+    "rarity": "common",
+    "minDepth": 2,
+    "weight": 16,
+    "description": "+1 SPD"
+  },
+  "vitality_charm": {
+    "name": "Vitality Charm",
+    "glyph": "❤️",
+    "target": "maxHp",
+    "effect": "6",
+    "rarity": "uncommon",
+    "minDepth": 2,
+    "weight": 12,
+    "description": "+6 Max HP"
+  },
+  "short_sword": {
+    "name": "Short Sword",
+    "glyph": "⚔️",
+    "target": "stats.atq",
+    "effect": "2",
+    "rarity": "uncommon",
+    "minDepth": 3,
+    "weight": 12,
+    "description": "+2 ATQ"
+  },
+  "plate_armor": {
+    "name": "Plate Armor",
+    "glyph": "🦺",
+    "target": "stats.def",
+    "effect": "2",
+    "rarity": "uncommon",
+    "minDepth": 4,
+    "weight": 10,
+    "description": "+2 DEF"
+  },
+  "warlords_ring": {
+    "name": "Warlord's Ring",
+    "glyph": "💍",
+    "target": "stats.atq",
+    "effect": "3",
+    "rarity": "rare",
+    "minDepth": 6,
+    "weight": 5,
+    "description": "+3 ATQ"
+  }
+}

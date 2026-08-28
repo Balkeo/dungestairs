@@ -79,5 +79,50 @@
     "actions": [
       { "kind": "buff", "target": "stats.atq", "amount": "3", "duration": 2 }
     ]
+  },
+  "arrow_volley": {
+    "name": "Arrow Volley",
+    "icon": null,
+    "cooldown": 2,
+    "description": "Loose a volley dealing ATQ + 2 magic damage, ignoring armor.",
+    "actions": [
+      { "kind": "damage", "amount": "stats.atq + 2" }
+    ]
+  },
+  "dodge_roll": {
+    "name": "Dodge Roll",
+    "icon": null,
+    "cooldown": 4,
+    "description": "Raise SPD by 3 for 2 rounds to strike first and evade.",
+    "actions": [
+      { "kind": "buff", "target": "stats.spd", "amount": "3", "duration": 2 }
+    ]
+  },
+  "cleave": {
+    "name": "Cleave",
+    "icon": null,
+    "cooldown": 3,
+    "description": "A savage swing dealing double ATQ magic damage.",
+    "actions": [
+      { "kind": "damage", "amount": "stats.atq * 2" }
+    ]
+  },
+  "blood_rage": {
+    "name": "Blood Rage",
+    "icon": null,
+    "cooldown": 5,
+    "description": "Raise ATQ by 4 for 2 rounds.",
+    "actions": [
+      { "kind": "buff", "target": "stats.atq", "amount": "4", "duration": 2 }
+    ]
+  },
+  "second_wind": {
+    "name": "Second Wind",
+    "icon": null,
+    "cooldown": 4,
+    "description": "Restore 10 HP plus 1 per level.",
+    "actions": [
+      { "kind": "heal", "amount": "10 + level" }
+    ]
   }
 }

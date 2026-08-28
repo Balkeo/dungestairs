@@ -7,7 +7,7 @@ import closedCell from '../Assets/Closed-Cell.jpg'
 import Colors from '../Helper/Colors'
 import { CELL_GLYPHS, CHEST_EMPTY_GLYPH } from '../Content/glyphs'
 import { FloatingLayer, useFloatingQueue } from '../Guideline/FloatingText'
-import { breathe, shakeHit, flashRed, poof, revealIn, glowPulse } from '../Guideline/animations'
+import { breathe, shakeHit, flashRed, poof, revealIn, glowPulse, targetPulse } from '../Guideline/animations'
 
 const Wraper = styled.div`
   display: flex;
@@ -50,6 +50,11 @@ const glyphBase = css`
 
 const Glyph = styled.span`
   ${glyphBase}
+  ${({ big }) => big && css`
+    font-size: 60px;
+    filter: drop-shadow(0 0 8px rgba(255, 80, 80, 0.7));
+    @media only screen and (max-width: 768px) { font-size: 38px; }
+  `}
   ${({ variant }) => variant === 'idle' && css`animation: ${breathe} 2.4s ease-in-out infinite;`}
   ${({ variant }) => variant === 'key' && css`animation: ${glowPulse} 1.6s ease-in-out infinite;`}
   ${({ variant }) => variant === 'dead' && css`animation: ${poof} 0.6s ease-in forwards;`}
@@ -70,6 +75,17 @@ const RedFlash = styled.div`
   background: radial-gradient(circle, ${Colors.red} 0%, rgba(255, 45, 85, 0) 70%);
   animation: ${flashRed} 0.4s ease-out forwards;
   pointer-events: none;
+`
+
+const TargetRing = styled.div`
+  position: absolute;
+  inset: 6%;
+  border: 3px solid ${Colors.yellow};
+  border-radius: 8px;
+  box-shadow: 0 0 10px ${Colors.yellow};
+  pointer-events: none;
+  z-index: 3;
+  animation: ${targetPulse} 0.9s ease-in-out infinite;
 `
 
 const GaugeWrap = styled.div`
@@ -112,7 +128,7 @@ const resolveGlyph = (cellValue) => {
   return CELL_GLYPHS[type] || null
 }
 
-export const Cell = ({ cellValue, onClick, action }) => {
+export const Cell = ({ cellValue, onClick, action, targetable }) => {
   const [isHovered, setHover] = useState(false)
   const [hitPulse, setHitPulse] = useState(0)
   const [floats, pushFloat] = useFloatingQueue()
@@ -120,6 +136,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
   const isMonster = cellValue.type === 'monster'
   const monsterHp = isMonster && cellValue.content ? cellValue.content.hp : null
   const isDead = isMonster && cellValue.content && cellValue.content.hp <= 0
+  const isBoss = isMonster && cellValue.content && cellValue.content.isBoss
   const glyph = resolveGlyph(cellValue)
 
   // Flinch when a monster loses HP.
@@ -146,7 +163,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
         ? <Glyph variant="dead">{glyph}</Glyph>
         : (
           <ShakeWrap key={hitPulse} shaking={hitPulse > 0}>
-            <Glyph variant="idle">{glyph}</Glyph>
+            <Glyph variant="idle" big={isBoss}>{glyph}</Glyph>
             {hitPulse > 0 && <RedFlash key={hitPulse} />}
           </ShakeWrap>
           )
@@ -170,6 +187,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
         highlight={isHovered && cellValue.canClick}
       >
         <FloatingLayer items={floats} />
+        {targetable && isMonster && !isDead && !cellValue.isBlocked && <TargetRing />}
         {glyphNode}
         {cellValue.isOpen && isMonster && !isDead && (
           <GaugeWrap>
@@ -185,5 +203,6 @@ export const Cell = ({ cellValue, onClick, action }) => {
 Cell.propTypes = {
   cellValue: PropTypes.object,
   onClick: PropTypes.func,
-  action: PropTypes.object
+  action: PropTypes.object,
+  targetable: PropTypes.bool
 }

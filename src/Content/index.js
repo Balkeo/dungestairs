@@ -13,6 +13,7 @@ import { EMPTY_CHARACTER } from '../Dungeon/Content/constant'
 import { resolveIcon } from './assets'
 import spells from './spells.json'
 import passives from './passives.json'
+import items from './items.json'
 
 // Auto-discover every class definition in ./classes (Vite import.meta.glob).
 const classModules = import.meta.glob('./classes/*.json', { eager: true })
@@ -40,6 +41,7 @@ const buildCharacter = (config) => {
     id: config.id,
     type: config.type,
     icon: resolveIcon(config.icon),
+    glyph: config.glyph || null,
     hp: config.hp,
     maxHp: config.hp,
     stats: { ...config.stats },
@@ -60,4 +62,5 @@ const Classes = rawClasses
 
 export const Spells = spells
 export const Passives = passives
+export const Items = Object.keys(items).map((id) => ({ id, ...items[id] }))
 export default Classes

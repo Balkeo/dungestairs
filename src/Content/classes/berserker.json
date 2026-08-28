@@ -1,0 +1,25 @@
+{
+  "id": "berserker",
+  "type": "Berserker",
+  "icon": null,
+  "glyph": "🪓",
+  "hp": 28,
+  "stats": { "atq": 4, "def": 0, "spd": 1 },
+  "level": 1,
+  "price": 1500,
+  "spells": ["cleave", "blood_rage", "second_wind"],
+  "passives": ["last_stand", "berserk", "life_tap"],
+  "skills": [
+    {
+      "icon": null,
+      "name": "War Paint",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        { "target": "hp", "effect": "5 * (skills[0].level - 1)" },
+        { "target": "maxHp", "effect": "5 * (skills[0].level - 1)" }
+      ],
+      "description": "Fiercer war paint increases maximum hit points by 5 per level."
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Colors from '../../Helper/Colors'
 
 export const InventorySlot = ({
   children
@@ -9,8 +8,7 @@ export const InventorySlot = ({
     <div
       style={{
         width: '55px',
-        height: '55px',
-        backgroundColor: Colors.white75
+        height: '55px'
       }}
     >
       { children }

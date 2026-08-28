@@ -9,6 +9,7 @@ import { SpellBar } from './Character/SpellBar'
 import { Floor } from './Floor'
 import { Cell } from './Cell'
 import { DepthBanner } from './DepthBanner'
+import { DeathScreen } from './DeathScreen'
 import useWindowDimensions from '../useWindowDimensions'
 
 const Wraper = styled.div`
@@ -24,7 +25,9 @@ const Wraper = styled.div`
 export const Game = ({
   player = {},
   addGold,
-  removeSelectedCharacter
+  removeSelectedCharacter,
+  restartRun,
+  recordRun
 }) => {
   const {
     size,
@@ -36,14 +39,20 @@ export const Game = ({
     queueSpell,
     cellAction,
     characterAction,
-    depthBanner
-  } = useGame(player, removeSelectedCharacter)
+    depthBanner,
+    runOver
+  } = useGame(player, recordRun)
   const { width, height } = useWindowDimensions()
   const isMobile = (width <= 768)
 
   return (
         <Wraper>
             <DepthBanner banner={depthBanner} />
+            <DeathScreen
+              summary={runOver}
+              onReplay={() => restartRun(runOver.depth)}
+              onMenu={() => removeSelectedCharacter(runOver.depth)}
+            />
             <Character
               character={character}
               mobileHeight={height - width - 20}
@@ -63,6 +72,7 @@ export const Game = ({
                         key={cellOffset}
                         cellValue={cellValue}
                         action={cellAction && cellAction.offset === cellOffset ? cellAction : null}
+                        targetable={!!queuedSpell && cellValue.type === 'monster' && cellValue.isOpen && cellValue.canClick && cellValue.content && cellValue.content.hp > 0}
                         onClick={() => clickOnCell(cellValue.x, cellValue.y, addGold)}
                     />
                 ))}
@@ -73,5 +83,7 @@ export const Game = ({
 Game.propTypes = {
   player: PropTypes.object,
   addGold: PropTypes.func,
-  removeSelectedCharacter: PropTypes.func
+  removeSelectedCharacter: PropTypes.func,
+  restartRun: PropTypes.func,
+  recordRun: PropTypes.func
 }

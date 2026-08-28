@@ -1,42 +1,8 @@
 import { useState, useEffect } from 'react'
 import Characters from './Character/Characters'
 import { calculate } from '../Helper/CharacterCalculator'
-
-const saveGame = (player) => {
-  try {
-    localStorage.setItem('_dungestairs', JSON.stringify(player))
-  } catch (err) {
-    console.log('Cannot access localStorage - browser may be old or storage may be corrupt')
-  }
-}
-
-const loadGame = () => {
-  const gameLoad = JSON.parse(localStorage.getItem('_dungestairs'))
-  if (gameLoad !== null) {
-    const savedCharacters = gameLoad.characters || []
-    // Content-driven fields (stats, spells, passives, icon) always come from
-    // the live config; only the player's progression (gold spent = price,
-    // upgraded skills) is restored from the save. This keeps existing saves
-    // compatible when new spells/passives are added to a class.
-    const characters = Characters.map((base, index) => {
-      const saved = savedCharacters[index] || {}
-      return {
-        ...base,
-        price: saved.price !== undefined ? saved.price : base.price,
-        skills: saved.skills || base.skills
-      }
-    })
-    const player = {
-      ...gameLoad,
-      characters,
-      selectedCharacter: null,
-      inGame: false
-    }
-    return player
-  }
-
-  return null
-}
+import { saveGame, loadGame, DEFAULT_STATS } from '../Helper/save'
+import { checkAchievements, achievementById } from '../Helper/achievements'
 
 export const usePlayer = () => {
   const loadedPlayer = loadGame()
@@ -46,17 +12,21 @@ export const usePlayer = () => {
         return {
           ...loadedPlayer,
           selectedCharacter: null,
-          inGame: false
+          inGame: false,
+          runId: 0
         }
       } else {
         return {
           gold: 0,
           selectedCharacter: null,
           inGame: false,
+          runId: 0,
           depth: {
             max: 0,
             previous: 0
           },
+          stats: { ...DEFAULT_STATS },
+          achievements: [],
           characters: Characters
         }
       }
@@ -87,6 +57,45 @@ export const usePlayer = () => {
         ...previousPlayer,
         selectedCharacter: character,
         inGame: true
+      }
+    })
+  }
+
+  // Fold a finished run into the lifetime stats, unlock any newly-earned
+  // achievements and pay out their gold rewards. Returns the achievements
+  // unlocked by this run so the UI can celebrate them.
+  const recordRun = (summary = {}) => {
+    const previousStats = player.stats || { ...DEFAULT_STATS }
+    const stats = {
+      runs: (previousStats.runs || 0) + 1,
+      bestDepth: Math.max(previousStats.bestDepth || 0, summary.depth || 0),
+      kills: (previousStats.kills || 0) + (summary.kills || 0),
+      bossKills: (previousStats.bossKills || 0) + (summary.bossKills || 0),
+      goldEarned: (previousStats.goldEarned || 0) + (summary.gold || 0)
+    }
+    const completed = player.achievements || []
+    const newlyIds = checkAchievements(stats, completed)
+    const reward = newlyIds.reduce((sum, id) => sum + (achievementById(id).reward || 0), 0)
+    setPlayer((previousPlayer) => ({
+      ...previousPlayer,
+      gold: previousPlayer.gold + reward,
+      stats,
+      achievements: [...(previousPlayer.achievements || []), ...newlyIds]
+    }))
+    return newlyIds.map((id) => ({ id, ...achievementById(id) }))
+  }
+
+  // Start a fresh run with the same character. Bumping runId re-keys (and thus
+  // remounts) the Game, giving a new dungeon and a full-HP character.
+  const restartRun = (depth) => {
+    setPlayer((previousPlayer) => {
+      return {
+        ...previousPlayer,
+        runId: (previousPlayer.runId || 0) + 1,
+        depth: {
+          max: Math.max(previousPlayer.depth.max, depth),
+          previous: depth
+        }
       }
     })
   }
@@ -152,5 +161,5 @@ export const usePlayer = () => {
     }
   })
 
-  return { player, addGold, selectCharacter, removeSelectedCharacter, buyCharacter, upgradeCharacterSkill }
+  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill }
 }

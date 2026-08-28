@@ -1,0 +1,51 @@
+{
+  "first_blood": {
+    "name": "Premier sang",
+    "desc": "Terrasse ton premier monstre.",
+    "glyph": "⚔️",
+    "when": "kills >= 1",
+    "reward": 10
+  },
+  "delver": {
+    "name": "Explorateur",
+    "desc": "Atteins l'étage 5.",
+    "glyph": "🗺️",
+    "when": "bestDepth >= 5",
+    "reward": 50
+  },
+  "boss_slayer": {
+    "name": "Tueur de boss",
+    "desc": "Vaincs un boss.",
+    "glyph": "🐉",
+    "when": "bossKills >= 1",
+    "reward": 100
+  },
+  "deep_diver": {
+    "name": "Plongeur",
+    "desc": "Atteins l'étage 10.",
+    "glyph": "⛏️",
+    "when": "bestDepth >= 10",
+    "reward": 150
+  },
+  "veteran": {
+    "name": "Vétéran",
+    "desc": "Joue 10 parties.",
+    "glyph": "🎖️",
+    "when": "runs >= 10",
+    "reward": 100
+  },
+  "hoarder": {
+    "name": "Chasseur de trésors",
+    "desc": "Gagne 1000 or au total.",
+    "glyph": "💰",
+    "when": "goldEarned >= 1000",
+    "reward": 200
+  },
+  "abyssal": {
+    "name": "Abyssal",
+    "desc": "Atteins l'étage 20.",
+    "glyph": "🕳️",
+    "when": "bestDepth >= 20",
+    "reward": 300
+  }
+}

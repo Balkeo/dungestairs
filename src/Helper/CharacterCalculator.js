@@ -1,9 +1,9 @@
 import jexl from 'jexl-sync'
 import Characters from '../Dungeon/Character/Characters'
-import Monsters from '../Dungeon/Monster/Monsters'
+import Monsters, { Bosses } from '../Dungeon/Monster/Monsters'
 
 const getBaseCharacter = (characterType) => {
-  const CharactersAndMonster = Characters.concat(Monsters)
+  const CharactersAndMonster = Characters.concat(Monsters).concat(Bosses)
   let baseCharacter = {}
   CharactersAndMonster.forEach((character) => {
     if (character.type === characterType) {
@@ -35,59 +35,51 @@ const evalNumber = (expression, context) => {
   return typeof value === 'number' && !isNaN(value) ? value : 0
 }
 
-const applySkills = (character, baseCharacter) => {
-  character.skills.forEach(function (skill, skillIndex) {
-    skill.effects.forEach(function (effect) {
-      character[effect.target] = baseCharacter[effect.target] + jexl.eval(effect.effect, character)
-    })
-    character.skills[skillIndex].cost = skill.level * 50
-  })
-  return character
-}
-
-const applyItems = (character, baseCharacter) => {
-  for (let index = 0; index < 8; index++) {
-    const item = character.items[index]
-    if (typeof item !== 'undefined') {
-      character[item.target] = baseCharacter[item.target] + jexl.eval(item.effect, character)
-    }
-  }
-  return character
-}
-
-// "stat" passives are permanent, always-on bonuses (e.g. +1 DEF). They are
-// summed per target and applied as an absolute offset from the base value so
-// that calculate() stays idempotent when called repeatedly. "threshold" and
-// "trigger" passives are situational and resolved during combat instead.
-const applyPassives = (character, baseCharacter) => {
-  if (!Array.isArray(character.passives)) {
-    return character
-  }
-  const deltas = {}
-  character.passives.forEach((passive) => {
-    if (passive.kind === 'stat' && passive.target) {
-      deltas[passive.target] = (deltas[passive.target] || 0) + evalNumber(passive.amount, character)
-    }
-  })
-  Object.keys(deltas).forEach((target) => {
-    const base = getPath(baseCharacter, target) || 0
-    setPath(character, target, base + deltas[target])
-  })
-  return character
-}
-
+// A character's final stats are its base values plus the summed contributions of
+// its upgraded skills, its equipped items and its "stat" passives. Everything is
+// accumulated as an absolute offset from the base so calculate() is idempotent:
+// calling it again (e.g. after picking up loot) never double-counts. "threshold"
+// and "trigger" passives are situational and resolved during combat instead.
 export function calculate (character) {
   const baseCharacter = getBaseCharacter(character.type)
-  // Defensive clone: stats and skills would otherwise be shared by reference
-  // with the base config, so mutating them here would corrupt the template.
   character = {
     ...character,
     stats: { ...(character.stats || {}) },
     skills: (character.skills || []).map((skill) => ({ ...skill })),
+    items: (character.items || []).slice(),
     passives: character.passives || baseCharacter.passives || []
   }
-  character = applySkills(character, baseCharacter)
-  character = applyItems(character, baseCharacter)
-  character = applyPassives(character, baseCharacter)
+
+  const deltas = {}
+  const add = (targetPath, amount) => {
+    if (targetPath) {
+      deltas[targetPath] = (deltas[targetPath] || 0) + amount
+    }
+  }
+
+  character.skills.forEach((skill, skillIndex) => {
+    (skill.effects || []).forEach((effect) => {
+      add(effect.target, evalNumber(effect.effect, character))
+    })
+    character.skills[skillIndex].cost = skill.level * 50
+  })
+
+  character.items.forEach((item) => {
+    if (item && item.target) {
+      add(item.target, evalNumber(item.effect, character))
+    }
+  })
+
+  character.passives.forEach((passive) => {
+    if (passive.kind === 'stat' && passive.target) {
+      add(passive.target, evalNumber(passive.amount, character))
+    }
+  })
+
+  Object.keys(deltas).forEach((targetPath) => {
+    const base = getPath(baseCharacter, targetPath) || 0
+    setPath(character, targetPath, base + deltas[targetPath])
+  })
+
   return character
 }
