@@ -41,14 +41,15 @@ export const useGame = (player = {}, removeSelectedCharacter) => {
       } else {
         if (cell.type === 'chest') {
           addGold(cell.content)
-          cell.content = 0
-          updateCell(cell)
+          // Build a new cell object rather than mutating floor[offset]:
+          // updateCell diffs against the previous cell, so an in-place
+          // mutation would compare the object to itself and never re-render.
+          updateCell({ ...cell, content: 0 })
           return cell
         } else if (cell.type === 'monster') {
           const spellId = queuedSpellRef.current
           const fightResult = resolveFight(cell.content, character, spellId)
-          cell.content = fightResult.monster
-          updateCell(cell)
+          updateCell({ ...cell, content: fightResult.monster })
           updateCharacter(fightResult.character)
           if (spellId) {
             clearQueuedSpell()

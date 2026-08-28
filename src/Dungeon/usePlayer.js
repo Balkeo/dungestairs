@@ -92,17 +92,15 @@ export const usePlayer = () => {
   }
 
   const removeSelectedCharacter = (depth) => {
-    const playerDepth = player.depth
-    if (playerDepth.max < depth) {
-      playerDepth.max = depth
-    }
-    playerDepth.previous = depth
     setPlayer((previousPlayer) => {
       return {
         ...previousPlayer,
         selectedCharacter: null,
         inGame: false,
-        depth: playerDepth
+        depth: {
+          max: Math.max(previousPlayer.depth.max, depth),
+          previous: depth
+        }
       }
     })
   }
