@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
 import { Skills } from './Skills'
 import { Stats } from './Stats'
+import { ClassAbilities } from './ClassAbilities'
 import Button from '../../Guideline/Button'
 
 const CharacterGrid = styled.div`
@@ -66,6 +67,10 @@ export const SelectCharacter = ({
               upgradeCharacterSkill={upgradeCharacterSkill}
               character={offset}
               wasBought={character.price === 0}
+            />
+            <ClassAbilities
+              spells={character.spells}
+              passives={character.passives}
             />
             <ButtonRow>
               <Button onClick={

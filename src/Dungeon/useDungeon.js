@@ -24,13 +24,10 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   const [depth, setDepth] = useState(() => dungeonDepth)
   let [cells, setCells] = useState(() => generateCells(size, depth))
 
-  const increaseDepth = () => {
-    setDepth(depth + 1)
-  }
-
   const exitToNextDepth = () => {
-    increaseDepth()
-    setCells(generateCells(size, depth))
+    const nextDepth = depth + 1
+    setDepth(nextDepth)
+    setCells(generateCells(size, nextDepth))
   }
 
   const assertCellExist = (x, y) => {
@@ -136,12 +133,15 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   }
 
   const updateCell = (cell = {}) => {
-    const newCells = cells
-    const oldCell = cells[cell.offset]
-    if (!isEqual(oldCell, cell)) {
+    setCells((previousCells) => {
+      const oldCell = previousCells[cell.offset]
+      if (isEqual(oldCell, cell)) {
+        return previousCells
+      }
+      const newCells = [...previousCells]
       newCells[cell.offset] = cell
-    }
-    setCells(newCells)
+      return newCells
+    })
   }
 
   const openClosedCell = useCallback(
@@ -152,8 +152,9 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
       }
       setCells((previousCells) => {
         const newCells = [...previousCells]
-        newCells[offset].isOpen = true
-        newCells[offset].canClick = isEmptyCell(newCells[offset])
+        const openedCell = { ...newCells[offset], isOpen: true }
+        openedCell.canClick = isEmptyCell(openedCell)
+        newCells[offset] = openedCell
         return newCells
       })
     },

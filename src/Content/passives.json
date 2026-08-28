@@ -1,0 +1,72 @@
+{
+  "tough_skin": {
+    "name": "Tough Skin",
+    "kind": "stat",
+    "target": "stats.def",
+    "amount": "1",
+    "description": "Thick hide grants +1 DEF at all times."
+  },
+  "last_stand": {
+    "name": "Last Stand",
+    "kind": "threshold",
+    "when": "hp <= maxHp * 0.5",
+    "target": "stats.atq",
+    "amount": "3",
+    "description": "+3 ATQ while below 50% HP."
+  },
+  "thorns": {
+    "name": "Thorns",
+    "kind": "trigger",
+    "on": "damaged",
+    "effect": "riposte",
+    "amount": "stats.def",
+    "description": "Reflect DEF damage back to any attacker that hits you."
+  },
+  "deadly_precision": {
+    "name": "Deadly Precision",
+    "kind": "trigger",
+    "on": "attack",
+    "effect": "crit",
+    "amount": "0.2",
+    "description": "20% chance to deal double damage on your attack."
+  },
+  "venomous": {
+    "name": "Venomous",
+    "kind": "trigger",
+    "on": "hit",
+    "effect": "dot",
+    "amount": "1",
+    "duration": 2,
+    "description": "Your hits poison the enemy for 1 damage per round over 2 rounds."
+  },
+  "swift": {
+    "name": "Swift",
+    "kind": "stat",
+    "target": "stats.spd",
+    "amount": "1",
+    "description": "Light on your feet: +1 SPD at all times."
+  },
+  "arcane_mind": {
+    "name": "Arcane Mind",
+    "kind": "stat",
+    "target": "stats.atq",
+    "amount": "1",
+    "description": "Focused study grants +1 ATQ at all times."
+  },
+  "life_tap": {
+    "name": "Life Tap",
+    "kind": "trigger",
+    "on": "hit",
+    "effect": "lifesteal",
+    "amount": "0.25",
+    "description": "Heal for 25% of the damage your attacks deal."
+  },
+  "overload": {
+    "name": "Overload",
+    "kind": "threshold",
+    "when": "hp >= maxHp * 0.75",
+    "target": "stats.atq",
+    "amount": "2",
+    "description": "+2 ATQ while above 75% HP."
+  }
+}

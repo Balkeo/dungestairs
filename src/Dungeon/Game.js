@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { useGame } from './useGame'
 
 import Character from './Character'
+import { SpellBar } from './Character/SpellBar'
 import { Floor } from './Floor'
 import { Cell } from './Cell'
 import useWindowDimensions from '../useWindowDimensions'
@@ -24,7 +25,7 @@ export const Game = ({
   addGold,
   removeSelectedCharacter
 }) => {
-  const { size, floor, clickOnCell, depth, character } = useGame(player, removeSelectedCharacter)
+  const { size, floor, clickOnCell, depth, character, queuedSpell, queueSpell } = useGame(player, removeSelectedCharacter)
   const { width, height } = useWindowDimensions()
   const isMobile: boolean = (width <= 768)
 
@@ -36,6 +37,11 @@ export const Game = ({
               isMobile={isMobile}
               player={player}
               depth={depth}
+            />
+            <SpellBar
+              character={character}
+              queuedSpell={queuedSpell}
+              queueSpell={queueSpell}
             />
             <Floor size={size} depth={depth} player={player}>
                 {floor.map((cellValue, cellOffset) => (
