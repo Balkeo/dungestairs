@@ -1,9 +1,9 @@
 import jexl from 'jexl-sync'
 import Characters from '../Dungeon/Character/Characters'
-import Monsters from '../Dungeon/Monster/Monsters'
+import Monsters, { Bosses } from '../Dungeon/Monster/Monsters'
 
 const getBaseCharacter = (characterType) => {
-  const CharactersAndMonster = Characters.concat(Monsters)
+  const CharactersAndMonster = Characters.concat(Monsters).concat(Bosses)
   let baseCharacter = {}
   CharactersAndMonster.forEach((character) => {
     if (character.type === characterType) {

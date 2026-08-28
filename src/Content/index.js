@@ -41,6 +41,7 @@ const buildCharacter = (config) => {
     id: config.id,
     type: config.type,
     icon: resolveIcon(config.icon),
+    glyph: config.glyph || null,
     hp: config.hp,
     maxHp: config.hp,
     stats: { ...config.stats },

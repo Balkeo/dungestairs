@@ -4,6 +4,33 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 2 — Contenu & difficulté (Phase 1)
+
+Objectif : donner de la tension et de la variété. Trois chantiers de la roadmap.
+
+**Livré**
+
+- **Scaling des monstres** — leurs PV **et leur ATQ** montent avec la
+  profondeur (niveau = `1 + depth/4`, effets `stats.atq` dans les skills). Le
+  combat n'est plus trivial : un héros défendu prend enfin des dégâts.
+- **Vague de contenu** — 3 nouveaux monstres (Bat 🦇, Ogre 👹, Ghost 👻),
+  2 nouvelles classes **data-driven** (Ranger 🏹, Berserker 🪓) avec portrait
+  emoji (fallback dans `Stats` quand pas d'asset PNG), 5 nouveaux sorts
+  (arrow_volley, dodge_roll, cleave, blood_rage, second_wind) et 2 passifs
+  (berserk, keen_eye).
+- **Boss tous les 5 étages** — roster de boss (Dragon 🐉, Ogre King 👑,
+  Reaper ☠️) placés à côté de la clé ; **la clé est verrouillée tant que le
+  boss est vivant** (vraie porte). Glyphe agrandi + halo rouge.
+
+**Vérifié** (navigateur headless)
+- Menu à 5 classes (Ranger/Berserker + portraits emoji). ✅
+- Boss présent à l'étage 5, bloque la clé. ✅
+- Combat menaçant : PV tombés à 8% ; **mort en combat au boss** (étage 5). ✅
+- Alliés mages → « Arcane Boon » équipés (ATQ 2 → 5). ✅
+- Zéro erreur console. ✅
+
+---
+
 ## Sprint 1 — Boucle jouable (Phase 1)
 
 Objectif : transformer le prototype en cycle « entrer → looter → mourir →

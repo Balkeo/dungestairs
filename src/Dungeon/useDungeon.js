@@ -1,6 +1,40 @@
 import { useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash'
 import { generateCellForDepth, getEntranceCell, getKeyCell } from './useCell'
+import { makeBoss } from './Monster/useMonster'
+import { EMPTY_CELL } from './Content/constant'
+
+const BOSS_INTERVAL = 5
+
+// On a boss floor, drop a boss on a tile next to the key so it blocks the exit
+// until it is defeated.
+const placeBoss = (cells, size, depth, keyCell) => {
+  const neighbours = [
+    { x: keyCell.x + 1, y: keyCell.y },
+    { x: keyCell.x - 1, y: keyCell.y },
+    { x: keyCell.x, y: keyCell.y + 1 },
+    { x: keyCell.x, y: keyCell.y - 1 }
+  ]
+  const entrance = getEntranceCell(size)
+  for (const spot of neighbours) {
+    if (spot.x < 0 || spot.y < 0 || spot.x >= size || spot.y >= size) {
+      continue
+    }
+    const offset = spot.y * size + spot.x
+    if (offset === entrance.offset || offset === keyCell.offset) {
+      continue
+    }
+    cells[offset] = {
+      ...EMPTY_CELL,
+      type: 'monster',
+      content: makeBoss(depth),
+      offset,
+      x: spot.x,
+      y: spot.y
+    }
+    return
+  }
+}
 
 const generateCells = (size, depth) => {
   const cells = []
@@ -16,6 +50,10 @@ const generateCells = (size, depth) => {
 
   cells[entranceCell.offset] = entranceCell
   cells[keyCell.offset] = keyCell
+
+  if (depth % BOSS_INTERVAL === 0) {
+    placeBoss(cells, size, depth, keyCell)
+  }
 
   return cells
 }

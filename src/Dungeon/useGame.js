@@ -143,6 +143,11 @@ export const useGame = (player = {}) => {
         return cell
       }
       if (cell.type === 'Key') {
+        const bossAlive = floor.some((c) => c && c.content && c.content.isBoss && c.content.hp > 0)
+        if (bossAlive) {
+          emitCell(offset, [plainText('🔒 Boss', Colors.red, 14)])
+          return cell
+        }
         setDepthBanner({ id: nextId(), depth: depth + 1 })
         sfx.key()
         exitToNextDepth()

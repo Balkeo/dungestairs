@@ -50,6 +50,11 @@ const glyphBase = css`
 
 const Glyph = styled.span`
   ${glyphBase}
+  ${({ big }) => big && css`
+    font-size: 60px;
+    filter: drop-shadow(0 0 8px rgba(255, 80, 80, 0.7));
+    @media only screen and (max-width: 768px) { font-size: 38px; }
+  `}
   ${({ variant }) => variant === 'idle' && css`animation: ${breathe} 2.4s ease-in-out infinite;`}
   ${({ variant }) => variant === 'key' && css`animation: ${glowPulse} 1.6s ease-in-out infinite;`}
   ${({ variant }) => variant === 'dead' && css`animation: ${poof} 0.6s ease-in forwards;`}
@@ -120,6 +125,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
   const isMonster = cellValue.type === 'monster'
   const monsterHp = isMonster && cellValue.content ? cellValue.content.hp : null
   const isDead = isMonster && cellValue.content && cellValue.content.hp <= 0
+  const isBoss = isMonster && cellValue.content && cellValue.content.isBoss
   const glyph = resolveGlyph(cellValue)
 
   // Flinch when a monster loses HP.
@@ -146,7 +152,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
         ? <Glyph variant="dead">{glyph}</Glyph>
         : (
           <ShakeWrap key={hitPulse} shaking={hitPulse > 0}>
-            <Glyph variant="idle">{glyph}</Glyph>
+            <Glyph variant="idle" big={isBoss}>{glyph}</Glyph>
             {hitPulse > 0 && <RedFlash key={hitPulse} />}
           </ShakeWrap>
           )

@@ -26,17 +26,17 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 | Écran de fin de run | Critique | S | ✅ livré (sprint 1) |
 | Activer les cases inertes (allié / piège) | Critique | M | ✅ livré (sprint 1) |
 | SFX de base (Web Audio) | Important | M | ✅ livré (sprint 1) |
-| Vague de contenu (+monstres, +classes, +sorts) | Critique | M | ⬜ à faire |
-| Équilibrage & courbe de difficulté | Critique | M | ⬜ à faire *(voir note ci-dessous)* |
-| Boss tous les N étages | Important | M | ⬜ à faire |
+| Vague de contenu (+monstres, +classes, +sorts) | Critique | M | ✅ livré (sprint 2) |
+| Équilibrage & courbe de difficulté | Critique | M | 🟡 en cours — scaling monstres fait (sprint 2) |
+| Boss tous les N étages | Important | M | ✅ livré (sprint 2) |
 | Onboarding / tutoriel | Important | S | ⬜ à faire |
 | Feedback de combat avancé | Bonus | S | ⬜ à faire |
 
-> **Note équilibrage** — L'ATQ des monstres ne scale pas avec la profondeur :
-> un héros défendu ne prend quasiment aucun dégât en combat (la seule vraie
-> menace vient des pièges, d'où des morts autour de l'étage 15+). Le combat
-> manque de tension. À traiter en priorité (ATQ/variété des monstres qui
-> montent avec la profondeur) pour rendre les runs réellement tendues.
+> **Note équilibrage** — Les monstres montent désormais en PV **et en ATQ**
+> avec la profondeur, et les boss verrouillent la sortie tous les 5 étages :
+> le combat fait mal (morts en combat dès l'étage 5 en test). Reste à faire un
+> vrai passage de tuning (courbe de dégâts/or/prix, variété des menaces) pour
+> lisser la difficulté — d'où le statut « en cours » plutôt que « livré ».
 
 ## Phase 2 — Prêt pour la 1.0
 

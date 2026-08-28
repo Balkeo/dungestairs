@@ -68,5 +68,21 @@
     "target": "stats.atq",
     "amount": "2",
     "description": "+2 ATQ while above 75% HP."
+  },
+  "berserk": {
+    "name": "Berserk",
+    "kind": "threshold",
+    "when": "hp <= maxHp * 0.3",
+    "target": "stats.atq",
+    "amount": "5",
+    "description": "+5 ATQ while below 30% HP."
+  },
+  "keen_eye": {
+    "name": "Keen Eye",
+    "kind": "trigger",
+    "on": "attack",
+    "effect": "crit",
+    "amount": "0.3",
+    "description": "30% chance to deal double damage on your attack."
   }
 }
