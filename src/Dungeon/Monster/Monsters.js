@@ -25,12 +25,14 @@ const createMonster = (
       ],
       descriptons: ''
     }
-  ]
+  ],
+  glyph = null
 ) => {
   return {
     ...EMPTY_CHARACTER,
     type,
     icon,
+    glyph,
     hp,
     maxHp: hp,
     stats,
@@ -55,7 +57,7 @@ const SKELETON = createMonster('Skeleton', Skeleton, 2, { atq: 2, spd: 2, def: 0
     ],
     descriptons: ''
   }
-])
+], '💀')
 
 const ZOMBIE = createMonster('Zombie', Zombie, 3, { atq: 1, spd: 1, def: 0 }, 1, [], [
   {
@@ -72,7 +74,7 @@ const ZOMBIE = createMonster('Zombie', Zombie, 3, { atq: 1, spd: 1, def: 0 }, 1,
     ],
     descriptons: ''
   }
-])
+], '🧟')
 
 const ALIEN = createMonster('Alien', Alien, 2, { atq: 1, spd: 1, def: 1 }, 1, [], [
   {
@@ -89,7 +91,7 @@ const ALIEN = createMonster('Alien', Alien, 2, { atq: 1, spd: 1, def: 1 }, 1, []
     ],
     descriptons: ''
   }
-])
+], '👽')
 
 const Monsters = [
   SKELETON,

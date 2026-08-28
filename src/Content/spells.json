@@ -1,0 +1,83 @@
+{
+  "holy_strike": {
+    "name": "Holy Strike",
+    "icon": null,
+    "cooldown": 2,
+    "description": "A blessed blow dealing ATQ + DEF magic damage, ignoring armor.",
+    "actions": [
+      { "kind": "damage", "amount": "stats.atq + stats.def" }
+    ]
+  },
+  "lay_on_hands": {
+    "name": "Lay on Hands",
+    "icon": null,
+    "cooldown": 4,
+    "description": "Restore 8 HP plus 2 per level.",
+    "actions": [
+      { "kind": "heal", "amount": "8 + level * 2" }
+    ]
+  },
+  "iron_wall": {
+    "name": "Iron Wall",
+    "icon": null,
+    "cooldown": 5,
+    "description": "Raise DEF by 3 for 2 rounds.",
+    "actions": [
+      { "kind": "buff", "target": "stats.def", "amount": "3", "duration": 2 }
+    ]
+  },
+  "backstab": {
+    "name": "Backstab",
+    "icon": null,
+    "cooldown": 3,
+    "description": "A vicious strike dealing double ATQ magic damage.",
+    "actions": [
+      { "kind": "damage", "amount": "stats.atq * 2" }
+    ]
+  },
+  "smoke_bomb": {
+    "name": "Smoke Bomb",
+    "icon": null,
+    "cooldown": 4,
+    "description": "Raise SPD by 2 for 3 rounds to strike first.",
+    "actions": [
+      { "kind": "buff", "target": "stats.spd", "amount": "2", "duration": 3 }
+    ]
+  },
+  "venom_blade": {
+    "name": "Venom Blade",
+    "icon": null,
+    "cooldown": 3,
+    "description": "Poison the enemy for 3 damage per round over 3 rounds.",
+    "actions": [
+      { "kind": "dot", "amount": "3", "duration": 3 }
+    ]
+  },
+  "fireball": {
+    "name": "Fireball",
+    "icon": null,
+    "cooldown": 2,
+    "description": "Hurl fire dealing ATQ + 4 + level magic damage, ignoring armor.",
+    "actions": [
+      { "kind": "damage", "amount": "stats.atq + 4 + level" }
+    ]
+  },
+  "frost_armor": {
+    "name": "Frost Armor",
+    "icon": null,
+    "cooldown": 4,
+    "description": "Raise DEF by 2 for 3 rounds.",
+    "actions": [
+      { "kind": "buff", "target": "stats.def", "amount": "2", "duration": 3 }
+    ]
+  },
+  "arcane_surge": {
+    "name": "Arcane Surge",
+    "icon": null,
+    "cooldown": 5,
+    "description": "Raise ATQ by 3 for 2 rounds.",
+    "actions": [
+      { "kind": "buff", "target": "stats.atq", "amount": "3", "duration": 2 }
+    ]
+  }
+}

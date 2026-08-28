@@ -1,0 +1,24 @@
+{
+  "id": "thief",
+  "type": "Thief",
+  "icon": "Thief",
+  "hp": 25,
+  "stats": { "atq": 2, "def": 0, "spd": 2 },
+  "level": 1,
+  "price": 500,
+  "spells": ["backstab", "smoke_bomb", "venom_blade"],
+  "passives": ["swift", "deadly_precision", "venomous"],
+  "skills": [
+    {
+      "icon": null,
+      "name": "Assassin's Cloak",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        { "target": "hp", "effect": "5 * (skills[0].level - 1)" },
+        { "target": "maxHp", "effect": "5 * (skills[0].level - 1)" }
+      ],
+      "description": "A finer cloak increases maximum hit points by 5 per level."
+    }
+  ]
+}

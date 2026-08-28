@@ -13,12 +13,25 @@ const saveGame = (player) => {
 const loadGame = () => {
   const gameLoad = JSON.parse(localStorage.getItem('_dungestairs'))
   if (gameLoad !== null) {
+    const savedCharacters = gameLoad.characters || []
+    // Content-driven fields (stats, spells, passives, icon) always come from
+    // the live config; only the player's progression (gold spent = price,
+    // upgraded skills) is restored from the save. This keeps existing saves
+    // compatible when new spells/passives are added to a class.
+    const characters = Characters.map((base, index) => {
+      const saved = savedCharacters[index] || {}
+      return {
+        ...base,
+        price: saved.price !== undefined ? saved.price : base.price,
+        skills: saved.skills || base.skills
+      }
+    })
     const player = {
       ...gameLoad,
+      characters,
       selectedCharacter: null,
       inGame: false
     }
-    player.characters = Object.assign(Characters, player.characters)
     return player
   }
 
@@ -27,7 +40,6 @@ const loadGame = () => {
 
 export const usePlayer = () => {
   const loadedPlayer = loadGame()
-  console.log(loadedPlayer)
   const [player, setPlayer] = useState(
     () => {
       if (loadedPlayer !== null) {
@@ -80,17 +92,15 @@ export const usePlayer = () => {
   }
 
   const removeSelectedCharacter = (depth) => {
-    const playerDepth = player.depth
-    if (playerDepth.max < depth) {
-      playerDepth.max = depth
-    }
-    playerDepth.previous = depth
     setPlayer((previousPlayer) => {
       return {
         ...previousPlayer,
         selectedCharacter: null,
         inGame: false,
-        depth: playerDepth
+        depth: {
+          max: Math.max(previousPlayer.depth.max, depth),
+          previous: depth
+        }
       }
     })
   }
@@ -127,9 +137,11 @@ export const usePlayer = () => {
         level: player.characters[character].skills[skill].level + 1
       }
       const newCharacter = {
-        ...player.characters[character]
+        ...player.characters[character],
+        skills: player.characters[character].skills.map(
+          (existingSkill, index) => (index === skill ? newSkill : existingSkill)
+        )
       }
-      newCharacter.skills[skill] = newSkill
       updateCharacters(character, newCharacter)
     }
   }
