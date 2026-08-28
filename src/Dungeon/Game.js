@@ -71,6 +71,7 @@ export const Game = ({
                         key={cellOffset}
                         cellValue={cellValue}
                         action={cellAction && cellAction.offset === cellOffset ? cellAction : null}
+                        targetable={!!queuedSpell && cellValue.type === 'monster' && cellValue.isOpen && cellValue.canClick && cellValue.content && cellValue.content.hp > 0}
                         onClick={() => clickOnCell(cellValue.x, cellValue.y, addGold)}
                     />
                 ))}

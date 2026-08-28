@@ -4,6 +4,30 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 3 — Onboarding & feedback de combat (Phase 1)
+
+**Livré**
+
+- **Onboarding / tutoriel** (`HowToPlay.js`) — modal « Comment jouer » ouvert
+  automatiquement au tout premier lancement (flag `localStorage`), avec les
+  règles essentielles ; bouton **?** en haut à droite pour le rouvrir à tout
+  moment. Monté au niveau de `App` (menu + jeu).
+- **Feedback de combat avancé**
+  - Sort armé : les ennemis ciblables affichent un **anneau jaune pulsé**
+    (`Cell` + prop `targetable`), et le hint de la barre de sorts nomme le sort
+    (« Click an enemy to cast … »).
+  - **Badges de buffs actifs** sur le portrait (ex. « DEF +3 · 2 » = bonus et
+    rounds restants), pour rendre les effets de sorts lisibles.
+
+**Vérifié** (navigateur headless) — onboarding : ouverture auto, fermeture,
+non-réouverture après reload, réouverture via « ? ». Combat : hint dynamique,
+anneau de ciblage présent, badge de buff affiché après un sort. Zéro erreur.
+
+> Phase 1 (MVP jouable) terminée hormis le **tuning fin d'équilibrage**
+> (courbe dégâts/or/prix), laissé de côté à la demande.
+
+---
+
 ## Sprint 2 — Contenu & difficulté (Phase 1)
 
 Objectif : donner de la tension et de la variété. Trois chantiers de la roadmap.

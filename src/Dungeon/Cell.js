@@ -7,7 +7,7 @@ import closedCell from '../Assets/Closed-Cell.jpg'
 import Colors from '../Helper/Colors'
 import { CELL_GLYPHS, CHEST_EMPTY_GLYPH } from '../Content/glyphs'
 import { FloatingLayer, useFloatingQueue } from '../Guideline/FloatingText'
-import { breathe, shakeHit, flashRed, poof, revealIn, glowPulse } from '../Guideline/animations'
+import { breathe, shakeHit, flashRed, poof, revealIn, glowPulse, targetPulse } from '../Guideline/animations'
 
 const Wraper = styled.div`
   display: flex;
@@ -77,6 +77,17 @@ const RedFlash = styled.div`
   pointer-events: none;
 `
 
+const TargetRing = styled.div`
+  position: absolute;
+  inset: 6%;
+  border: 3px solid ${Colors.yellow};
+  border-radius: 8px;
+  box-shadow: 0 0 10px ${Colors.yellow};
+  pointer-events: none;
+  z-index: 3;
+  animation: ${targetPulse} 0.9s ease-in-out infinite;
+`
+
 const GaugeWrap = styled.div`
   position: absolute;
   bottom: 4px;
@@ -117,7 +128,7 @@ const resolveGlyph = (cellValue) => {
   return CELL_GLYPHS[type] || null
 }
 
-export const Cell = ({ cellValue, onClick, action }) => {
+export const Cell = ({ cellValue, onClick, action, targetable }) => {
   const [isHovered, setHover] = useState(false)
   const [hitPulse, setHitPulse] = useState(0)
   const [floats, pushFloat] = useFloatingQueue()
@@ -176,6 +187,7 @@ export const Cell = ({ cellValue, onClick, action }) => {
         highlight={isHovered && cellValue.canClick}
       >
         <FloatingLayer items={floats} />
+        {targetable && isMonster && !isDead && !cellValue.isBlocked && <TargetRing />}
         {glyphNode}
         {cellValue.isOpen && isMonster && !isDead && (
           <GaugeWrap>
@@ -191,5 +203,6 @@ export const Cell = ({ cellValue, onClick, action }) => {
 Cell.propTypes = {
   cellValue: PropTypes.object,
   onClick: PropTypes.func,
-  action: PropTypes.object
+  action: PropTypes.object,
+  targetable: PropTypes.bool
 }

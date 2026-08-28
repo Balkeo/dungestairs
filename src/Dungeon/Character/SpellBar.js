@@ -15,9 +15,11 @@ const Wrapper = styled.div`
 const Hint = styled.div`
   font-size: 11px;
   line-height: 14px;
-  color: ${Colors.white30};
+  color: ${({ active }) => (active ? Colors.yellow : Colors.white30)};
+  font-weight: ${({ active }) => (active ? 700 : 400)};
   margin-bottom: 6px;
   text-align: center;
+  transition: color 0.2s ease;
 `
 
 const Bar = styled.div`
@@ -71,9 +73,15 @@ export const SpellBar = ({
     return null
   }
 
+  const armed = spells.find((spell) => spell.id === queuedSpell)
+
   return (
     <Wrapper>
-      <Hint>Select a spell, then click an enemy to cast it this round.</Hint>
+      <Hint active={!!armed}>
+        {armed
+          ? `▸ Click an enemy to cast ${armed.name}`
+          : 'Select a spell, then click an enemy to cast it this round.'}
+      </Hint>
       <Bar>
         {spells.map((spell) => {
           const remaining = cooldowns[spell.id] || 0

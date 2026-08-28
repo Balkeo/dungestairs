@@ -40,6 +40,39 @@ const HurtFlash = styled.div`
   ${css`animation: ${flashRed} 0.45s ease-out forwards;`}
 `
 
+const Buffs = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none;
+`
+
+const Buff = styled.span`
+  font-family: Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: ${Colors.blueLight};
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid ${Colors.blueLight};
+  border-radius: 4px;
+  padding: 1px 5px;
+`
+
+const STAT_LABEL = { atq: 'ATQ', def: 'DEF', spd: 'SPD' }
+
+const activeBuffs = (character) => {
+  return (character.activeEffects || [])
+    .filter((effect) => effect.kind === 'buff' && effect.remaining > 0)
+    .map((effect) => {
+      const key = (effect.target || '').replace('stats.', '')
+      return `${STAT_LABEL[key] || key} +${effect.amount} · ${effect.remaining}`
+    })
+}
+
 export const Character = ({
   character,
   mobileHeight,
@@ -69,6 +102,11 @@ export const Character = ({
         <PortraitArea>
           <Stats character={character} mobileHeight={mobileHeight}/>
           <FloatingLayer items={floats} />
+          <Buffs>
+            {activeBuffs(character).map((label) => (
+              <Buff key={label}>{label}</Buff>
+            ))}
+          </Buffs>
           {flash && <HurtFlash key={flash.id} tone={flash.tone} />}
         </PortraitArea>
         {

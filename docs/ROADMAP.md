@@ -29,8 +29,8 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 | Vague de contenu (+monstres, +classes, +sorts) | Critique | M | ✅ livré (sprint 2) |
 | Équilibrage & courbe de difficulté | Critique | M | 🟡 en cours — scaling monstres fait (sprint 2) |
 | Boss tous les N étages | Important | M | ✅ livré (sprint 2) |
-| Onboarding / tutoriel | Important | S | ⬜ à faire |
-| Feedback de combat avancé | Bonus | S | ⬜ à faire |
+| Onboarding / tutoriel | Important | S | ✅ livré (sprint 3) |
+| Feedback de combat avancé | Bonus | S | ✅ livré (sprint 3) |
 
 > **Note équilibrage** — Les monstres montent désormais en PV **et en ATQ**
 > avec la profondeur, et les boss verrouillent la sortie tous les 5 étages :
