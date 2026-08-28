@@ -3,6 +3,7 @@ import './styles.css'
 import { Game } from './Dungeon/Game'
 import { MainMenu } from './Dungeon/MainMenu'
 import { HowToPlay } from './Dungeon/HowToPlay'
+import { Settings } from './Dungeon/Settings'
 import { usePlayer } from './Dungeon/usePlayer'
 import Colors from './Helper/Colors'
 
@@ -12,6 +13,7 @@ const App = () => {
   return (
     <div className="App" style={{ backgroundColor: Colors.brown1 }}>
       <HowToPlay />
+      <Settings />
       {player.inGame
         ? <Game key={player.runId} player={player} addGold={addGold} removeSelectedCharacter={removeSelectedCharacter} restartRun={restartRun}/>
         : <MainMenu player={player} selectCharacter={selectCharacter} buyCharacter={buyCharacter} upgradeCharacterSkill={upgradeCharacterSkill} />

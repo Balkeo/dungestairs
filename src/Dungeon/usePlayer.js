@@ -1,42 +1,7 @@
 import { useState, useEffect } from 'react'
 import Characters from './Character/Characters'
 import { calculate } from '../Helper/CharacterCalculator'
-
-const saveGame = (player) => {
-  try {
-    localStorage.setItem('_dungestairs', JSON.stringify(player))
-  } catch (err) {
-    console.log('Cannot access localStorage - browser may be old or storage may be corrupt')
-  }
-}
-
-const loadGame = () => {
-  const gameLoad = JSON.parse(localStorage.getItem('_dungestairs'))
-  if (gameLoad !== null) {
-    const savedCharacters = gameLoad.characters || []
-    // Content-driven fields (stats, spells, passives, icon) always come from
-    // the live config; only the player's progression (gold spent = price,
-    // upgraded skills) is restored from the save. This keeps existing saves
-    // compatible when new spells/passives are added to a class.
-    const characters = Characters.map((base, index) => {
-      const saved = savedCharacters[index] || {}
-      return {
-        ...base,
-        price: saved.price !== undefined ? saved.price : base.price,
-        skills: saved.skills || base.skills
-      }
-    })
-    const player = {
-      ...gameLoad,
-      characters,
-      selectedCharacter: null,
-      inGame: false
-    }
-    return player
-  }
-
-  return null
-}
+import { saveGame, loadGame } from '../Helper/save'
 
 export const usePlayer = () => {
   const loadedPlayer = loadGame()

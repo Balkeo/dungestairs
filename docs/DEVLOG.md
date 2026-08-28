@@ -4,6 +4,29 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 5 — Sauvegardes versionnées & réglages (Phase 2)
+
+**Livré**
+
+- **Versionnage des sauvegardes** (`src/Helper/save.js`) — la save porte
+  désormais un `version`, et ne stocke que la **progression** (or, records de
+  profondeur, prix payé + skills par classe) ; tout le reste est reconstruit
+  depuis la config au chargement. Une fonction `migrate()` remonte les anciens
+  saves (dont les saves pré-versioning « objet joueur complet ») à la version
+  courante, et repart proprement à zéro plutôt que de crasher sur un format
+  inconnu. Point d'entrée unique réutilisé par `usePlayer`.
+- **Écran de réglages** (`Settings.js`) — bouton ⚙️ (à côté du ?) ouvrant un
+  modal : coupe/active le **son** (préférence persistée, appliquée au
+  démarrage) et **réinitialise la sauvegarde** (confirmation en deux temps).
+
+**Vérifié** (navigateur headless)
+- Nouveau save au format versionné (v1). ✅
+- Ancien save non versionné (or 999) **migré en v1 sans crash**. ✅
+- Réglages : ouverture, mute persisté (localStorage), reset qui efface. ✅
+- Zéro erreur console.
+
+---
+
 ## Sprint 4 — Équilibrage (passe 1) (Phase 1)
 
 **Livré**

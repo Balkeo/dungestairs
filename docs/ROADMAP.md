@@ -42,15 +42,15 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 
 ## Phase 2 — Prêt pour la 1.0
 
-- Versionnage des sauvegardes + migration *(Critique, S)*
-- Écran de réglages (mute, reset save) *(Critique, S)*
-- Polish mobile & responsive *(Critique, M)*
-- Méta-progression & déblocages *(Important, M)*
-- Passe artistique cohérente *(Important, L)*
-- Page d'accueil / itch.io *(Important, S)*
-- Succès & statistiques *(Bonus, M)*
-- Accessibilité *(Bonus, S)*
-- Analytics respectueux *(Bonus, S)*
+- Versionnage des sauvegardes + migration *(Critique, S)* — ✅ livré (sprint 5)
+- Écran de réglages (mute, reset save) *(Critique, S)* — ✅ livré (sprint 5)
+- Polish mobile & responsive *(Critique, M)* — ⬜ à faire
+- Méta-progression & déblocages *(Important, M)* — ⬜ à faire
+- Passe artistique cohérente *(Important, L)* — ⬜ à faire
+- Page d'accueil / itch.io *(Important, S)* — ⬜ à faire
+- Succès & statistiques *(Bonus, M)* — ⬜ à faire
+- Accessibilité *(Bonus, S)* — ⬜ à faire
+- Analytics respectueux *(Bonus, S)* — ⬜ à faire
 
 ## Phase 3 — Jeu vivant (rétention)
 
