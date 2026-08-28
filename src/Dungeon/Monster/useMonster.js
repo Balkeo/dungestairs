@@ -5,7 +5,7 @@ import { random } from '../../Helper/Utils'
 // Regular monster: its level rises every few floors so its HP and ATQ scale.
 export const useMonster = (depth = 1) => {
   const monster = Object.assign({}, Monsters[random(Monsters.length)])
-  monster.level = 1 + Math.floor(depth / 4)
+  monster.level = 1 + Math.floor(depth / 3)
   return calculate(monster)
 }
 
@@ -14,7 +14,7 @@ export const useMonster = (depth = 1) => {
 export const makeBoss = (depth = 1) => {
   const index = Math.max(0, Math.floor(depth / 5) - 1) % Bosses.length
   const boss = Object.assign({}, Bosses[index])
-  boss.level = 1 + Math.floor(depth / 2)
+  boss.level = 1 + Math.floor(depth / 3)
   boss.isBoss = true
   return calculate(boss)
 }

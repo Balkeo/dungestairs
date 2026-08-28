@@ -152,7 +152,9 @@ const strike = (attacker, defender, attackerStats, defenderStats, attackerSide, 
   if (attacker.hp <= 0) {
     return
   }
-  let damage = Math.max(0, attackerStats.atq - defenderStats.def)
+  // Every melee blow lands for at least 1: no combatant is ever fully immune
+  // (so fights carry tension) and no fight is unwinnable when ATQ <= DEF.
+  let damage = Math.max(1, attackerStats.atq - defenderStats.def)
 
   let isCrit = false
   const critTrigger = triggersFor(attacker, 'attack').find((trigger) => trigger.effect === 'crit')

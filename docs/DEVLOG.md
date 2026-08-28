@@ -4,6 +4,30 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 4 — Équilibrage (passe 1) (Phase 1)
+
+**Livré**
+
+- **Minimum 1 dégât en mêlée** (`resolveFight`) — le correctif central. Avant,
+  `atq - def` pouvait tomber à 0 : un héros défendu était invincible, et un
+  héros faible ne pouvait pas blesser un boss (`atq <= def` → combat
+  ingagnable). Désormais chaque coup fait au moins 1 : tout combat compte et
+  reste gagnable.
+- **Scaling lissé** — monstres et boss montent d'un niveau tous les 3 étages
+  (au lieu de 4 / 2).
+- **Boss adoucis** — ATQ/DEF revus à la baisse pour qu'ils soient durs mais
+  battables au sort/mêlée.
+- **Économie** — l'or des coffres passe de `level + d6×level` à
+  `level×2 + d6×level` (déblocages de classes moins laborieux).
+
+**Vérifié** (autoplay, plusieurs runs)
+- Aucune mort aux étages 1-4 (early game survivable). ✅
+- Jeu « bourrin » (sans sorts) → meurt au 1er boss (étage 5). ✅
+- Jeu « malin » (soin + Holy Strike) → passe le boss, atteint l'étage 12-20. ✅
+- → La compétence du joueur est récompensée. Zéro erreur console.
+
+---
+
 ## Sprint 3 — Onboarding & feedback de combat (Phase 1)
 
 **Livré**

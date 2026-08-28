@@ -27,16 +27,18 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 | Activer les cases inertes (allié / piège) | Critique | M | ✅ livré (sprint 1) |
 | SFX de base (Web Audio) | Important | M | ✅ livré (sprint 1) |
 | Vague de contenu (+monstres, +classes, +sorts) | Critique | M | ✅ livré (sprint 2) |
-| Équilibrage & courbe de difficulté | Critique | M | 🟡 en cours — scaling monstres fait (sprint 2) |
+| Équilibrage & courbe de difficulté | Critique | M | ✅ passe 1 (sprint 4) — itérable |
 | Boss tous les N étages | Important | M | ✅ livré (sprint 2) |
 | Onboarding / tutoriel | Important | S | ✅ livré (sprint 3) |
 | Feedback de combat avancé | Bonus | S | ✅ livré (sprint 3) |
 
-> **Note équilibrage** — Les monstres montent désormais en PV **et en ATQ**
-> avec la profondeur, et les boss verrouillent la sortie tous les 5 étages :
-> le combat fait mal (morts en combat dès l'étage 5 en test). Reste à faire un
-> vrai passage de tuning (courbe de dégâts/or/prix, variété des menaces) pour
-> lisser la difficulté — d'où le statut « en cours » plutôt que « livré ».
+> **Note équilibrage (passe 1 faite)** — Correctif clé : les dégâts de mêlée
+> ont désormais un **minimum de 1** (avant, `atq - def` pouvait valoir 0, ce
+> qui rendait un héros défendu invincible ou un combat ingagnable). Scaling
+> lissé (niveau tous les 3 étages), boss adoucis. Validé : un jeu bourrin meurt
+> au 1er boss (étage 5), un jeu malin (sorts + soins) le passe et atteint
+> l'étage 12–20 → la compétence compte. Reste itérable (tuning fin par retours
+> de vrais joueurs).
 
 ## Phase 2 — Prêt pour la 1.0
 

@@ -64,9 +64,9 @@ const createBoss = (type, glyph, hp, stats, hpPerLevel, atqPerLevel) => {
 }
 
 export const Bosses = [
-  createBoss('Dragon', '🐉', 20, { atq: 5, spd: 2, def: 2 }, 5, 2),
-  createBoss('Ogre King', '👑', 30, { atq: 4, spd: 1, def: 3 }, 6, 2),
-  createBoss('Reaper', '☠️', 18, { atq: 6, spd: 4, def: 1 }, 4, 2)
+  createBoss('Dragon', '🐉', 18, { atq: 4, spd: 2, def: 1 }, 4, 1),
+  createBoss('Ogre King', '👑', 24, { atq: 4, spd: 1, def: 2 }, 5, 1),
+  createBoss('Reaper', '☠️', 16, { atq: 5, spd: 4, def: 0 }, 3, 1)
 ]
 
 export default Monsters
