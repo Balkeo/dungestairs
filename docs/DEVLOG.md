@@ -4,6 +4,28 @@ Journal des évolutions, du plus récent au plus ancien.
 
 ---
 
+## Sprint 7 — Méta-progression & succès (Phase 2)
+
+**Livré**
+
+- **Stats à vie** — parties jouées, meilleure profondeur, kills, boss vaincus,
+  or total. Alimentées à chaque mort via `recordRun` (`usePlayer`) à partir des
+  stats de run suivies dans `useGame` (dont les kills de boss).
+- **Succès data-driven** (`Content/achievements.json` + `Helper/achievements.js`)
+  — 7 succès avec condition `jexl` sur les stats et **récompense en or**.
+  Débloqués et payés automatiquement à la fin d'une run.
+- **Modal Records & Succès** (`Records.js`, bouton 🏆) — grille de stats + liste
+  des succès (obtenus / verrouillés, récompense).
+- **Écran de mort** — affiche les succès fraîchement débloqués (+ or).
+- **Sauvegardes v2** — `stats` et `achievements` persistés, avec migration
+  depuis v1 / legacy.
+
+**Vérifié** (navigateur headless) — Records s'ouvre (0/7 au départ), une run
+débloque des succès (4/7 après une partie profonde), l'écran de mort liste les
+succès obtenus, save en v2, or récompensé. Zéro erreur console.
+
+---
+
 ## Sprint 6 — Polish mobile (Phase 2)
 
 **Corrigé**

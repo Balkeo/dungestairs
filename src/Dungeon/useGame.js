@@ -9,7 +9,7 @@ import Colors from '../Helper/Colors'
 
 const ALLY_TYPES = ['healer', 'mage', 'knight']
 
-export const useGame = (player = {}) => {
+export const useGame = (player = {}, recordRun = () => []) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
   const { character, updateCharacter, addItem } = useCharacter(player.characters[player.selectedCharacter])
@@ -24,9 +24,10 @@ export const useGame = (player = {}) => {
   const [depthBanner, setDepthBanner] = useState(null)
 
   // Run stats (kept in a ref too so the death effect reads the final values).
-  const statsRef = useRef({ kills: 0, gold: 0 })
+  const statsRef = useRef({ kills: 0, gold: 0, bossKills: 0 })
   const [runOver, setRunOver] = useState(null)
   const bumpKills = () => { statsRef.current = { ...statsRef.current, kills: statsRef.current.kills + 1 } }
+  const bumpBossKills = () => { statsRef.current = { ...statsRef.current, bossKills: statsRef.current.bossKills + 1 } }
   const addRunGold = (amount) => { statsRef.current = { ...statsRef.current, gold: statsRef.current.gold + amount } }
 
   const nextId = () => ++actionId.current
@@ -46,7 +47,14 @@ export const useGame = (player = {}) => {
   useEffect(() => {
     if (character.hp <= 0 && !runOver) {
       sfx.death()
-      setRunOver({ depth, kills: statsRef.current.kills, gold: statsRef.current.gold })
+      const summary = {
+        depth,
+        kills: statsRef.current.kills,
+        gold: statsRef.current.gold,
+        bossKills: statsRef.current.bossKills
+      }
+      const unlocked = recordRun(summary)
+      setRunOver({ ...summary, unlocked })
     }
   }, [character]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -136,6 +144,9 @@ export const useGame = (player = {}) => {
         if (events.some((e) => e.type === 'ko')) {
           sfx.ko()
           bumpKills()
+          if (cell.content && cell.content.isBoss) {
+            bumpBossKills()
+          }
         }
         if (spellId) {
           clearQueuedSpell()

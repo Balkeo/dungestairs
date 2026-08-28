@@ -88,6 +88,31 @@ const StatLabel = styled.div`
   color: ${Colors.white30};
 `
 
+const Unlocked = styled.div`
+  margin: 0 0 20px;
+  padding: 12px;
+  background: rgba(255, 208, 80, 0.1);
+  border: 1px solid ${Colors.yellow};
+  border-radius: 10px;
+`
+
+const UnlockedTitle = styled.div`
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: ${Colors.yellow};
+  margin-bottom: 8px;
+`
+
+const UnlockedItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: ${Colors.white100};
+  padding: 2px 0;
+`
+
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
@@ -118,6 +143,18 @@ export const DeathScreen = ({ summary, onReplay, onMenu }) => {
             <StatLabel>Or gagné</StatLabel>
           </Stat>
         </Stats>
+        {summary.unlocked && summary.unlocked.length > 0 && (
+          <Unlocked>
+            <UnlockedTitle>🏆 Succès débloqué{summary.unlocked.length > 1 ? 's' : ''}</UnlockedTitle>
+            {summary.unlocked.map((achievement) => (
+              <UnlockedItem key={achievement.id}>
+                <span>{achievement.glyph}</span>
+                <span>{achievement.name}</span>
+                <span style={{ marginLeft: 'auto', color: Colors.green, fontWeight: 700 }}>+{achievement.reward} or</span>
+              </UnlockedItem>
+            ))}
+          </Unlocked>
+        )}
         <Actions>
           <Button onClick={onReplay}>Rejouer</Button>
           <Button onClick={onMenu}>Menu principal</Button>

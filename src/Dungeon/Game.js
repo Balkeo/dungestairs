@@ -26,7 +26,8 @@ export const Game = ({
   player = {},
   addGold,
   removeSelectedCharacter,
-  restartRun
+  restartRun,
+  recordRun
 }) => {
   const {
     size,
@@ -40,7 +41,7 @@ export const Game = ({
     characterAction,
     depthBanner,
     runOver
-  } = useGame(player)
+  } = useGame(player, recordRun)
   const { width, height } = useWindowDimensions()
   const isMobile = (width <= 768)
 
@@ -83,5 +84,6 @@ Game.propTypes = {
   player: PropTypes.object,
   addGold: PropTypes.func,
   removeSelectedCharacter: PropTypes.func,
-  restartRun: PropTypes.func
+  restartRun: PropTypes.func,
+  recordRun: PropTypes.func
 }

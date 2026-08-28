@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import Characters from './Character/Characters'
 import { calculate } from '../Helper/CharacterCalculator'
-import { saveGame, loadGame } from '../Helper/save'
+import { saveGame, loadGame, DEFAULT_STATS } from '../Helper/save'
+import { checkAchievements, achievementById } from '../Helper/achievements'
 
 export const usePlayer = () => {
   const loadedPlayer = loadGame()
@@ -24,6 +25,8 @@ export const usePlayer = () => {
             max: 0,
             previous: 0
           },
+          stats: { ...DEFAULT_STATS },
+          achievements: [],
           characters: Characters
         }
       }
@@ -56,6 +59,30 @@ export const usePlayer = () => {
         inGame: true
       }
     })
+  }
+
+  // Fold a finished run into the lifetime stats, unlock any newly-earned
+  // achievements and pay out their gold rewards. Returns the achievements
+  // unlocked by this run so the UI can celebrate them.
+  const recordRun = (summary = {}) => {
+    const previousStats = player.stats || { ...DEFAULT_STATS }
+    const stats = {
+      runs: (previousStats.runs || 0) + 1,
+      bestDepth: Math.max(previousStats.bestDepth || 0, summary.depth || 0),
+      kills: (previousStats.kills || 0) + (summary.kills || 0),
+      bossKills: (previousStats.bossKills || 0) + (summary.bossKills || 0),
+      goldEarned: (previousStats.goldEarned || 0) + (summary.gold || 0)
+    }
+    const completed = player.achievements || []
+    const newlyIds = checkAchievements(stats, completed)
+    const reward = newlyIds.reduce((sum, id) => sum + (achievementById(id).reward || 0), 0)
+    setPlayer((previousPlayer) => ({
+      ...previousPlayer,
+      gold: previousPlayer.gold + reward,
+      stats,
+      achievements: [...(previousPlayer.achievements || []), ...newlyIds]
+    }))
+    return newlyIds.map((id) => ({ id, ...achievementById(id) }))
   }
 
   // Start a fresh run with the same character. Bumping runId re-keys (and thus
@@ -134,5 +161,5 @@ export const usePlayer = () => {
     }
   })
 
-  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, buyCharacter, upgradeCharacterSkill }
+  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill }
 }

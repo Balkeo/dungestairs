@@ -45,10 +45,10 @@ Effort : `S` (<1 sem) · `M` (1–2 sem) · `L` (3 sem+)
 - Versionnage des sauvegardes + migration *(Critique, S)* — ✅ livré (sprint 5)
 - Écran de réglages (mute, reset save) *(Critique, S)* — ✅ livré (sprint 5)
 - Polish mobile & responsive *(Critique, M)* — ✅ livré (sprint 6)
-- Méta-progression & déblocages *(Important, M)* — ⬜ à faire
-- Passe artistique cohérente *(Important, L)* — ⬜ à faire
+- Méta-progression & déblocages *(Important, M)* — ✅ livré (sprint 7)
+- Passe artistique cohérente *(Important, L)* — 🟡 prêt côté code (fallback emoji), à commander à l'artiste
 - Page d'accueil / itch.io *(Important, S)* — ⬜ à faire
-- Succès & statistiques *(Bonus, M)* — ⬜ à faire
+- Succès & statistiques *(Bonus, M)* — ✅ livré (sprint 7)
 - Accessibilité *(Bonus, S)* — ⬜ à faire
 - Analytics respectueux *(Bonus, S)* — ⬜ à faire
 

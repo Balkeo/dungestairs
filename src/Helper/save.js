@@ -7,13 +7,17 @@ import Characters from '../Dungeon/Character/Characters'
 //
 // Bump SAVE_VERSION whenever the persisted shape changes, and add a migration
 // step below so existing saves upgrade instead of breaking.
-export const SAVE_VERSION = 1
+export const SAVE_VERSION = 2
 const KEY = '_dungestairs'
+
+export const DEFAULT_STATS = { runs: 0, bestDepth: 0, kills: 0, bossKills: 0, goldEarned: 0 }
 
 const snapshot = (player) => ({
   version: SAVE_VERSION,
   gold: player.gold || 0,
   depth: player.depth || { max: 0, previous: 0 },
+  stats: player.stats || { ...DEFAULT_STATS },
+  achievements: player.achievements || [],
   characters: (player.characters || []).map((character) => ({
     price: character.price,
     skills: character.skills
@@ -38,25 +42,28 @@ const migrate = (raw) => {
   if (raw.version === SAVE_VERSION) {
     return raw
   }
-  // Legacy pre-versioning save: the whole player object was stored.
-  if (raw.version === undefined) {
-    return {
-      version: SAVE_VERSION,
-      gold: raw.gold || 0,
-      depth: raw.depth || { max: 0, previous: 0 },
-      characters: (raw.characters || []).map((character) => ({
-        price: character && character.price,
-        skills: character && character.skills
-      }))
-    }
-  }
   // A save from a newer build than this code: don't guess, start fresh.
   if (raw.version > SAVE_VERSION) {
     return null
   }
-  // Older numbered versions would be upgraded step by step here as the schema
-  // evolves; for now v1 is the baseline.
-  return { ...raw, version: SAVE_VERSION }
+  // Normalise any older (or pre-versioning) save into the base fields, then let
+  // the field defaults below fill in whatever that version didn't carry.
+  const base = raw.version === undefined
+    ? {
+        gold: raw.gold || 0,
+        depth: raw.depth || { max: 0, previous: 0 },
+        characters: (raw.characters || []).map((character) => ({
+          price: character && character.price,
+          skills: character && character.skills
+        }))
+      }
+    : raw
+  return {
+    ...base,
+    version: SAVE_VERSION,
+    stats: { ...DEFAULT_STATS, ...(base.stats || {}) },
+    achievements: base.achievements || []
+  }
 }
 
 export const loadGame = () => {
@@ -82,6 +89,8 @@ export const loadGame = () => {
   return {
     gold: saved.gold || 0,
     depth: saved.depth || { max: 0, previous: 0 },
+    stats: { ...DEFAULT_STATS, ...(saved.stats || {}) },
+    achievements: saved.achievements || [],
     characters,
     selectedCharacter: null,
     inGame: false,

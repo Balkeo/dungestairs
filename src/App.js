@@ -4,18 +4,20 @@ import { Game } from './Dungeon/Game'
 import { MainMenu } from './Dungeon/MainMenu'
 import { HowToPlay } from './Dungeon/HowToPlay'
 import { Settings } from './Dungeon/Settings'
+import { Records } from './Dungeon/Records'
 import { usePlayer } from './Dungeon/usePlayer'
 import Colors from './Helper/Colors'
 
 const App = () => {
-  const { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, buyCharacter, upgradeCharacterSkill } = usePlayer()
+  const { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill } = usePlayer()
 
   return (
     <div className="App" style={{ backgroundColor: Colors.brown1 }}>
       <HowToPlay />
       <Settings />
+      <Records player={player} />
       {player.inGame
-        ? <Game key={player.runId} player={player} addGold={addGold} removeSelectedCharacter={removeSelectedCharacter} restartRun={restartRun}/>
+        ? <Game key={player.runId} player={player} addGold={addGold} removeSelectedCharacter={removeSelectedCharacter} restartRun={restartRun} recordRun={recordRun}/>
         : <MainMenu player={player} selectCharacter={selectCharacter} buyCharacter={buyCharacter} upgradeCharacterSkill={upgradeCharacterSkill} />
       }
     </div>
