@@ -46,13 +46,15 @@ export const usePlayer = () => {
         return {
           ...loadedPlayer,
           selectedCharacter: null,
-          inGame: false
+          inGame: false,
+          runId: 0
         }
       } else {
         return {
           gold: 0,
           selectedCharacter: null,
           inGame: false,
+          runId: 0,
           depth: {
             max: 0,
             previous: 0
@@ -87,6 +89,21 @@ export const usePlayer = () => {
         ...previousPlayer,
         selectedCharacter: character,
         inGame: true
+      }
+    })
+  }
+
+  // Start a fresh run with the same character. Bumping runId re-keys (and thus
+  // remounts) the Game, giving a new dungeon and a full-HP character.
+  const restartRun = (depth) => {
+    setPlayer((previousPlayer) => {
+      return {
+        ...previousPlayer,
+        runId: (previousPlayer.runId || 0) + 1,
+        depth: {
+          max: Math.max(previousPlayer.depth.max, depth),
+          previous: depth
+        }
       }
     })
   }
@@ -152,5 +169,5 @@ export const usePlayer = () => {
     }
   })
 
-  return { player, addGold, selectCharacter, removeSelectedCharacter, buyCharacter, upgradeCharacterSkill }
+  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, buyCharacter, upgradeCharacterSkill }
 }

@@ -26,5 +26,26 @@ export const useCharacter = (selectedCharacter) => {
     })
   }
 
-  return { character, updateCharacter }
+  // Equip a looted item: recompute stats but keep the current HP (and add any
+  // Max HP the item grants), so loot never acts as a free full heal. Returns
+  // whether the item was actually added (the bag holds 8).
+  const addItem = (item) => {
+    let added = false
+    setCharacter((previousCharacter) => {
+      const currentItems = (previousCharacter.items || []).filter(Boolean)
+      if (!item || currentItems.length >= 8) {
+        return previousCharacter
+      }
+      added = true
+      const recalculated = calculate({ ...previousCharacter, items: [...currentItems, item] })
+      const maxHpGain = recalculated.maxHp - previousCharacter.maxHp
+      recalculated.hp = Math.min(previousCharacter.hp + Math.max(0, maxHpGain), recalculated.maxHp)
+      recalculated.cooldowns = previousCharacter.cooldowns
+      recalculated.activeEffects = previousCharacter.activeEffects
+      return recalculated
+    })
+    return added
+  }
+
+  return { character, updateCharacter, addItem }
 }
