@@ -11,6 +11,10 @@ import { rollDice } from '../Helper/Utils'
 //   * "trigger" passives fire on attack/hit/damaged events
 // Spells and passives describe their numbers as jexl expressions evaluated
 // against the acting entity, so new content needs no engine change.
+//
+// Alongside the new state, resolveFight returns an `events` list describing
+// what happened this round (damage, crit, heal, poison, K.O.). The UI turns
+// those into floating combat text; the events never affect the maths.
 // ---------------------------------------------------------------------------
 
 const evalNumber = (expression, context) => {
@@ -71,7 +75,7 @@ const addDot = (entity, amount, duration) => {
 }
 
 // Damage-over-time (poison) ticks at the start of the round and expires.
-const tickDots = (entity) => {
+const tickDots = (entity, side, events) => {
   const remaining = []
   let total = 0
   ;(entity.activeEffects || []).forEach((effect) => {
@@ -87,6 +91,7 @@ const tickDots = (entity) => {
   entity.activeEffects = remaining
   if (total > 0) {
     applyDamage(entity, total)
+    events.push({ on: side, type: 'poison', amount: total })
   }
 }
 
@@ -109,7 +114,7 @@ const isSpellReady = (character, spellId) => {
   return (character.cooldowns[spellId] || 0) <= 0
 }
 
-const castSpell = (character, monster, spellId) => {
+const castSpell = (character, monster, spellId, events) => {
   const spell = (character.spells || []).find((candidate) => candidate.id === spellId)
   if (!spell || !isSpellReady(character, spellId)) {
     return
@@ -119,15 +124,18 @@ const castSpell = (character, monster, spellId) => {
     switch (action.kind) {
       case 'damage':
         applyDamage(monster, amount)
+        events.push({ on: 'monster', type: 'spell', amount })
         break
       case 'heal':
         heal(character, amount)
+        events.push({ on: 'character', type: 'heal', amount })
         break
       case 'buff':
         character.activeEffects = [
           ...character.activeEffects,
           { kind: 'buff', target: action.target, amount, remaining: action.duration || 1 }
         ]
+        events.push({ on: 'character', type: 'buff', text: spell.name })
         break
       case 'dot':
         addDot(monster, amount, action.duration || 1)
@@ -140,24 +148,32 @@ const castSpell = (character, monster, spellId) => {
 }
 
 // One combatant strikes the other, firing crit / on-hit / on-damaged triggers.
-const strike = (attacker, defender, attackerStats, defenderStats) => {
+const strike = (attacker, defender, attackerStats, defenderStats, attackerSide, defenderSide, events) => {
   if (attacker.hp <= 0) {
     return
   }
   let damage = Math.max(0, attackerStats.atq - defenderStats.def)
 
+  let isCrit = false
   const critTrigger = triggersFor(attacker, 'attack').find((trigger) => trigger.effect === 'crit')
   if (critTrigger && Math.random() < evalNumber(critTrigger.amount, attacker)) {
     damage *= 2
+    isCrit = true
   }
 
   applyDamage(defender, damage)
 
   if (damage > 0) {
+    events.push({ on: defenderSide, type: isCrit ? 'crit' : 'hit', amount: damage })
+
     const hitContext = { ...attacker, damageDealt: damage }
     triggersFor(attacker, 'hit').forEach((trigger) => {
       if (trigger.effect === 'lifesteal') {
-        heal(attacker, Math.floor(evalNumber(trigger.amount, hitContext) * damage))
+        const healed = Math.floor(evalNumber(trigger.amount, hitContext) * damage)
+        heal(attacker, healed)
+        if (healed > 0) {
+          events.push({ on: attackerSide, type: 'heal', amount: healed })
+        }
       } else if (trigger.effect === 'dot') {
         addDot(defender, evalNumber(trigger.amount, attacker), trigger.duration || 1)
       }
@@ -167,51 +183,62 @@ const strike = (attacker, defender, attackerStats, defenderStats) => {
     if (defender.hp > 0) {
       triggersFor(defender, 'damaged').forEach((trigger) => {
         if (trigger.effect === 'riposte') {
-          applyDamage(attacker, evalNumber(trigger.amount, defender))
+          const reflected = evalNumber(trigger.amount, defender)
+          applyDamage(attacker, reflected)
+          if (reflected > 0) {
+            events.push({ on: attackerSide, type: 'hit', amount: reflected })
+          }
         }
       })
     }
   }
 }
 
-const attackRound = (character, monster) => {
+const attackRound = (character, monster, events) => {
   const characterStats = effectiveStats(character)
   const monsterStats = effectiveStats(monster)
   const characterSpd = rollDice(6, characterStats.spd)
   const monsterSpd = rollDice(6, monsterStats.spd)
 
   if (characterSpd < monsterSpd) {
-    strike(monster, character, monsterStats, characterStats)
-    strike(character, monster, characterStats, monsterStats)
+    strike(monster, character, monsterStats, characterStats, 'monster', 'character', events)
+    strike(character, monster, characterStats, monsterStats, 'character', 'monster', events)
   } else {
-    strike(character, monster, characterStats, monsterStats)
-    strike(monster, character, monsterStats, characterStats)
+    strike(character, monster, characterStats, monsterStats, 'character', 'monster', events)
+    strike(monster, character, monsterStats, characterStats, 'monster', 'character', events)
   }
 }
 
 export const resolveFight = (monster = {}, character = {}, queuedSpellId = null) => {
   const nextCharacter = cloneEntity(character)
   const nextMonster = cloneEntity(monster)
+  const events = []
+  const monsterWasAlive = nextMonster.hp > 0
 
   tickCooldowns(nextCharacter)
 
   if (queuedSpellId) {
-    castSpell(nextCharacter, nextMonster, queuedSpellId)
+    castSpell(nextCharacter, nextMonster, queuedSpellId, events)
   }
 
-  tickDots(nextMonster)
-  tickDots(nextCharacter)
+  tickDots(nextMonster, 'monster', events)
+  tickDots(nextCharacter, 'character', events)
 
   // Skip the melee exchange if the spell or poison already finished the enemy.
   if (nextMonster.hp > 0 && nextCharacter.hp > 0) {
-    attackRound(nextCharacter, nextMonster)
+    attackRound(nextCharacter, nextMonster, events)
   }
 
   tickBuffs(nextCharacter)
   tickBuffs(nextMonster)
 
+  if (monsterWasAlive && nextMonster.hp <= 0) {
+    events.push({ on: 'monster', type: 'ko' })
+  }
+
   return {
     character: nextCharacter,
-    monster: nextMonster
+    monster: nextMonster,
+    events
   }
 }

@@ -8,6 +8,7 @@ import Character from './Character'
 import { SpellBar } from './Character/SpellBar'
 import { Floor } from './Floor'
 import { Cell } from './Cell'
+import { DepthBanner } from './DepthBanner'
 import useWindowDimensions from '../useWindowDimensions'
 
 const Wraper = styled.div`
@@ -25,18 +26,31 @@ export const Game = ({
   addGold,
   removeSelectedCharacter
 }) => {
-  const { size, floor, clickOnCell, depth, character, queuedSpell, queueSpell } = useGame(player, removeSelectedCharacter)
+  const {
+    size,
+    floor,
+    clickOnCell,
+    depth,
+    character,
+    queuedSpell,
+    queueSpell,
+    cellAction,
+    characterAction,
+    depthBanner
+  } = useGame(player, removeSelectedCharacter)
   const { width, height } = useWindowDimensions()
   const isMobile = (width <= 768)
 
   return (
         <Wraper>
+            <DepthBanner banner={depthBanner} />
             <Character
               character={character}
               mobileHeight={height - width - 20}
               isMobile={isMobile}
               player={player}
               depth={depth}
+              action={characterAction}
             />
             <SpellBar
               character={character}
@@ -48,6 +62,7 @@ export const Game = ({
                     <Cell
                         key={cellOffset}
                         cellValue={cellValue}
+                        action={cellAction && cellAction.offset === cellOffset ? cellAction : null}
                         onClick={() => clickOnCell(cellValue.x, cellValue.y, addGold)}
                     />
                 ))}
