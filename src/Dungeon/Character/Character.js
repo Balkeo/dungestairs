@@ -11,7 +11,7 @@ import { flashRed } from '../../Guideline/animations'
 
 const Wraper = styled.div`
   box-sizing: border-box;
-  background-color: ${Colors.brown1};
+  background-color: ${Colors.woodDark};
   color: ${Colors.white50};
   display: flex;
   flex-direction: row;

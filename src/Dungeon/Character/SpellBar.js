@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Colors from '../../Helper/Colors'
+import { DISPLAY_FONT, BODY_FONT, parchmentFill } from '../../Guideline/theme'
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -13,12 +14,14 @@ const Wrapper = styled.div`
 `
 
 const Hint = styled.div`
+  font-family: ${BODY_FONT};
   font-size: 11px;
   line-height: 14px;
-  color: ${({ active }) => (active ? Colors.yellow : Colors.white30)};
-  font-weight: ${({ active }) => (active ? 700 : 400)};
+  color: ${({ active }) => (active ? Colors.goldLight : Colors.parchmentShade)};
+  font-weight: ${({ active }) => (active ? 800 : 600)};
   margin-bottom: 6px;
   text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
   transition: color 0.2s ease;
 `
 
@@ -35,30 +38,33 @@ const SpellButton = styled.button`
   min-width: 92px;
   box-sizing: border-box;
   padding: 8px 10px;
-  border-radius: 8px;
-  border: 2px solid ${({ selected }) => (selected ? Colors.yellow : Colors.black50)};
-  background: ${({ disabled }) => (disabled ? Colors.carbon : Colors.background)};
-  color: ${({ disabled }) => (disabled ? Colors.white20 : Colors.white75)};
-  font-family: Helvetica, sans-serif;
+  border-radius: 10px;
+  ${parchmentFill}
+  border: 3px solid ${({ selected }) => (selected ? Colors.gold : Colors.woodDark)};
+  color: ${Colors.ink};
+  font-family: ${BODY_FONT};
   font-size: 12px;
   line-height: 14px;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  transition: all 0.2s ease-in-out;
-  box-shadow: ${({ selected }) => (selected ? `0 0 8px ${Colors.yellow}` : 'none')};
-  &:hover {
-    border-color: ${({ disabled, selected }) => (disabled ? Colors.black50 : selected ? Colors.yellow : Colors.white50)};
-  }
+  transition: transform 0.06s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: ${({ selected }) => (selected ? `0 0 10px ${Colors.gold}, 0 4px 0 0 ${Colors.woodDark}` : `0 4px 0 0 ${Colors.woodDark}`)};
+  filter: ${({ disabled }) => (disabled ? 'grayscale(0.7) brightness(0.85)' : 'none')};
+  opacity: ${({ disabled }) => (disabled ? 0.75 : 1)};
+  &:not(:disabled):hover { filter: brightness(1.05); }
+  &:not(:disabled):active { transform: translateY(3px); box-shadow: 0 1px 0 0 ${Colors.woodDark}; }
 `
 
 const SpellName = styled.div`
-  font-weight: bold;
-  color: ${({ disabled }) => (disabled ? Colors.white20 : Colors.white100)};
+  font-family: ${DISPLAY_FONT};
+  font-weight: 800;
+  color: ${Colors.woodDark};
 `
 
 const Cooldown = styled.div`
   margin-top: 2px;
   font-size: 10px;
-  color: ${({ ready }) => (ready ? Colors.green : Colors.red)};
+  font-weight: 700;
+  color: ${({ ready }) => (ready ? '#2f7d4f' : Colors.ember)};
 `
 
 export const SpellBar = ({
@@ -79,8 +85,8 @@ export const SpellBar = ({
     <Wrapper>
       <Hint active={!!armed}>
         {armed
-          ? `▸ Click an enemy to cast ${armed.name}`
-          : 'Select a spell, then click an enemy to cast it this round.'}
+          ? `▸ Clique un ennemi pour lancer ${armed.name}`
+          : 'Choisis un sort, puis clique un ennemi pour le lancer.'}
       </Hint>
       <Bar>
         {spells.map((spell) => {
