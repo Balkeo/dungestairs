@@ -1,7 +1,7 @@
 {
   "id": "berserker",
   "type": "Berserker",
-  "icon": null,
+  "icon": "Berserker",
   "glyph": "🪓",
   "hp": 28,
   "stats": { "atq": 4, "def": 0, "spd": 1 },

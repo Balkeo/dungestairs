@@ -8,7 +8,9 @@ export const CELL_GLYPHS = {
   chest: '💰',
   healer: '💚',
   mage: '🔮',
-  knight: '🛡️'
+  knight: '🛡️',
+  merchant: '🧪',
+  void: '🕳️'
 }
 
 // An opened (empty) chest shows nothing rather than a leftover glyph.

@@ -1,14 +1,27 @@
 import { useCallback, useEffect, useState } from 'react'
 import { isEqual } from 'lodash'
-import { generateCellForDepth, getEntranceCell, getKeyCell } from './useCell'
+import { generateCellForDepth, getEntranceCell } from './useCell'
 import { makeBoss } from './Monster/useMonster'
+import { pickLayout, pickReachableKey } from './layouts'
 import { EMPTY_CELL } from './Content/constant'
 
 const BOSS_INTERVAL = 5
 
-// On a boss floor, drop a boss on a tile next to the key so it blocks the exit
-// until it is defeated.
-const placeBoss = (cells, size, depth, keyCell) => {
+// A chasm tile: impassable and unrevealable, so it shapes the walkable room.
+const makeVoidCell = (offset, size) => ({
+  ...EMPTY_CELL,
+  type: 'void',
+  content: '',
+  isOpen: true,
+  canClick: false,
+  offset,
+  x: offset % size,
+  y: Math.floor(offset / size)
+})
+
+// On a boss floor, drop a boss on a walkable tile next to the key so it blocks
+// the exit until it is defeated.
+const placeBoss = (cells, size, depth, keyCell, voids) => {
   const neighbours = [
     { x: keyCell.x + 1, y: keyCell.y },
     { x: keyCell.x - 1, y: keyCell.y },
@@ -21,7 +34,7 @@ const placeBoss = (cells, size, depth, keyCell) => {
       continue
     }
     const offset = spot.y * size + spot.x
-    if (offset === entrance.offset || offset === keyCell.offset) {
+    if (offset === entrance.offset || offset === keyCell.offset || voids.has(offset)) {
       continue
     }
     cells[offset] = {
@@ -39,7 +52,7 @@ const placeBoss = (cells, size, depth, keyCell) => {
 const generateCells = (size, depth) => {
   const cells = []
   const entranceCell = getEntranceCell(size)
-  const keyCell = getKeyCell(size)
+  const isBossFloor = depth % BOSS_INTERVAL === 0
 
   for (let row = 0; row < size; row++) {
     for (let cell = 0; cell < size; cell++) {
@@ -48,11 +61,26 @@ const generateCells = (size, depth) => {
     }
   }
 
-  cells[entranceCell.offset] = entranceCell
-  cells[keyCell.offset] = keyCell
+  // Carve the room shape, then place fixed tiles on walkable ground.
+  const { voids } = pickLayout(depth, size)
+  for (const offset of voids) {
+    cells[offset] = makeVoidCell(offset, size)
+  }
 
-  if (depth % BOSS_INTERVAL === 0) {
-    placeBoss(cells, size, depth, keyCell)
+  cells[entranceCell.offset] = entranceCell
+
+  const keyCell = pickReachableKey(voids, size, isBossFloor)
+  cells[keyCell.offset] = {
+    ...EMPTY_CELL,
+    type: 'Key',
+    content: '',
+    offset: keyCell.offset,
+    x: keyCell.x,
+    y: keyCell.y
+  }
+
+  if (isBossFloor) {
+    placeBoss(cells, size, depth, keyCell, voids)
   }
 
   return cells
@@ -73,7 +101,9 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
       return false
     }
     const offset = y * 5 + x
-    return typeof cells[offset] !== 'undefined'
+    const cell = cells[offset]
+    // Void tiles are treated as non-existent so they block reveals and pathing.
+    return typeof cell !== 'undefined' && cell.type !== 'void'
   }
 
   const isOpen = (cell) => {
@@ -141,6 +171,14 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
   }
 
   const canClickOnCell = (cell) => {
+    if (cell.type === 'void') {
+      return false
+    }
+    // An already-revealed, still-alive monster can always be attacked as long as
+    // it is reachable (next to an open tile). Without this, two monsters standing
+    // side by side would each count as "guarding" the other and block each other
+    // forever. The guard rule below still applies to revealing/looting other tiles.
+    const isLiveMonster = isMonsterCell(cell) && !isClearedCell(cell)
     let canClick = cell.canClick
     let haveMonsterInAdjacentCells = false
     const adjacentCells = getAdjacentCells(cell)
@@ -153,7 +191,7 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
       }
       return adjacentCell
     })
-    if (haveMonsterInAdjacentCells) {
+    if (haveMonsterInAdjacentCells && !isLiveMonster) {
       return false
     }
 
@@ -164,7 +202,10 @@ export const useDungeon = (size = 5, dungeonDepth = 1) => {
     cells = cells.map((cellValue) => {
       const temp = Object.assign({}, cellValue)
       temp.canClick = canClickOnCell(cellValue)
-      temp.isBlocked = haveMonsterInAdjacentCells(getAdjacentCells(cellValue))
+      // A live, revealed monster is never itself "locked" by a neighbouring
+      // monster — you can always fight it. The lock still guards other tiles.
+      const isLiveMonster = isMonsterCell(cellValue) && !isClearedCell(cellValue)
+      temp.isBlocked = !isLiveMonster && haveMonsterInAdjacentCells(getAdjacentCells(cellValue))
       return temp
     })
     return cells

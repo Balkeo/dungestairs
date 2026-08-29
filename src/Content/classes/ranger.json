@@ -1,7 +1,7 @@
 {
   "id": "ranger",
   "type": "Ranger",
-  "icon": null,
+  "icon": "Ranger",
   "glyph": "🏹",
   "hp": 22,
   "stats": { "atq": 2, "def": 0, "spd": 3 },

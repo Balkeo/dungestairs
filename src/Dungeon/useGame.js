@@ -7,7 +7,7 @@ import { rollItemDrop, blessing } from '../Helper/loot'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
 
-const ALLY_TYPES = ['healer', 'mage', 'knight']
+const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 
 export const useGame = (player = {}, recordRun = () => []) => {
   const size = 5
@@ -66,13 +66,22 @@ export const useGame = (player = {}, recordRun = () => []) => {
     sfx.trap()
   }
 
-  const applyAlly = (cell) => {
+  const applyAlly = (cell, addGold = () => {}) => {
     if (cell.type === 'healer') {
       const amount = Math.round(character.maxHp * 0.3)
       updateCharacter({ ...character, hp: Math.min(character.maxHp, character.hp + amount) })
       emitCell(cell.offset, [plainText(`+${amount}`, Colors.greenLight, 18)])
       setCharacterAction({ id: nextId(), texts: [plainText(`+${amount}`, Colors.greenLight, 18)] })
       sfx.heal()
+      return
+    }
+    if (cell.type === 'merchant') {
+      // A wandering trader tosses a coin purse that scales with the depth.
+      const amount = 5 + Math.floor(depth / 2) + Math.floor(Math.random() * (5 + depth))
+      addGold(amount)
+      addRunGold(amount)
+      emitCell(cell.offset, [goldText(amount)])
+      sfx.coin()
       return
     }
     const item = cell.type === 'knight'
@@ -103,7 +112,7 @@ export const useGame = (player = {}, recordRun = () => []) => {
         if (cell.type === 'trap') {
           springTrap(cell)
         } else if (ALLY_TYPES.includes(cell.type)) {
-          applyAlly(cell)
+          applyAlly(cell, addGold)
         }
         return cell
       }
