@@ -31,7 +31,31 @@ const black50 = 'rgba(0,0,0,0.5)'
 const black75 = 'rgba(0,0,0,0.75)'
 const black100 = 'rgba(0,0,0,1)'
 
+// Parchment / hand-drawn game theme.
+const parchment = '#e9d6ad'
+const parchmentDark = '#d8bf8e'
+const parchmentShade = '#c9ac74'
+const ink = '#2b2117'
+const inkSoft = '#5a4a38'
+const wood = '#5a3a24'
+const woodDark = '#3d2716'
+const woodLight = '#7a5334'
+const gold = '#e6a938'
+const goldLight = '#f4c65e'
+const ember = '#d1462f'
+
 const Colors = {
+  parchment,
+  parchmentDark,
+  parchmentShade,
+  ink,
+  inkSoft,
+  wood,
+  woodDark,
+  woodLight,
+  gold,
+  goldLight,
+  ember,
   background,
   blue,
   blueLight,
