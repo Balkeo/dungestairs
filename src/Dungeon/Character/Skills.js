@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Skill } from './Skill'
 import Colors from '../../Helper/Colors'
+import { DISPLAY_FONT } from '../../Guideline/theme'
 import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 
 const Wrapper = styled.div`
@@ -22,9 +23,13 @@ const Row = styled.div`
 `
 
 const Name = styled.div`
+  font-family: ${DISPLAY_FONT};
+  font-weight: 800;
+  letter-spacing: 1px;
   font-size: 16px;
   line-height: 18px;
-  color: ${Colors.white100};
+  color: ${Colors.goldLight};
+  text-shadow: 0 2px 3px rgba(0,0,0,0.6);
 `
 const Separator = styled(DashedSeparator)`
   margin-top: 15px;
@@ -43,27 +48,27 @@ const SkillSelector = styled.span`
   font-size: 20px;
   line-height: 20px;
   width: 20px;
-  color: ${Colors.white20};
-  background: ${Colors.background};
+  color: ${Colors.parchment};
+  background: rgba(0,0,0,0.3);
   transition: all 0.25s ease-in-out;
-  border: 1px solid ${Colors.white20};
+  border: 1px solid ${Colors.woodLight};
   border-radius: 50%;
   vertical-align: baseline;
   display: ${({ show }) => (show ? 'flex' : 'none')};
   &:hover {
     cursor: pointer;
-    color: ${Colors.white75};
-    border: 1px solid ${Colors.white75};
+    color: ${Colors.goldLight};
+    border: 1px solid ${Colors.gold};
   }
 `
 
 const SkillUpgrador = styled.span`
   font-size: 14px;
   line-height: 14px;
-  color: ${Colors.white20};
-  background: ${Colors.background};
+  color: ${Colors.parchment};
+  background: rgba(0,0,0,0.3);
   transition: all 0.25s ease-in-out;
-  border: 1px solid ${Colors.white20};
+  border: 1px solid ${Colors.woodLight};
   border-radius: 5px;
   vertical-align: baseline;
   padding: 3px;
@@ -71,8 +76,8 @@ const SkillUpgrador = styled.span`
   display: ${({ show }) => (show ? 'flex' : 'none')};
   &:hover {
     cursor: pointer;
-    color: ${Colors.white75};
-    border: 1px solid ${Colors.white75};
+    color: ${Colors.goldLight};
+    border: 1px solid ${Colors.gold};
   }
 `
 
@@ -107,7 +112,7 @@ export const Skills = ({
   return (
     <Wrapper>
       <Row>
-        <Name>Skills</Name>
+        <Name>Talents</Name>
       </Row>
       <Separator />
       <Row>

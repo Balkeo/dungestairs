@@ -3,16 +3,22 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Colors from '../Helper/Colors'
 import Coin from '../Assets/Coin.png'
+import { woodFill, DISPLAY_FONT } from '../Guideline/theme'
 
 const Wraper = styled.div`
   box-sizing: border-box;
   width: 72px;
   height: 100%;
-  box-shadow: 1px 0 0 0 ${Colors.carbon};
-  background-color: ${Colors.brown2};
+  ${woodFill}
+  border-right: 3px solid ${Colors.woodDark};
   display: flex;
   flex-direction: column;
-  color: ${Colors.white50};
+  align-items: center;
+  gap: 6px;
+  padding-top: 10px;
+  font-family: ${DISPLAY_FONT};
+  font-weight: 800;
+  color: ${Colors.goldLight};
 `
 
 const Label = styled.span`

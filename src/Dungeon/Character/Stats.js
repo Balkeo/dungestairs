@@ -11,12 +11,15 @@ const Wraper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin: 0 auto;
-  background-color: ${({ background }) => (background ? 'transparent' : Colors.background)};
+  background-color: ${({ background }) => (background ? Colors.parchment : Colors.parchmentDark)};
   background-image: ${({ background }) => (background ? `url(${background})` : 'none')};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-radius: ${({ background }) => (background ? '0' : '10px')};
+  border: 3px solid ${Colors.woodDark};
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45), inset 0 0 0 2px ${Colors.parchmentDark};
+  overflow: hidden;
   order: 2;
   @media only screen and (max-width: 768px) {
     width: min(64vw, 240px);

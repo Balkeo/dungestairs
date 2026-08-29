@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
+import { DISPLAY_FONT } from '../../Guideline/theme'
 import styled from 'styled-components'
 import DashedSeparator from '../../Guideline/Separator/DashedSeparator'
 import { InventorySlot } from './InventorySlot'
@@ -24,9 +25,13 @@ const Row = styled.div`
 `
 
 const Name = styled.div`
+  font-family: ${DISPLAY_FONT};
+  font-weight: 800;
+  letter-spacing: 1px;
   font-size: 16px;
   line-height: 18px;
-  color: ${Colors.white100};
+  color: ${Colors.goldLight};
+  text-shadow: 0 2px 3px rgba(0,0,0,0.6);
 `
 const Separator = styled(DashedSeparator)`
   margin-top: 15px;
@@ -62,7 +67,7 @@ export const Inventory = ({
   return (
     <Wrapper>
       <Row>
-        <Name>Inventory</Name>
+        <Name>Inventaire</Name>
       </Row>
       <Separator />
       <Row>
