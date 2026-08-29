@@ -14,12 +14,20 @@ export const MainMenu = ({
   player,
   selectCharacter,
   buyCharacter,
-  upgradeCharacterSkill
+  upgradeCharacterSkill,
+  upgradeCharacterSpell
 }) => {
   return (
     <Wraper>
       <Player player={player}/>
-      <SelectCharacter characters={player.characters} selectCharacter={selectCharacter} buyCharacter={buyCharacter} upgradeCharacterSkill={upgradeCharacterSkill}/>
+      <SelectCharacter
+        characters={player.characters}
+        gold={player.gold}
+        selectCharacter={selectCharacter}
+        buyCharacter={buyCharacter}
+        upgradeCharacterSkill={upgradeCharacterSkill}
+        upgradeCharacterSpell={upgradeCharacterSpell}
+      />
     </Wraper>
   )
 }
@@ -27,5 +35,6 @@ MainMenu.propTypes = {
   player: PropTypes.object,
   selectCharacter: PropTypes.func,
   buyCharacter: PropTypes.func,
-  upgradeCharacterSkill: PropTypes.func
+  upgradeCharacterSkill: PropTypes.func,
+  upgradeCharacterSpell: PropTypes.func
 }

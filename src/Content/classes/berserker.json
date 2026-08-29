@@ -4,22 +4,79 @@
   "icon": "Berserker",
   "glyph": "🪓",
   "hp": 28,
-  "stats": { "atq": 4, "def": 0, "spd": 1 },
+  "stats": {
+    "atq": 4,
+    "def": 0,
+    "spd": 1
+  },
   "level": 1,
   "price": 1500,
-  "spells": ["cleave", "blood_rage", "second_wind"],
-  "passives": ["last_stand", "berserk", "life_tap"],
+  "spells": [
+    "cleave",
+    "blood_rage",
+    "second_wind"
+  ],
+  "passives": [
+    "last_stand",
+    "berserk",
+    "life_tap"
+  ],
   "skills": [
     {
-      "icon": null,
-      "name": "War Paint",
+      "name": "Vitalité",
+      "glyph": "❤️",
       "level": 1,
       "cost": 50,
       "effects": [
-        { "target": "hp", "effect": "5 * (skills[0].level - 1)" },
-        { "target": "maxHp", "effect": "5 * (skills[0].level - 1)" }
+        {
+          "target": "hp",
+          "effect": "5 * (skills[0].level - 1)"
+        },
+        {
+          "target": "maxHp",
+          "effect": "5 * (skills[0].level - 1)"
+        }
       ],
-      "description": "Fiercer war paint increases maximum hit points by 5 per level."
+      "description": "+5 PV max / niveau"
+    },
+    {
+      "name": "Puissance",
+      "glyph": "⚔️",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.atq",
+          "effect": "skills[1].level - 1"
+        }
+      ],
+      "description": "+1 ATQ / niveau"
+    },
+    {
+      "name": "Défense",
+      "glyph": "🛡️",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.def",
+          "effect": "skills[2].level - 1"
+        }
+      ],
+      "description": "+1 DEF / niveau"
+    },
+    {
+      "name": "Vitesse",
+      "glyph": "👟",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.spd",
+          "effect": "skills[3].level - 1"
+        }
+      ],
+      "description": "+1 SPD / niveau"
     }
   ]
 }

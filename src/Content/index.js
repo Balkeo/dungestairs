@@ -48,7 +48,7 @@ const buildCharacter = (config) => {
     level: config.level || 1,
     items: config.items ? [...config.items] : [],
     skills: config.skills ? config.skills.map((s) => ({ ...s })) : [],
-    spells: resolveList(config.spells, spells),
+    spells: resolveList(config.spells, spells).map((spell) => ({ level: 1, ...spell })),
     passives: resolveList(config.passives, passives),
     price: config.price || 0
   }

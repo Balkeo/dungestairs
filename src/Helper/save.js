@@ -1,4 +1,5 @@
 import Characters from '../Dungeon/Character/Characters'
+import { calculate } from './CharacterCalculator'
 
 // Versioned save/load. Only the player's *progression* is persisted (gold,
 // depth records, and per-character price-paid + upgraded skills). Everything
@@ -7,11 +8,13 @@ import Characters from '../Dungeon/Character/Characters'
 //
 // Bump SAVE_VERSION whenever the persisted shape changes, and add a migration
 // step below so existing saves upgrade instead of breaking.
-export const SAVE_VERSION = 2
+export const SAVE_VERSION = 3
 const KEY = '_dungestairs'
 
 export const DEFAULT_STATS = { runs: 0, bestDepth: 0, kills: 0, bossKills: 0, goldEarned: 0 }
 
+// Persist only progression levels (not the full skill/spell objects), so the
+// content can change shape without invalidating saves.
 const snapshot = (player) => ({
   version: SAVE_VERSION,
   gold: player.gold || 0,
@@ -20,7 +23,11 @@ const snapshot = (player) => ({
   achievements: player.achievements || [],
   characters: (player.characters || []).map((character) => ({
     price: character.price,
-    skills: character.skills
+    skillLevels: (character.skills || []).map((skill) => skill.level || 1),
+    spellLevels: (character.spells || []).reduce((acc, spell) => {
+      acc[spell.id] = spell.level || 1
+      return acc
+    }, {})
   }))
 })
 
@@ -80,11 +87,17 @@ export const loadGame = () => {
   const savedCharacters = saved.characters || []
   const characters = Characters.map((base, index) => {
     const character = savedCharacters[index] || {}
-    return {
+    const skillLevels = character.skillLevels || []
+    const spellLevels = character.spellLevels || {}
+    const rebuilt = {
       ...base,
       price: character.price !== undefined ? character.price : base.price,
-      skills: character.skills || base.skills
+      skills: (base.skills || []).map((skill, i) => ({ ...skill, level: skillLevels[i] || skill.level || 1 })),
+      spells: (base.spells || []).map((spell) => ({ ...spell, level: spellLevels[spell.id] || spell.level || 1 }))
     }
+    // Recompute so the menu reflects saved stat upgrades (spell levels are just
+    // carried through by calculate).
+    return calculate(rebuilt)
   })
   return {
     gold: saved.gold || 0,
