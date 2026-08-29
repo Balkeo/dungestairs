@@ -13,7 +13,7 @@ const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, removeGold = () => {}) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
-  const { character, updateCharacter, addItem } = useCharacter(player.characters[player.selectedCharacter])
+  const { character, updateCharacter, addItem, addBoon, clearBoons } = useCharacter(player.characters[player.selectedCharacter])
 
   const [queuedSpell, setQueuedSpell] = useState(null)
   const queuedSpellRef = useRef(null)
@@ -113,17 +113,14 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       sfx.heal()
       return
     }
-    const item = cell.type === 'knight'
+    // Knight / mage allies grant a temporary boon for the current floor only.
+    const boon = cell.type === 'knight'
       ? blessing('bless_guard', "Guard's Boon", '🛡️', 'stats.def', '1', '+1 DEF')
       : blessing('bless_arcane', 'Arcane Boon', '🔮', 'stats.atq', '1', '+1 ATQ')
-    const hasSpace = (character.items || []).filter(Boolean).length < 8
-    if (hasSpace) {
-      addItem(item)
-      emitCell(cell.offset, [itemText(item)])
-      sfx.loot()
-    } else {
-      emitCell(cell.offset, [plainText('Sac plein', Colors.white50, 13)])
-    }
+    addBoon(boon)
+    emitCell(cell.offset, [itemText(boon)])
+    setCharacterAction({ id: nextId(), texts: [itemText(boon)] })
+    sfx.loot()
   }
 
   const clickOnCell = useCallback(
@@ -206,6 +203,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         }
         setDepthBanner({ id: nextId(), depth: depth + 1 })
         sfx.key()
+        clearBoons() // ally boons only last for the floor they were granted on
         exitToNextDepth()
       }
     }
