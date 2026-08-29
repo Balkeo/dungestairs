@@ -3,8 +3,8 @@ import { isEqual } from 'lodash'
 
 import { calculate } from '../../Helper/CharacterCalculator'
 
-// A run can hold only a few relics — keeps builds focused and the game hard.
-export const MAX_RELICS = 3
+// A run can hold only ONE relic — it's a build-defining pick, not a stack.
+export const MAX_RELICS = 1
 
 export const useCharacter = (selectedCharacter) => {
   const selectCharacter = () => {

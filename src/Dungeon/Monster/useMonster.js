@@ -16,6 +16,11 @@ export const useMonster = (depth = 1) => {
   monster.level = 1 + Math.floor(depth / 2)
   const calculated = calculate(monster)
 
+  // Extra HP the deeper you go, so a strong hero can't one-shot everything.
+  const depthHp = 1 + depth * 0.08
+  calculated.maxHp = Math.round(calculated.maxHp * depthHp)
+  calculated.hp = calculated.maxHp
+
   const mods = getRunModifiers()
   const eliteChance = Math.min(0.28, 0.06 + depth * 0.015)
   if (mods.allElite || (depth >= 3 && rng() < eliteChance)) {
@@ -37,16 +42,22 @@ export const useMonster = (depth = 1) => {
 // Boss for a boss floor: cycles through the roster and scales strongly with the
 // full depth (level = depth).
 export const makeBoss = (depth = 1) => {
+  const scaleHp = (boss) => {
+    const calc = calculate(boss)
+    calc.maxHp = Math.round(calc.maxHp * (1 + depth * 0.1))
+    calc.hp = calc.maxHp
+    return calc
+  }
   if (depth >= FINAL_DEPTH) {
     const finalBoss = Object.assign({}, FinalBoss)
     finalBoss.level = 1 + Math.floor(depth / 3)
     finalBoss.isBoss = true
     finalBoss.isFinalBoss = true
-    return calculate(finalBoss)
+    return scaleHp(finalBoss)
   }
   const index = Math.max(0, Math.floor(depth / 5) - 1) % Bosses.length
   const boss = Object.assign({}, Bosses[index])
   boss.level = 1 + Math.floor(depth / 3)
   boss.isBoss = true
-  return calculate(boss)
+  return scaleHp(boss)
 }

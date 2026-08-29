@@ -367,11 +367,17 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
               const unlocked = recordRun(summary)
               setRunOver({ ...summary, unlocked })
             } else {
-              // Regular bosses drop a run-long relic.
+              // Regular bosses drop a relic — or a gold purse if you already hold
+              // your one relic.
               const relic = rollRelic()
               if (relic) {
                 addRelic(relic)
                 emitCell(offset, [plainText('✦ Relique', Colors.yellow, 13), itemText(relic)])
+              } else {
+                const purse = Math.floor((20 + depth * 3) * goldMult)
+                addGold(purse)
+                addRunGold(purse)
+                emitCell(offset, [goldText(purse)])
               }
             }
           }
