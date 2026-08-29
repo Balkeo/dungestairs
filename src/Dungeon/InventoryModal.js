@@ -5,6 +5,7 @@ import Modal from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
 import { DISPLAY_FONT } from '../Guideline/theme'
 import { rarityColor } from '../Content/rarity'
+import { MAX_RELICS } from './Character/useCharacter'
 const inkRarity = (r) => (r === 'common' ? Colors.ink : rarityColor(r))
 
 const Title = styled.div`
@@ -136,7 +137,7 @@ export const InventoryModal = ({ isShowing, hide, character = {} }) => {
             </Line>
           )
         })}
-        {relics.length > 0 && <Section>✦ Reliques ({relics.length})</Section>}
+        {relics.length > 0 && <Section>✦ Reliques ({relics.length}/{MAX_RELICS})</Section>}
         {relics.map((relic, index) => {
           const tint = inkRarity(relic.rarity)
           return (

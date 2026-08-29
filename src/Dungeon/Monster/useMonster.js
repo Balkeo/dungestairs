@@ -13,7 +13,7 @@ export const FINAL_DEPTH = 20
 // harder hitting, but it drops bonus loot (handled in useGame).
 export const useMonster = (depth = 1) => {
   const monster = Object.assign({}, Monsters[random(Monsters.length)])
-  monster.level = 1 + Math.floor(depth / 3)
+  monster.level = 1 + Math.floor(depth / 2)
   const calculated = calculate(monster)
 
   const mods = getRunModifiers()

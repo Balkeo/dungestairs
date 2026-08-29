@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDungeon } from './useDungeon'
-import { useCharacter } from './Character/useCharacter'
+import { useCharacter, MAX_RELICS } from './Character/useCharacter'
 import { resolveFight } from './resolveFight'
 import { eventsToTexts, goldText, itemText, plainText } from './combatText'
 import { rollItemDrop, blessing } from '../Helper/loot'
@@ -26,7 +26,11 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
 
   // A random relic the character does not already own (bosses drop these).
   const rollRelic = () => {
-    const owned = new Set((character.relics || []).map((relic) => relic.id))
+    const ownedRelics = character.relics || []
+    if (ownedRelics.length >= MAX_RELICS) {
+      return null
+    }
+    const owned = new Set(ownedRelics.map((relic) => relic.id))
     const pool = Relics.filter((relic) => !owned.has(relic.id))
     if (pool.length === 0) {
       return null
@@ -335,24 +339,17 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         if (ko) {
           sfx.ko()
           bumpKills()
-          // Elites drop bonus loot: extra gold, a likely item, sometimes a relic.
+          // Elites drop a little bonus loot: extra gold and a chance of an item.
           if (cell.content && cell.content.isElite) {
-            const bonusGold = Math.floor((4 + depth * 2) * goldMult)
+            const bonusGold = Math.floor((2 + depth) * goldMult)
             addGold(bonusGold)
             addRunGold(bonusGold)
             const eliteTexts = [plainText('★ Élite', Colors.yellow, 12), goldText(bonusGold)]
             const hasSpace = (character.items || []).filter(Boolean).length < 8
-            const drop = hasSpace ? rollItemDrop(depth + 2, 0.7) : null
+            const drop = hasSpace ? rollItemDrop(depth + 1, 0.4) : null
             if (drop) {
               addItem(drop)
               eliteTexts.push(itemText(drop))
-            }
-            if (rng() < 0.2) {
-              const eliteRelic = rollRelic()
-              if (eliteRelic) {
-                addRelic(eliteRelic)
-                eliteTexts.push(itemText(eliteRelic))
-              }
             }
             emitCell(offset, eliteTexts)
           }

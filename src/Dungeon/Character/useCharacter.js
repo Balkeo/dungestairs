@@ -3,6 +3,9 @@ import { isEqual } from 'lodash'
 
 import { calculate } from '../../Helper/CharacterCalculator'
 
+// A run can hold only a few relics — keeps builds focused and the game hard.
+export const MAX_RELICS = 3
+
 export const useCharacter = (selectedCharacter) => {
   const selectCharacter = () => {
     const character = calculate(Object.assign({}, selectedCharacter))
@@ -91,10 +94,12 @@ export const useCharacter = (selectedCharacter) => {
       return
     }
     setCharacter((previousCharacter) => {
-      if ((previousCharacter.relics || []).some((owned) => owned.id === relic.id)) {
+      const owned = previousCharacter.relics || []
+      // The reliquary is small on purpose: relics are build-defining, not stacked.
+      if (owned.length >= MAX_RELICS || owned.some((r) => r.id === relic.id)) {
         return previousCharacter
       }
-      const relics = [...(previousCharacter.relics || []), relic]
+      const relics = [...owned, relic]
       const recalculated = calculate({ ...previousCharacter, relics })
       const maxHpGain = recalculated.maxHp - previousCharacter.maxHp
       recalculated.hp = Math.min(previousCharacter.hp + Math.max(0, maxHpGain), recalculated.maxHp)

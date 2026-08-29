@@ -13,7 +13,7 @@ const TYPES = [
   },
   {
     type: 'event',
-    probability: 8
+    probability: 5
   },
   {
     type: 'loot',
@@ -21,7 +21,7 @@ const TYPES = [
   },
   {
     type: 'empty',
-    probability: 27
+    probability: 30
   },
   {
     type: 'encounter',

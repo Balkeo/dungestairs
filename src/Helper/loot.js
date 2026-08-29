@@ -4,7 +4,7 @@ import { rng } from './rng'
 // Roll for an item drop appropriate to the current depth. Returns a fresh item
 // object (with its id) or null when nothing drops. Items are weighted and gated
 // by a minimum depth so better gear appears deeper.
-export const rollItemDrop = (depth = 1, chance = 0.45) => {
+export const rollItemDrop = (depth = 1, chance = 0.32) => {
   if (rng() > chance) {
     return null
   }
