@@ -6,12 +6,16 @@
 import Thief from '../Assets/Thief.png'
 import Paladin from '../Assets/Paladin.png'
 import Mage from '../Assets/Mage.png'
+import Berserker from '../Assets/Berserker.png'
+import Ranger from '../Assets/Ranger.png'
 import Skills from '../Assets/Skills.png'
 
 const ASSETS = {
   Thief,
   Paladin,
   Mage,
+  Berserker,
+  Ranger,
   Skills
 }
 

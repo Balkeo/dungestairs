@@ -8,6 +8,28 @@ import Colors from '../Helper/Colors'
 import { CELL_GLYPHS, CHEST_EMPTY_GLYPH } from '../Content/glyphs'
 import { FloatingLayer, useFloatingQueue } from '../Guideline/FloatingText'
 import { breathe, shakeHit, flashRed, poof, revealIn, glowPulse, targetPulse } from '../Guideline/animations'
+import Merchant from '../Assets/Merchant.png'
+import GeckoKnight from '../Assets/GeckoKnight.png'
+
+// Art shown in the tile for friendly NPC (ally) cells. Monsters carry their own
+// `icon` on the cell content; these cover the ally sub-types that have art.
+const ALLY_ICONS = {
+  merchant: Merchant,
+  knight: GeckoKnight
+}
+
+// Resolve the tile artwork (PNG) for a cell, or null to fall back to the emoji
+// glyph. Monsters use their content icon; allies use the ALLY_ICONS map.
+const resolveIconImage = (cellValue) => {
+  if (!cellValue.isOpen) {
+    return null
+  }
+  const { type, content } = cellValue
+  if (type === 'monster' && content) {
+    return content.icon || null
+  }
+  return ALLY_ICONS[type] || null
+}
 
 const Wraper = styled.div`
   display: flex;
@@ -19,10 +41,18 @@ const Wraper = styled.div`
   cursor: ${({ isHovered, cellValue }) => ((isHovered && cellValue.canClick) ? 'pointer' : 'default')};
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   background-image: ${({ cellValue }) => (cellValue.isOpen ? `url(${openedCell})` : `url(${closedCell})`)};
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  ${({ isVoid }) => isVoid && css`
+    background-image: radial-gradient(circle at center, #000 0%, #050608 55%, #12151b 100%);
+    box-shadow: inset 0 0 22px 6px rgba(0, 0, 0, 0.9);
+    cursor: default;
+  `}
 `
 
 const Content = styled.div`
@@ -57,6 +87,23 @@ const Glyph = styled.span`
   `}
   ${({ variant }) => variant === 'idle' && css`animation: ${breathe} 2.4s ease-in-out infinite;`}
   ${({ variant }) => variant === 'key' && css`animation: ${glowPulse} 1.6s ease-in-out infinite;`}
+  ${({ variant }) => variant === 'dead' && css`animation: ${poof} 0.6s ease-in forwards;`}
+`
+
+const Sprite = styled.img`
+  max-width: 84%;
+  max-height: 84%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.55));
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  ${({ big }) => big && css`
+    max-width: 96%;
+    max-height: 96%;
+    filter: drop-shadow(0 0 8px rgba(255, 80, 80, 0.7));
+  `}
+  ${({ variant }) => variant === 'idle' && css`animation: ${breathe} 2.4s ease-in-out infinite;`}
   ${({ variant }) => variant === 'dead' && css`animation: ${poof} 0.6s ease-in forwards;`}
 `
 
@@ -119,6 +166,9 @@ const resolveGlyph = (cellValue) => {
     return null
   }
   const { type, content } = cellValue
+  if (type === 'void') {
+    return null
+  }
   if (type === 'monster' && content) {
     return content.glyph || '👾'
   }
@@ -137,7 +187,9 @@ export const Cell = ({ cellValue, onClick, action, targetable }) => {
   const monsterHp = isMonster && cellValue.content ? cellValue.content.hp : null
   const isDead = isMonster && cellValue.content && cellValue.content.hp <= 0
   const isBoss = isMonster && cellValue.content && cellValue.content.isBoss
+  const isVoid = cellValue.type === 'void'
   const glyph = resolveGlyph(cellValue)
+  const iconImg = resolveIconImage(cellValue)
 
   // Flinch when a monster loses HP.
   const prevHp = useRef(monsterHp)
@@ -157,7 +209,20 @@ export const Cell = ({ cellValue, onClick, action, targetable }) => {
   }, [actionId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   let glyphNode = null
-  if (glyph) {
+  if (iconImg) {
+    if (isMonster) {
+      glyphNode = isDead
+        ? <Sprite variant="dead" src={iconImg} alt="" />
+        : (
+          <ShakeWrap key={hitPulse} shaking={hitPulse > 0}>
+            <Sprite variant="idle" big={isBoss} src={iconImg} alt="" />
+            {hitPulse > 0 && <RedFlash key={hitPulse} />}
+          </ShakeWrap>
+          )
+    } else {
+      glyphNode = <Sprite variant="idle" src={iconImg} alt="" />
+    }
+  } else if (glyph) {
     if (isMonster) {
       glyphNode = isDead
         ? <Glyph variant="dead">{glyph}</Glyph>
@@ -179,10 +244,11 @@ export const Cell = ({ cellValue, onClick, action, targetable }) => {
       onMouseLeave={() => setHover(false)}
       isHovered={isHovered}
       cellValue={cellValue}
+      isVoid={isVoid}
     >
       <Content
         key={cellValue.isOpen ? 'open' : 'closed'}
-        revealing={cellValue.isOpen && glyph !== null}
+        revealing={cellValue.isOpen && !isVoid && (glyph !== null || iconImg !== null)}
         dim={!cellValue.isOpen && !cellValue.canClick}
         highlight={isHovered && cellValue.canClick}
       >

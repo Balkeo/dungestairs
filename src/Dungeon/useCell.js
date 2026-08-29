@@ -38,7 +38,8 @@ const CELL_TYPE_FOR_TYPE = {
   ally: [
     'healer',
     'mage',
-    'knight'
+    'knight',
+    'merchant'
   ],
   trap: [
     'trap'

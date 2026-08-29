@@ -1,25 +1,82 @@
 {
   "id": "ranger",
   "type": "Ranger",
-  "icon": null,
+  "icon": "Ranger",
   "glyph": "🏹",
   "hp": 22,
-  "stats": { "atq": 2, "def": 0, "spd": 3 },
+  "stats": {
+    "atq": 2,
+    "def": 0,
+    "spd": 3
+  },
   "level": 1,
   "price": 750,
-  "spells": ["arrow_volley", "dodge_roll", "venom_blade"],
-  "passives": ["swift", "keen_eye", "venomous"],
+  "spells": [
+    "arrow_volley",
+    "dodge_roll",
+    "venom_blade"
+  ],
+  "passives": [
+    "swift",
+    "keen_eye",
+    "venomous"
+  ],
   "skills": [
     {
-      "icon": null,
-      "name": "Hunter's Kit",
+      "name": "Vitalité",
+      "glyph": "❤️",
       "level": 1,
       "cost": 50,
       "effects": [
-        { "target": "hp", "effect": "5 * (skills[0].level - 1)" },
-        { "target": "maxHp", "effect": "5 * (skills[0].level - 1)" }
+        {
+          "target": "hp",
+          "effect": "5 * (skills[0].level - 1)"
+        },
+        {
+          "target": "maxHp",
+          "effect": "5 * (skills[0].level - 1)"
+        }
       ],
-      "description": "A better kit increases maximum hit points by 5 per level."
+      "description": "+5 PV max / niveau"
+    },
+    {
+      "name": "Puissance",
+      "glyph": "⚔️",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.atq",
+          "effect": "skills[1].level - 1"
+        }
+      ],
+      "description": "+1 ATQ / niveau"
+    },
+    {
+      "name": "Défense",
+      "glyph": "🛡️",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.def",
+          "effect": "skills[2].level - 1"
+        }
+      ],
+      "description": "+1 DEF / niveau"
+    },
+    {
+      "name": "Vitesse",
+      "glyph": "👟",
+      "level": 1,
+      "cost": 50,
+      "effects": [
+        {
+          "target": "stats.spd",
+          "effect": "skills[3].level - 1"
+        }
+      ],
+      "description": "+1 SPD / niveau"
     }
   ]
 }

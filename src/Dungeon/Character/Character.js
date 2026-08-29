@@ -65,12 +65,15 @@ const Buff = styled.span`
 const STAT_LABEL = { atq: 'ATQ', def: 'DEF', spd: 'SPD' }
 
 const activeBuffs = (character) => {
-  return (character.activeEffects || [])
+  const combat = (character.activeEffects || [])
     .filter((effect) => effect.kind === 'buff' && effect.remaining > 0)
     .map((effect) => {
       const key = (effect.target || '').replace('stats.', '')
       return `${STAT_LABEL[key] || key} +${effect.amount} · ${effect.remaining}`
     })
+  // Temporary ally boons (this floor only) are shown as buffs, not inventory.
+  const boons = (character.boons || []).map((boon) => `${boon.glyph || ''} ${boon.description || ''}`.trim())
+  return [...combat, ...boons]
 }
 
 export const Character = ({

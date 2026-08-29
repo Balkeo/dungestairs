@@ -155,11 +155,30 @@ export const usePlayer = () => {
     }
   }
 
+  // Each spell levels up independently, scaling its own effect. Cost grows with
+  // the spell's current level.
+  const spellUpgradeCost = (spell) => (spell.level || 1) * 60
+
+  const upgradeCharacterSpell = (character, spellId) => {
+    const target = player.characters[character].spells.find((spell) => spell.id === spellId)
+    if (!target || player.gold < spellUpgradeCost(target)) {
+      return
+    }
+    removeGold(spellUpgradeCost(target))
+    const newCharacter = {
+      ...player.characters[character],
+      spells: player.characters[character].spells.map(
+        (spell) => (spell.id === spellId ? { ...spell, level: (spell.level || 1) + 1 } : spell)
+      )
+    }
+    updateCharacters(character, newCharacter)
+  }
+
   useEffect(() => {
     if (!player.inGame) {
       saveGame(player)
     }
   })
 
-  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill }
+  return { player, addGold, removeGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill, upgradeCharacterSpell }
 }

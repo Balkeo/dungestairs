@@ -10,7 +10,28 @@ import { Floor } from './Floor'
 import { Cell } from './Cell'
 import { DepthBanner } from './DepthBanner'
 import { DeathScreen } from './DeathScreen'
+import { Shop } from './Shop'
+import { InventoryModal } from './InventoryModal'
+import { useModal } from '../Guideline/Modal'
+import Colors from '../Helper/Colors'
 import useWindowDimensions from '../useWindowDimensions'
+
+const InventoryButton = styled.button`
+  position: fixed;
+  top: 12px;
+  right: 150px;
+  z-index: 1030;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid ${Colors.white30};
+  background: ${Colors.brown2};
+  color: ${Colors.white75};
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  &:hover { color: ${Colors.white100}; border-color: ${Colors.white75}; }
+`
 
 const Wraper = styled.div`
   display: flex;
@@ -25,6 +46,7 @@ const Wraper = styled.div`
 export const Game = ({
   player = {},
   addGold,
+  removeGold,
   removeSelectedCharacter,
   restartRun,
   recordRun
@@ -40,13 +62,31 @@ export const Game = ({
     cellAction,
     characterAction,
     depthBanner,
-    runOver
-  } = useGame(player, recordRun)
+    runOver,
+    shop,
+    buyItem,
+    closeShop
+  } = useGame(player, recordRun, addGold, removeGold)
   const { width, height } = useWindowDimensions()
   const isMobile = (width <= 768)
+  const inventoryModal = useModal()
+  const bagFull = (character.items || []).filter(Boolean).length >= 8
 
   return (
         <Wraper>
+            <InventoryButton title="Équipement" onClick={inventoryModal.toggle}>🎒</InventoryButton>
+            <InventoryModal
+              isShowing={inventoryModal.isShowing}
+              hide={inventoryModal.toggle}
+              character={character}
+            />
+            <Shop
+              shop={shop}
+              gold={player.gold}
+              bagFull={bagFull}
+              onBuy={buyItem}
+              onClose={closeShop}
+            />
             <DepthBanner banner={depthBanner} />
             <DeathScreen
               summary={runOver}

@@ -47,5 +47,35 @@ export const useCharacter = (selectedCharacter) => {
     return added
   }
 
-  return { character, updateCharacter, addItem }
+  // Grant a temporary ally boon: recompute stats with the extra boon but keep the
+  // current HP. Boons live outside the inventory bag and are wiped on depth change.
+  const addBoon = (boon) => {
+    if (!boon) {
+      return
+    }
+    setCharacter((previousCharacter) => {
+      const boons = [...(previousCharacter.boons || []), boon]
+      const recalculated = calculate({ ...previousCharacter, boons })
+      recalculated.hp = Math.min(previousCharacter.hp, recalculated.maxHp)
+      recalculated.cooldowns = previousCharacter.cooldowns
+      recalculated.activeEffects = previousCharacter.activeEffects
+      return recalculated
+    })
+  }
+
+  // Drop every boon (called when descending to a new floor) and recompute stats.
+  const clearBoons = () => {
+    setCharacter((previousCharacter) => {
+      if (!previousCharacter.boons || previousCharacter.boons.length === 0) {
+        return previousCharacter
+      }
+      const recalculated = calculate({ ...previousCharacter, boons: [] })
+      recalculated.hp = Math.min(previousCharacter.hp, recalculated.maxHp)
+      recalculated.cooldowns = previousCharacter.cooldowns
+      recalculated.activeEffects = previousCharacter.activeEffects
+      return recalculated
+    })
+  }
+
+  return { character, updateCharacter, addItem, addBoon, clearBoons }
 }

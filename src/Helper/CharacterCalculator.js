@@ -47,6 +47,7 @@ export function calculate (character) {
     stats: { ...(character.stats || {}) },
     skills: (character.skills || []).map((skill) => ({ ...skill })),
     items: (character.items || []).slice(),
+    boons: (character.boons || []).slice(),
     passives: character.passives || baseCharacter.passives || []
   }
 
@@ -67,6 +68,14 @@ export function calculate (character) {
   character.items.forEach((item) => {
     if (item && item.target) {
       add(item.target, evalNumber(item.effect, character))
+    }
+  })
+
+  // Ally "boons" boost stats like items but are temporary (reset on depth change)
+  // and never enter the inventory bag.
+  character.boons.forEach((boon) => {
+    if (boon && boon.target) {
+      add(boon.target, evalNumber(boon.effect, character))
     }
   })
 

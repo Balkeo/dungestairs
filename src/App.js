@@ -9,7 +9,7 @@ import { usePlayer } from './Dungeon/usePlayer'
 import Colors from './Helper/Colors'
 
 const App = () => {
-  const { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill } = usePlayer()
+  const { player, addGold, removeGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill, upgradeCharacterSpell } = usePlayer()
 
   return (
     <div className="App" style={{ backgroundColor: Colors.brown1 }}>
@@ -17,8 +17,8 @@ const App = () => {
       <Settings />
       <Records player={player} />
       {player.inGame
-        ? <Game key={player.runId} player={player} addGold={addGold} removeSelectedCharacter={removeSelectedCharacter} restartRun={restartRun} recordRun={recordRun}/>
-        : <MainMenu player={player} selectCharacter={selectCharacter} buyCharacter={buyCharacter} upgradeCharacterSkill={upgradeCharacterSkill} />
+        ? <Game key={player.runId} player={player} addGold={addGold} removeGold={removeGold} removeSelectedCharacter={removeSelectedCharacter} restartRun={restartRun} recordRun={recordRun}/>
+        : <MainMenu player={player} selectCharacter={selectCharacter} buyCharacter={buyCharacter} upgradeCharacterSkill={upgradeCharacterSkill} upgradeCharacterSpell={upgradeCharacterSpell} />
       }
     </div>
   )

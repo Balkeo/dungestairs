@@ -119,8 +119,11 @@ const castSpell = (character, monster, spellId, events) => {
   if (!spell || !isSpellReady(character, spellId)) {
     return
   }
+  // Spell effects scale with the spell's own level (each spell levels up its own
+  // stat: damage, heal, buff amount or poison), exposed to jexl as `spellLevel`.
+  const spellContext = { ...character, spellLevel: spell.level || 1 }
   ;(spell.actions || []).forEach((action) => {
-    const amount = evalNumber(action.amount, character)
+    const amount = evalNumber(action.amount, spellContext)
     switch (action.kind) {
       case 'damage':
         applyDamage(monster, amount)
