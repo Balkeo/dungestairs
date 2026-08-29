@@ -2,15 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Colors from '../../Helper/Colors'
+import { BODY_FONT, DISPLAY_FONT } from '../../Guideline/theme'
 
 const Row = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  border-radius: 8px;
-  background: ${Colors.white5};
-  border: 1px solid ${Colors.white10};
+  border-radius: 9px;
+  background: rgba(61, 39, 22, 0.06);
+  border: 1px solid rgba(61, 39, 22, 0.18);
 `
 
 const Glyph = styled.div`
@@ -34,26 +35,28 @@ const TopLine = styled.div`
 `
 
 const Name = styled.span`
-  font-family: Helvetica, sans-serif;
+  font-family: ${BODY_FONT};
   font-size: 13px;
-  font-weight: 700;
-  color: ${({ tint }) => tint || Colors.white100};
+  font-weight: 800;
+  color: ${({ tint }) => tint || Colors.ink};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `
 
 const Level = styled.span`
+  font-family: ${DISPLAY_FONT};
   font-size: 11px;
-  font-weight: 700;
-  color: ${Colors.yellow};
+  font-weight: 800;
+  color: ${Colors.wood};
   flex: 0 0 auto;
 `
 
 const Hint = styled.span`
-  font-family: Helvetica, sans-serif;
+  font-family: ${BODY_FONT};
   font-size: 10px;
-  color: ${Colors.white50};
+  font-weight: 600;
+  color: ${Colors.inkSoft};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -61,22 +64,24 @@ const Hint = styled.span`
 
 const Buy = styled.button`
   flex: 0 0 auto;
-  min-width: 58px;
-  padding: 5px 8px;
-  border-radius: 7px;
-  border: none;
-  font-family: Helvetica, sans-serif;
+  min-width: 56px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  border: 2px solid ${({ disabled }) => (disabled ? 'rgba(61,39,22,0.25)' : Colors.woodDark)};
+  font-family: ${DISPLAY_FONT};
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 3px;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ disabled }) => (disabled ? Colors.white30 : Colors.white100)};
-  background: ${({ disabled }) => (disabled ? Colors.white5 : Colors.green)};
-  transition: filter 0.15s ease;
-  &:hover { filter: ${({ disabled }) => (disabled ? 'none' : 'brightness(1.12)')}; }
+  color: ${({ disabled }) => (disabled ? Colors.inkSoft : Colors.woodDark)};
+  background: ${({ disabled }) => (disabled ? 'rgba(61,39,22,0.08)' : `linear-gradient(180deg, ${Colors.goldLight}, ${Colors.gold})`)};
+  box-shadow: ${({ disabled }) => (disabled ? 'none' : '0 3px 0 0 #a06a17')};
+  transition: transform 0.06s ease, filter 0.15s ease;
+  &:hover { filter: ${({ disabled }) => (disabled ? 'none' : 'brightness(1.06)')}; }
+  &:not(:disabled):active { transform: translateY(2px); box-shadow: 0 1px 0 0 #a06a17; }
 `
 
 export const UpgradeRow = ({ glyph, name, tint, level, hint, cost, canAfford = true, owned = true, onUpgrade }) => {

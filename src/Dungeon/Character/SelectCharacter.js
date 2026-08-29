@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import Colors from '../../Helper/Colors'
 import { UpgradeRow } from './UpgradeRow'
+import { GameButton } from '../../Guideline/GameButton'
+import { DISPLAY_FONT, BODY_FONT, parchmentFill, woodFill } from '../../Guideline/theme'
 
 const Scroller = styled.div`
   box-sizing: border-box;
   display: flex;
-  gap: 16px;
+  gap: 18px;
   align-items: stretch;
   width: 100%;
   height: 100%;
@@ -22,17 +24,19 @@ const Card = styled.div`
   flex: 0 0 300px;
   max-width: 300px;
   height: 100%;
-  max-height: 560px;
+  max-height: 566px;
   display: flex;
   flex-direction: column;
-  background: ${Colors.dark2};
-  border: 1px solid ${Colors.white10};
-  border-radius: 14px;
+  ${parchmentFill}
+  color: ${Colors.ink};
+  font-family: ${BODY_FONT};
+  border: 3px solid ${Colors.woodDark};
+  border-radius: 16px;
   overflow: hidden;
   scroll-snap-align: center;
-  box-shadow: 0 6px 20px ${Colors.black30};
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  &:hover { transform: translateY(-3px); box-shadow: 0 10px 26px ${Colors.black50}; }
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45), inset 0 0 0 2px ${Colors.parchmentDark};
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  &:hover { transform: translateY(-4px); box-shadow: 0 16px 34px rgba(0, 0, 0, 0.55), inset 0 0 0 2px ${Colors.parchmentDark}; }
   @media only screen and (max-width: 768px) {
     flex-basis: 86vw;
     max-width: 86vw;
@@ -43,16 +47,17 @@ const Portrait = styled.div`
   position: relative;
   height: 150px;
   flex: 0 0 150px;
-  background-color: ${Colors.carbon};
+  background-color: ${Colors.woodDark};
   background-image: ${({ img }) => (img ? `url(${img})` : 'none')};
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  border-bottom: 3px solid ${Colors.woodDark};
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, transparent 55%, ${Colors.dark2} 100%);
+    background: linear-gradient(to bottom, rgba(61,39,22,0.15) 0%, transparent 35%, rgba(61,39,22,0.15) 100%);
   }
 `
 
@@ -63,21 +68,22 @@ const Locked = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 40px;
-  background: ${Colors.black50};
+  background: rgba(20, 12, 7, 0.6);
   z-index: 1;
   &::after { content: '🔒'; }
 `
 
 const Head = styled.div`
-  padding: 4px 12px 8px;
+  padding: 8px 12px 8px;
 `
 
 const Name = styled.div`
-  font-family: Helvetica, sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: ${Colors.white100};
+  font-family: ${DISPLAY_FONT};
+  font-size: 22px;
+  font-weight: 900;
+  color: ${Colors.woodDark};
   line-height: 1.1;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.4);
 `
 
 const Chips = styled.div`
@@ -92,22 +98,23 @@ const Chip = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 4px 0;
-  border-radius: 7px;
-  background: ${Colors.white5};
-  border: 1px solid ${Colors.white10};
+  border-radius: 8px;
+  background: rgba(61, 39, 22, 0.08);
+  border: 1px solid rgba(61, 39, 22, 0.22);
 `
 
 const ChipVal = styled.span`
-  font-family: Helvetica, sans-serif;
-  font-size: 14px;
+  font-family: ${DISPLAY_FONT};
+  font-size: 15px;
   font-weight: 800;
-  color: ${({ tint }) => tint || Colors.white100};
+  color: ${({ tint }) => tint || Colors.ink};
 `
 
 const ChipLabel = styled.span`
   font-size: 9px;
+  font-weight: 700;
   letter-spacing: 0.5px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
 `
 
 const Body = styled.div`
@@ -120,49 +127,35 @@ const Body = styled.div`
 `
 
 const SectionTitle = styled.div`
-  font-family: Helvetica, sans-serif;
-  font-size: 10px;
+  font-family: ${DISPLAY_FONT};
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: ${Colors.white50};
+  color: ${Colors.wood};
   margin: 8px 0 2px;
 `
 
 const Passive = styled.div`
-  font-family: Helvetica, sans-serif;
+  font-family: ${BODY_FONT};
   font-size: 11px;
   line-height: 1.35;
 `
 const PassiveName = styled.span`
-  font-weight: 700;
-  color: ${Colors.green};
+  font-weight: 800;
+  color: #2f7d4f;
 `
 const PassiveDesc = styled.span`
-  color: ${Colors.white30};
+  color: ${Colors.inkSoft};
 `
 
 const Footer = styled.div`
   padding: 10px 12px;
-  border-top: 1px solid ${Colors.white10};
+  ${woodFill}
+  border-top: 3px solid ${Colors.woodDark};
 `
 
-const Cta = styled.button`
-  width: 100%;
-  padding: 11px;
-  border: none;
-  border-radius: 10px;
-  font-family: Helvetica, sans-serif;
-  font-size: 15px;
-  font-weight: 800;
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ disabled }) => (disabled ? Colors.white30 : Colors.black100)};
-  background: ${({ locked, disabled }) => (disabled ? Colors.white5 : locked ? Colors.yellow : Colors.greenLight)};
-  transition: filter 0.15s ease;
-  &:hover { filter: ${({ disabled }) => (disabled ? 'none' : 'brightness(1.08)')}; }
-`
-
-const STAT_TINT = [Colors.red, Colors.yellow, Colors.blue, Colors.greenLight]
+const STAT_TINT = [Colors.ember, '#b8860b', '#2f6db8', '#2f7d4f']
 const SPELL_ICON = { damage: '💥', heal: '💚', buff: '🔼', dot: '🧪' }
 
 const spellIcon = (spell) => {
@@ -192,10 +185,10 @@ export const SelectCharacter = ({
             <Head>
               <Name>{character.type}</Name>
               <Chips>
-                <Chip><ChipVal tint={Colors.red}>{character.maxHp}</ChipVal><ChipLabel>PV</ChipLabel></Chip>
-                <Chip><ChipVal tint={Colors.yellow}>{stats.atq}</ChipVal><ChipLabel>ATQ</ChipLabel></Chip>
-                <Chip><ChipVal tint={Colors.blue}>{stats.def}</ChipVal><ChipLabel>DEF</ChipLabel></Chip>
-                <Chip><ChipVal tint={Colors.greenLight}>{stats.spd}</ChipVal><ChipLabel>SPD</ChipLabel></Chip>
+                <Chip><ChipVal tint={Colors.ember}>{character.maxHp}</ChipVal><ChipLabel>PV</ChipLabel></Chip>
+                <Chip><ChipVal tint="#b8860b">{stats.atq}</ChipVal><ChipLabel>ATQ</ChipLabel></Chip>
+                <Chip><ChipVal tint="#2f6db8">{stats.def}</ChipVal><ChipLabel>DEF</ChipLabel></Chip>
+                <Chip><ChipVal tint="#2f7d4f">{stats.spd}</ChipVal><ChipLabel>SPD</ChipLabel></Chip>
               </Chips>
             </Head>
             <Body>
@@ -226,7 +219,7 @@ export const SelectCharacter = ({
                     key={spell.id}
                     glyph={spellIcon(spell)}
                     name={spell.name}
-                    tint={Colors.pinkLight}
+                    tint={Colors.wood}
                     level={spell.level || 1}
                     hint={`${spell.levelUp || ''}${spell.cooldown ? ` · CD ${spell.cooldown}` : ''}`}
                     cost={cost}
@@ -250,13 +243,15 @@ export const SelectCharacter = ({
               )}
             </Body>
             <Footer>
-              <Cta
-                locked={!owned}
+              <GameButton
+                variant={owned ? 'primary' : 'wood'}
+                size="md"
+                style={{ width: '100%' }}
                 disabled={!owned && gold < character.price}
                 onClick={() => (owned ? selectCharacter(offset, seed) : buyCharacter(offset))}
               >
                 {owned ? `Jouer ${character.type}` : `Acheter · ${character.price} 🪙`}
-              </Cta>
+              </GameButton>
             </Footer>
           </Card>
         )
