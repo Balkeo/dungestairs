@@ -12,12 +12,16 @@ const TYPES = [
     probability: 5
   },
   {
+    type: 'event',
+    probability: 8
+  },
+  {
     type: 'loot',
     probability: 15
   },
   {
     type: 'empty',
-    probability: 30
+    probability: 27
   },
   {
     type: 'encounter',
@@ -43,6 +47,9 @@ const CELL_TYPE_FOR_TYPE = {
   ],
   trap: [
     'trap'
+  ],
+  event: [
+    'event'
   ]
 }
 
@@ -93,6 +100,8 @@ const getType = () => {
       return CELL_TYPE_FOR_TYPE.ally
     case 'trap':
       return CELL_TYPE_FOR_TYPE.trap
+    case 'event':
+      return CELL_TYPE_FOR_TYPE.event
     case 'empty':
     default :
       return CELL_TYPE_FOR_TYPE.empty

@@ -15,6 +15,7 @@ import spells from './spells.json'
 import passives from './passives.json'
 import items from './items.json'
 import relics from './relics.json'
+import events from './events.json'
 
 // Auto-discover every class definition in ./classes (Vite import.meta.glob).
 const classModules = import.meta.glob('./classes/*.json', { eager: true })
@@ -65,4 +66,5 @@ export const Spells = spells
 export const Passives = passives
 export const Items = Object.keys(items).map((id) => ({ id, ...items[id] }))
 export const Relics = Object.keys(relics).map((id) => ({ id, ...relics[id] }))
+export const Events = Object.keys(events).map((id) => ({ id, ...events[id] }))
 export default Classes

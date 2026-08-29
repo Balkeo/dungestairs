@@ -123,12 +123,15 @@ export const DeathScreen = ({ summary, onReplay, onMenu }) => {
   if (!summary) {
     return null
   }
+  const won = summary.won
   return (
     <Overlay>
       <Panel>
-        <Skull>💀</Skull>
-        <Title>Vous êtes mort</Title>
-        <Sub>Le donjon vous a eu... pour cette fois.</Sub>
+        <Skull>{won ? '🏆' : '💀'}</Skull>
+        <Title style={won ? { color: Colors.yellow } : undefined}>
+          {won ? 'Victoire !' : 'Vous êtes mort'}
+        </Title>
+        <Sub>{won ? 'Vous avez vaincu le Seigneur du Donjon !' : 'Le donjon vous a eu... pour cette fois.'}</Sub>
         <Stats>
           <Stat>
             <StatValue tint={Colors.blueLight}>{summary.depth}</StatValue>

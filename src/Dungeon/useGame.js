@@ -5,7 +5,7 @@ import { resolveFight } from './resolveFight'
 import { eventsToTexts, goldText, itemText, plainText } from './combatText'
 import { rollItemDrop, blessing } from '../Helper/loot'
 import { rollShopStock, itemPrice } from '../Helper/shop'
-import { Relics } from '../Content'
+import { Relics, Events } from '../Content'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
 
@@ -50,6 +50,78 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
     setShop({ offset: cell.offset, items: shopStocksRef.current[cell.offset] })
   }
   const closeShop = () => setShop(null)
+
+  // Choice events: each event tile shows a scenario with a few choices. The
+  // rolled event is remembered per tile, and consumed once resolved.
+  const [event, setEvent] = useState(null)
+  const eventDefsRef = useRef({})
+  const resolvedEventsRef = useRef({})
+
+  const openEvent = (cell) => {
+    if (resolvedEventsRef.current[cell.offset]) {
+      emitCell(cell.offset, [plainText('déjà visité', Colors.white50, 12)])
+      return
+    }
+    if (!eventDefsRef.current[cell.offset]) {
+      eventDefsRef.current[cell.offset] = Events[Math.floor(Math.random() * Events.length)]
+    }
+    setEvent({ offset: cell.offset, def: eventDefsRef.current[cell.offset] })
+  }
+  const closeEvent = () => setEvent(null)
+
+  const applyOutcome = (outcome) => {
+    switch (outcome.kind) {
+      case 'gold': {
+        const amount = Number(outcome.amount || 0)
+        addGold(amount)
+        if (amount > 0) addRunGold(amount)
+        break
+      }
+      case 'hp': {
+        const amount = Number(outcome.amount || 0)
+        updateCharacter({ ...character, hp: Math.max(0, Math.min(character.maxHp, character.hp + amount)) })
+        break
+      }
+      case 'item': {
+        const hasSpace = (character.items || []).filter(Boolean).length < 8
+        const drop = hasSpace ? rollItemDrop(depth + 1, 1) : null
+        if (drop) addItem(drop)
+        break
+      }
+      case 'relic': {
+        const relic = rollRelic()
+        if (relic) addRelic(relic)
+        break
+      }
+      case 'boon': {
+        const stat = outcome.stat || 'atq'
+        const label = { atq: 'ATQ', def: 'DEF', spd: 'SPD' }[stat] || stat.toUpperCase()
+        addBoon(blessing(`event_${stat}`, 'Bénédiction', '✨', `stats.${stat}`, '2', `+2 ${label}`))
+        break
+      }
+      case 'random': {
+        const options = outcome.options || []
+        if (options.length) {
+          const picked = options[Math.floor(Math.random() * options.length)]
+          ;(picked.outcomes || []).forEach(applyOutcome)
+        }
+        break
+      }
+      default:
+        break
+    }
+  }
+
+  const resolveEventChoice = (index) => {
+    if (!event) return
+    const choice = event.def.choices[index]
+    if (!choice) return
+    if (choice.cost && player.gold < choice.cost) return
+    if (choice.cost) addGold(-choice.cost)
+    ;(choice.outcomes || []).forEach(applyOutcome)
+    resolvedEventsRef.current[event.offset] = true
+    setEvent(null)
+  }
 
   const buyItem = (index) => {
     if (!shop) {
@@ -171,6 +243,8 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
           springTrap(cell)
         } else if (cell.type === 'merchant') {
           openMerchant(cell)
+        } else if (cell.type === 'event') {
+          openEvent(cell)
         } else if (ALLY_TYPES.includes(cell.type)) {
           applyAlly(cell, addGold)
         }
@@ -179,6 +253,10 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       if (cell.type === 'merchant') {
         // Re-open the trader to keep shopping.
         openMerchant(cell)
+        return cell
+      }
+      if (cell.type === 'event') {
+        openEvent(cell)
         return cell
       }
       if (cell.type === 'chest') {
@@ -239,13 +317,47 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         if (ko) {
           sfx.ko()
           bumpKills()
+          // Elites drop bonus loot: extra gold, a likely item, sometimes a relic.
+          if (cell.content && cell.content.isElite) {
+            const bonusGold = 4 + depth * 2
+            addGold(bonusGold)
+            addRunGold(bonusGold)
+            const eliteTexts = [plainText('★ Élite', Colors.yellow, 12), goldText(bonusGold)]
+            const hasSpace = (character.items || []).filter(Boolean).length < 8
+            const drop = hasSpace ? rollItemDrop(depth + 2, 0.7) : null
+            if (drop) {
+              addItem(drop)
+              eliteTexts.push(itemText(drop))
+            }
+            if (Math.random() < 0.2) {
+              const eliteRelic = rollRelic()
+              if (eliteRelic) {
+                addRelic(eliteRelic)
+                eliteTexts.push(itemText(eliteRelic))
+              }
+            }
+            emitCell(offset, eliteTexts)
+          }
           if (cell.content && cell.content.isBoss) {
             bumpBossKills()
-            // Bosses drop a run-long relic.
-            const relic = rollRelic()
-            if (relic) {
-              addRelic(relic)
-              emitCell(offset, [plainText('✦ Relique', Colors.yellow, 13), itemText(relic)])
+            if (cell.content.isFinalBoss && !runOver) {
+              // Beating the final boss wins the run.
+              const summary = {
+                depth,
+                kills: statsRef.current.kills,
+                gold: statsRef.current.gold,
+                bossKills: statsRef.current.bossKills,
+                won: true
+              }
+              const unlocked = recordRun(summary)
+              setRunOver({ ...summary, unlocked })
+            } else {
+              // Regular bosses drop a run-long relic.
+              const relic = rollRelic()
+              if (relic) {
+                addRelic(relic)
+                emitCell(offset, [plainText('✦ Relique', Colors.yellow, 13), itemText(relic)])
+              }
             }
           }
         }
@@ -295,6 +407,9 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
     shop,
     buyItem,
     sellItem,
-    closeShop
+    closeShop,
+    event,
+    resolveEventChoice,
+    closeEvent
   }
 }

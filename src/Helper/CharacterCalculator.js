@@ -67,7 +67,17 @@ export function calculate (character) {
   })
 
   character.items.forEach((item) => {
-    if (item && item.target) {
+    if (!item) {
+      return
+    }
+    // Items may carry a single {target, effect} or several via `effects`.
+    if (Array.isArray(item.effects)) {
+      item.effects.forEach((effect) => {
+        if (effect && effect.target) {
+          add(effect.target, evalNumber(effect.effect, character))
+        }
+      })
+    } else if (item.target) {
       add(item.target, evalNumber(item.effect, character))
     }
   })

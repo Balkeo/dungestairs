@@ -142,6 +142,19 @@ const GaugeWrap = styled.div`
   width: 84%;
 `
 
+const EliteBadge = styled.div`
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  z-index: 4;
+  font-size: 14px;
+  line-height: 1;
+  filter: drop-shadow(0 0 4px ${Colors.yellow});
+  pointer-events: none;
+  &::after { content: '⭐'; }
+  @media only screen and (max-width: 768px) { font-size: 11px; }
+`
+
 const Blocked = styled.div`
   position: absolute;
   inset: 0;
@@ -187,6 +200,7 @@ export const Cell = ({ cellValue, onClick, action, targetable }) => {
   const monsterHp = isMonster && cellValue.content ? cellValue.content.hp : null
   const isDead = isMonster && cellValue.content && cellValue.content.hp <= 0
   const isBoss = isMonster && cellValue.content && cellValue.content.isBoss
+  const isElite = isMonster && cellValue.content && cellValue.content.isElite
   const isVoid = cellValue.type === 'void'
   const glyph = resolveGlyph(cellValue)
   const iconImg = resolveIconImage(cellValue)
@@ -254,6 +268,7 @@ export const Cell = ({ cellValue, onClick, action, targetable }) => {
       >
         <FloatingLayer items={floats} />
         {targetable && isMonster && !isDead && !cellValue.isBlocked && <TargetRing />}
+        {isElite && !isDead && <EliteBadge />}
         {glyphNode}
         {cellValue.isOpen && isMonster && !isDead && (
           <GaugeWrap>

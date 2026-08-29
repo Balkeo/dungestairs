@@ -95,4 +95,11 @@ export const Bosses = [
   createBoss('Behemoth', '🪲', 22, { atq: 4, spd: 1, def: 2 }, 5, 1, Behemoth)
 ]
 
+// The run's final boss: beating it wins the run.
+export const FinalBoss = (() => {
+  const boss = createBoss('Seigneur du Donjon', '😈', 40, { atq: 6, spd: 2, def: 3 }, 5, 2, OgreKing)
+  boss.isFinalBoss = true
+  return boss
+})()
+
 export default Monsters

@@ -10,6 +10,7 @@ export const CELL_GLYPHS = {
   mage: '🔮',
   knight: '🛡️',
   merchant: '🧪',
+  event: '❓',
   void: '🕳️'
 }
 

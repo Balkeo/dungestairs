@@ -11,6 +11,7 @@ import { Cell } from './Cell'
 import { DepthBanner } from './DepthBanner'
 import { DeathScreen } from './DeathScreen'
 import { Shop } from './Shop'
+import { EventModal } from './EventModal'
 import { InventoryModal } from './InventoryModal'
 import { useModal } from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
@@ -66,7 +67,10 @@ export const Game = ({
     shop,
     buyItem,
     sellItem,
-    closeShop
+    closeShop,
+    event,
+    resolveEventChoice,
+    closeEvent
   } = useGame(player, recordRun, addGold, removeGold)
   const { width, height } = useWindowDimensions()
   const isMobile = (width <= 768)
@@ -89,6 +93,12 @@ export const Game = ({
               onBuy={buyItem}
               onSell={sellItem}
               onClose={closeShop}
+            />
+            <EventModal
+              event={event}
+              gold={player.gold}
+              onChoose={resolveEventChoice}
+              onClose={closeEvent}
             />
             <DepthBanner banner={depthBanner} />
             <DeathScreen
