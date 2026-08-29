@@ -62,6 +62,28 @@ const Buff = styled.span`
   padding: 1px 5px;
 `
 
+const RelicBar = styled.div`
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 3px;
+  max-width: 46%;
+`
+
+const Relic = styled.span`
+  font-size: 15px;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid ${Colors.yellow};
+  border-radius: 5px;
+  padding: 2px 3px;
+  cursor: help;
+`
+
 const STAT_LABEL = { atq: 'ATQ', def: 'DEF', spd: 'SPD' }
 
 const activeBuffs = (character) => {
@@ -110,6 +132,15 @@ export const Character = ({
               <Buff key={label}>{label}</Buff>
             ))}
           </Buffs>
+          {(character.relics || []).length > 0 && (
+            <RelicBar>
+              {character.relics.map((relic) => (
+                <Relic key={relic.id} title={`${relic.name} — ${relic.description}`}>
+                  {relic.glyph || '✦'}
+                </Relic>
+              ))}
+            </RelicBar>
+          )}
           {flash && <HurtFlash key={flash.id} tone={flash.tone} />}
         </PortraitArea>
         {

@@ -43,6 +43,16 @@ const List = styled.div`
   overflow-y: auto;
 `
 
+const Section = styled.div`
+  font-family: Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: ${Colors.yellow};
+  margin: 6px 0 2px;
+`
+
 const Line = styled.div`
   display: flex;
   align-items: center;
@@ -95,6 +105,7 @@ const Count = styled.span`
 
 export const InventoryModal = ({ isShowing, hide, character = {} }) => {
   const items = (character.items || []).filter(Boolean)
+  const relics = (character.relics || []).filter(Boolean)
   const stats = character.stats || {}
   const title = (
     <Title>
@@ -119,6 +130,19 @@ export const InventoryModal = ({ isShowing, hide, character = {} }) => {
               <Info>
                 <Name tint={tint}>{item.name}</Name>
                 <Desc>{item.description}</Desc>
+              </Info>
+            </Line>
+          )
+        })}
+        {relics.length > 0 && <Section>✦ Reliques ({relics.length})</Section>}
+        {relics.map((relic, index) => {
+          const tint = rarityColor(relic.rarity)
+          return (
+            <Line key={`relic-${index}`} tint={tint}>
+              <Glyph>{relic.glyph || '✦'}</Glyph>
+              <Info>
+                <Name tint={tint}>{relic.name}</Name>
+                <Desc>{relic.description}</Desc>
               </Info>
             </Line>
           )

@@ -84,6 +84,26 @@ export const useCharacter = (selectedCharacter) => {
     })
   }
 
+  // Acquire a run-long relic (unique). Recompute stats and grant any Max HP it
+  // adds as current HP too. No-op if the relic is already owned.
+  const addRelic = (relic) => {
+    if (!relic) {
+      return
+    }
+    setCharacter((previousCharacter) => {
+      if ((previousCharacter.relics || []).some((owned) => owned.id === relic.id)) {
+        return previousCharacter
+      }
+      const relics = [...(previousCharacter.relics || []), relic]
+      const recalculated = calculate({ ...previousCharacter, relics })
+      const maxHpGain = recalculated.maxHp - previousCharacter.maxHp
+      recalculated.hp = Math.min(previousCharacter.hp + Math.max(0, maxHpGain), recalculated.maxHp)
+      recalculated.cooldowns = previousCharacter.cooldowns
+      recalculated.activeEffects = previousCharacter.activeEffects
+      return recalculated
+    })
+  }
+
   // Drop every boon (called when descending to a new floor) and recompute stats.
   const clearBoons = () => {
     setCharacter((previousCharacter) => {
@@ -98,5 +118,5 @@ export const useCharacter = (selectedCharacter) => {
     })
   }
 
-  return { character, updateCharacter, addItem, removeItem, addBoon, clearBoons }
+  return { character, updateCharacter, addItem, removeItem, addBoon, clearBoons, addRelic }
 }

@@ -47,16 +47,19 @@ const effectiveStats = (entity) => {
       addToStat(effect.target, effect.amount)
     }
   })
-  ;(entity.passives || []).forEach((passive) => {
-    if (passive.kind === 'threshold' && jexl.eval(String(passive.when), entity)) {
-      addToStat(passive.target, evalNumber(passive.amount, entity))
+  // Passives and run-long relics share the same threshold shape.
+  ;[...(entity.passives || []), ...(entity.relics || [])].forEach((modifier) => {
+    if (modifier.kind === 'threshold' && jexl.eval(String(modifier.when), entity)) {
+      addToStat(modifier.target, evalNumber(modifier.amount, entity))
     }
   })
   return stats
 }
 
+// Triggered effects come from both class passives and acquired relics.
 const triggersFor = (entity, on) => {
-  return (entity.passives || []).filter((passive) => passive.kind === 'trigger' && passive.on === on)
+  return [...(entity.passives || []), ...(entity.relics || [])]
+    .filter((modifier) => modifier.kind === 'trigger' && modifier.on === on)
 }
 
 const heal = (entity, amount) => {
@@ -147,7 +150,13 @@ const castSpell = (character, monster, spellId, events) => {
         break
     }
   })
-  character.cooldowns = { ...character.cooldowns, [spellId]: spell.cooldown || 0 }
+  const cooldownReduction = (character.relics || [])
+    .filter((relic) => relic.kind === 'cooldown')
+    .reduce((sum, relic) => sum + Number(relic.amount || 0), 0)
+  character.cooldowns = {
+    ...character.cooldowns,
+    [spellId]: Math.max(0, (spell.cooldown || 0) - cooldownReduction)
+  }
 }
 
 // One combatant strikes the other, firing crit / on-hit / on-damaged triggers.

@@ -5,15 +5,31 @@ import { resolveFight } from './resolveFight'
 import { eventsToTexts, goldText, itemText, plainText } from './combatText'
 import { rollItemDrop, blessing } from '../Helper/loot'
 import { rollShopStock, itemPrice } from '../Helper/shop'
+import { Relics } from '../Content'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
+
+// Sum a numeric field across the relics matching a kind/effect.
+const relicSum = (relics = [], kind, effect) => relics
+  .filter((relic) => relic.kind === kind && (effect === undefined || relic.effect === effect))
+  .reduce((total, relic) => total + Number(relic.amount || 0), 0)
 
 const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 
 export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, removeGold = () => {}) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
-  const { character, updateCharacter, addItem, removeItem, addBoon, clearBoons } = useCharacter(player.characters[player.selectedCharacter])
+  const { character, updateCharacter, addItem, removeItem, addBoon, clearBoons, addRelic } = useCharacter(player.characters[player.selectedCharacter])
+
+  // A random relic the character does not already own (bosses drop these).
+  const rollRelic = () => {
+    const owned = new Set((character.relics || []).map((relic) => relic.id))
+    const pool = Relics.filter((relic) => !owned.has(relic.id))
+    if (pool.length === 0) {
+      return null
+    }
+    return { ...pool[Math.floor(Math.random() * pool.length)] }
+  }
 
   // Sell price of an item at a merchant: half its shop value, floored, min 1.
   const sellValue = (item) => Math.max(1, Math.floor(itemPrice(item) / 2))
@@ -166,12 +182,16 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         return cell
       }
       if (cell.type === 'chest') {
-        if (cell.content > 0) {
-          addGold(cell.content)
-          addRunGold(cell.content)
+        const chestBonus = cell.content > 0
+          ? Math.floor(cell.content * relicSum(character.relics || [], 'onChest', 'gold_bonus'))
+          : 0
+        const chestGold = cell.content + chestBonus
+        if (chestGold > 0) {
+          addGold(chestGold)
+          addRunGold(chestGold)
           sfx.coin()
         }
-        const texts = cell.content > 0 ? [goldText(cell.content)] : []
+        const texts = chestGold > 0 ? [goldText(chestGold)] : []
         const hasSpace = (character.items || []).filter(Boolean).length < 8
         const drop = hasSpace ? rollItemDrop(depth) : null
         if (drop) {
@@ -188,10 +208,27 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       if (cell.type === 'monster') {
         const spellId = queuedSpellRef.current
         const fightResult = resolveFight(cell.content, character, spellId)
-        updateCell({ ...cell, content: fightResult.monster })
-        updateCharacter(fightResult.character)
-        const id = nextId()
         const events = fightResult.events
+        const ko = events.some((e) => e.type === 'ko')
+        const relics = character.relics || []
+
+        // On-kill relics: heal and/or gold when the monster dies this hit.
+        let nextChar = fightResult.character
+        if (ko) {
+          const healOnKill = relicSum(relics, 'onKill', 'heal')
+          const goldOnKill = relicSum(relics, 'onKill', 'gold')
+          if (healOnKill > 0) {
+            nextChar = { ...nextChar, hp: Math.min(nextChar.maxHp, nextChar.hp + healOnKill) }
+          }
+          if (goldOnKill > 0) {
+            addGold(goldOnKill)
+            addRunGold(goldOnKill)
+          }
+        }
+
+        updateCell({ ...cell, content: fightResult.monster })
+        updateCharacter(nextChar)
+        const id = nextId()
         setCellAction({ id, offset, texts: eventsToTexts(events, 'monster') })
         setCharacterAction({ id, texts: eventsToTexts(events, 'character') })
         if (events.some((e) => e.type === 'crit')) {
@@ -199,11 +236,17 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         } else if (events.some((e) => e.on === 'monster' && ['hit', 'spell', 'poison'].includes(e.type))) {
           sfx.hit()
         }
-        if (events.some((e) => e.type === 'ko')) {
+        if (ko) {
           sfx.ko()
           bumpKills()
           if (cell.content && cell.content.isBoss) {
             bumpBossKills()
+            // Bosses drop a run-long relic.
+            const relic = rollRelic()
+            if (relic) {
+              addRelic(relic)
+              emitCell(offset, [plainText('✦ Relique', Colors.yellow, 13), itemText(relic)])
+            }
           }
         }
         if (spellId) {
@@ -219,6 +262,18 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         }
         setDepthBanner({ id: nextId(), depth: depth + 1 })
         sfx.key()
+        // On-floor relics trigger as you descend (heal is applied before boons are
+        // cleared so it survives the recompute).
+        const relics = character.relics || []
+        const floorHeal = relicSum(relics, 'onFloor', 'heal')
+        const floorGold = relicSum(relics, 'onFloor', 'gold')
+        if (floorHeal > 0) {
+          updateCharacter({ ...character, hp: Math.min(character.maxHp, character.hp + floorHeal) })
+        }
+        if (floorGold > 0) {
+          addGold(floorGold)
+          addRunGold(floorGold)
+        }
         clearBoons() // ally boons only last for the floor they were granted on
         exitToNextDepth()
       }

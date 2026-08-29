@@ -48,6 +48,7 @@ export function calculate (character) {
     skills: (character.skills || []).map((skill) => ({ ...skill })),
     items: (character.items || []).slice(),
     boons: (character.boons || []).slice(),
+    relics: (character.relics || []).slice(),
     passives: character.passives || baseCharacter.passives || []
   }
 
@@ -76,6 +77,14 @@ export function calculate (character) {
   character.boons.forEach((boon) => {
     if (boon && boon.target) {
       add(boon.target, evalNumber(boon.effect, character))
+    }
+  })
+
+  // Run-long relics: only the "stat" kind adds flat stats here; conditional and
+  // triggered relics are handled in combat (resolveFight) like passives.
+  character.relics.forEach((relic) => {
+    if (relic && relic.kind === 'stat' && relic.target) {
+      add(relic.target, evalNumber(relic.amount, character))
     }
   })
 

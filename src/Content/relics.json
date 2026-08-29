@@ -1,0 +1,106 @@
+{
+  "vampiric_fang": {
+    "name": "Croc Vampirique",
+    "glyph": "🧛",
+    "rarity": "rare",
+    "kind": "trigger",
+    "on": "hit",
+    "effect": "lifesteal",
+    "amount": "0.2",
+    "description": "Vole 20% des dégâts que tu infliges."
+  },
+  "spiked_shell": {
+    "name": "Carapace à Pointes",
+    "glyph": "🦔",
+    "rarity": "uncommon",
+    "kind": "trigger",
+    "on": "damaged",
+    "effect": "riposte",
+    "amount": "stats.def",
+    "description": "Renvoie tes DEF en dégâts à qui te frappe."
+  },
+  "hunters_totem": {
+    "name": "Totem du Chasseur",
+    "glyph": "🎯",
+    "rarity": "uncommon",
+    "kind": "trigger",
+    "on": "attack",
+    "effect": "crit",
+    "amount": "0.25",
+    "description": "+25% de chance de coup critique."
+  },
+  "venom_coating": {
+    "name": "Enduit Venimeux",
+    "glyph": "🐍",
+    "rarity": "uncommon",
+    "kind": "trigger",
+    "on": "hit",
+    "effect": "dot",
+    "amount": "2",
+    "duration": 2,
+    "description": "Tes coups empoisonnent (2 dégâts / tour, 2 tours)."
+  },
+  "berserkers_idol": {
+    "name": "Idole du Berserker",
+    "glyph": "🗿",
+    "rarity": "rare",
+    "kind": "threshold",
+    "when": "hp <= maxHp * 0.5",
+    "target": "stats.atq",
+    "amount": "3",
+    "description": "+3 ATQ sous 50% de PV."
+  },
+  "titan_heart": {
+    "name": "Cœur de Titan",
+    "glyph": "💎",
+    "rarity": "rare",
+    "kind": "stat",
+    "target": "maxHp",
+    "amount": "12",
+    "description": "+12 PV max."
+  },
+  "soul_harvest": {
+    "name": "Moisson d'Âmes",
+    "glyph": "💀",
+    "rarity": "uncommon",
+    "kind": "onKill",
+    "effect": "heal",
+    "amount": "2",
+    "description": "Regagne 2 PV à chaque monstre tué."
+  },
+  "greed_ring": {
+    "name": "Anneau de Cupidité",
+    "glyph": "💰",
+    "rarity": "uncommon",
+    "kind": "onKill",
+    "effect": "gold",
+    "amount": "3",
+    "description": "Gagne 3 or à chaque monstre tué."
+  },
+  "lucky_clover": {
+    "name": "Trèfle Porte-Bonheur",
+    "glyph": "🍀",
+    "rarity": "uncommon",
+    "kind": "onChest",
+    "effect": "gold_bonus",
+    "amount": "0.5",
+    "description": "Les coffres rapportent +50% d'or."
+  },
+  "phoenix_ember": {
+    "name": "Braise du Phénix",
+    "glyph": "🔥",
+    "rarity": "rare",
+    "kind": "onFloor",
+    "effect": "heal",
+    "amount": "6",
+    "description": "Regagne 6 PV à chaque nouvel étage."
+  },
+  "arcane_conduit": {
+    "name": "Conduit Arcanique",
+    "glyph": "✨",
+    "rarity": "epic",
+    "kind": "cooldown",
+    "amount": "1",
+    "description": "Tes sorts rechargent 1 tour plus vite."
+  }
+}
