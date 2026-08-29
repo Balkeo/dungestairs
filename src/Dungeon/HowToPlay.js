@@ -13,15 +13,15 @@ const HelpButton = styled.button`
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 2px solid ${Colors.white30};
-  background: ${Colors.brown2};
-  color: ${Colors.white75};
+  border: 2px solid ${Colors.woodDark};
+  background: ${Colors.wood};
+  color: ${Colors.goldLight};
   font-size: 20px;
   font-weight: 700;
   font-family: Helvetica, sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { color: ${Colors.white100}; border-color: ${Colors.white75}; }
+  &:hover { color: ${Colors.white100}; border-color: ${Colors.goldLight}; }
 `
 
 const Title = styled.div`

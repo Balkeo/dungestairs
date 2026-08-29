@@ -28,14 +28,14 @@ const SeedBadge = styled.button`
   height: 30px;
   padding: 0 10px;
   border-radius: 15px;
-  border: 1px solid ${Colors.white20};
-  background: ${Colors.brown2};
-  color: ${Colors.white75};
+  border: 2px solid ${Colors.woodDark};
+  background: ${Colors.wood};
+  color: ${Colors.goldLight};
   font-family: Helvetica, monospace;
   font-size: 12px;
   letter-spacing: 1px;
   cursor: pointer;
-  &:hover { color: ${Colors.white100}; border-color: ${Colors.white75}; }
+  &:hover { color: ${Colors.white100}; border-color: ${Colors.goldLight}; }
 `
 
 const ChallengeMark = styled.span`
@@ -51,13 +51,13 @@ const InventoryButton = styled.button`
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 2px solid ${Colors.white30};
-  background: ${Colors.brown2};
-  color: ${Colors.white75};
+  border: 2px solid ${Colors.woodDark};
+  background: ${Colors.wood};
+  color: ${Colors.goldLight};
   font-size: 18px;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { color: ${Colors.white100}; border-color: ${Colors.white75}; }
+  &:hover { color: ${Colors.white100}; border-color: ${Colors.goldLight}; }
 `
 
 const Wraper = styled.div`

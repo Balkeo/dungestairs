@@ -13,13 +13,13 @@ const TrophyButton = styled.button`
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 2px solid ${Colors.white30};
-  background: ${Colors.brown2};
-  color: ${Colors.white75};
+  border: 2px solid ${Colors.woodDark};
+  background: ${Colors.wood};
+  color: ${Colors.goldLight};
   font-size: 18px;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { color: ${Colors.white100}; border-color: ${Colors.yellow}; }
+  &:hover { color: #fff; border-color: ${Colors.gold}; }
 `
 
 const Title = styled.div`
