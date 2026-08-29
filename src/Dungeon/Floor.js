@@ -36,7 +36,7 @@ const Board = styled.div`
   box-sizing: border-box;
   display: grid;
   ${({ size }) => (`
-    grid-template: repeat(${size}, 1fr) / repeat(${size}, 1fr);
+    grid-template: repeat(${size}, minmax(0, 1fr)) / repeat(${size}, minmax(0, 1fr));
     width: ${size * 110}px;
     height: ${size * 110}px;
   `)}

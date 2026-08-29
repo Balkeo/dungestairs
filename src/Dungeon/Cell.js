@@ -41,6 +41,9 @@ const Wraper = styled.div`
   cursor: ${({ isHovered, cellValue }) => ((isHovered && cellValue.canClick) ? 'pointer' : 'default')};
   width: 100%;
   height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   background-image: ${({ cellValue }) => (cellValue.isOpen ? `url(${openedCell})` : `url(${closedCell})`)};
   background-position: center;
   background-repeat: no-repeat;
