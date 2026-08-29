@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
+import { DISPLAY_FONT } from '../Guideline/theme'
 import { rarityColor } from '../Content/rarity'
+const inkRarity = (r) => (r === 'common' ? Colors.ink : rarityColor(r))
 
 const Title = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
 `
 
 const StatRow = styled.div`
@@ -18,7 +20,7 @@ const StatRow = styled.div`
   gap: 8px;
   margin: 14px 0;
   font-family: Helvetica, sans-serif;
-  color: ${Colors.white75};
+  color: ${Colors.inkSoft};
   font-size: 14px;
 `
 
@@ -31,7 +33,7 @@ const Stat = styled.div`
 const StatValue = styled.span`
   font-size: 18px;
   font-weight: 700;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
 `
 
 const List = styled.div`
@@ -49,7 +51,7 @@ const Section = styled.div`
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: ${Colors.yellow};
+  color: ${Colors.wood};
   margin: 6px 0 2px;
 `
 
@@ -60,7 +62,7 @@ const Line = styled.div`
   padding: 7px 9px;
   border: 2px solid ${({ tint }) => tint};
   border-radius: 8px;
-  background: ${Colors.background};
+  background: rgba(61,39,22,0.06);
 `
 
 const Glyph = styled.div`
@@ -85,20 +87,20 @@ const Name = styled.div`
 const Desc = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 12px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
 `
 
 const Empty = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 14px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   text-align: center;
   padding: 20px 0;
 `
 
 const Count = styled.span`
   font-size: 13px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   font-weight: 400;
   margin-left: 8px;
 `
@@ -123,7 +125,7 @@ export const InventoryModal = ({ isShowing, hide, character = {} }) => {
       <List>
         {items.length === 0 && <Empty>Aucun objet équipé pour l’instant.</Empty>}
         {items.map((item, index) => {
-          const tint = rarityColor(item.rarity)
+          const tint = inkRarity(item.rarity)
           return (
             <Line key={index} tint={tint}>
               <Glyph>{item.glyph || item.icon || '❔'}</Glyph>
@@ -136,7 +138,7 @@ export const InventoryModal = ({ isShowing, hide, character = {} }) => {
         })}
         {relics.length > 0 && <Section>✦ Reliques ({relics.length})</Section>}
         {relics.map((relic, index) => {
-          const tint = rarityColor(relic.rarity)
+          const tint = inkRarity(relic.rarity)
           return (
             <Line key={`relic-${index}`} tint={tint}>
               <Glyph>{relic.glyph || '✦'}</Glyph>

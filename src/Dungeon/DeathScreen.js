@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css, keyframes } from 'styled-components'
 import Colors from '../Helper/Colors'
-import Button from '../Guideline/Button'
+import { GameButton } from '../Guideline/GameButton'
+import { DISPLAY_FONT, parchmentFill } from '../Guideline/theme'
 
 const fadeIn = keyframes`
   from { opacity: 0; }
@@ -30,10 +31,11 @@ const Panel = styled.div`
   box-sizing: border-box;
   padding: 32px 28px;
   text-align: center;
-  background: ${Colors.brown1};
-  border: 1px solid ${Colors.black50};
-  border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  ${parchmentFill}
+  color: ${Colors.ink};
+  border: 4px solid ${Colors.woodDark};
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), inset 0 0 0 2px ${Colors.parchmentDark};
   ${css`animation: ${riseIn} 0.4s ease both;`}
 `
 
@@ -45,7 +47,7 @@ const Skull = styled.div`
 
 const Title = styled.h2`
   margin: 0 0 4px;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: ${DISPLAY_FONT};
   font-size: 26px;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -54,7 +56,7 @@ const Title = styled.h2`
 
 const Sub = styled.div`
   font-size: 13px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   margin-bottom: 22px;
 `
 
@@ -68,9 +70,9 @@ const Stats = styled.div`
 const Stat = styled.div`
   flex: 1;
   padding: 14px 8px;
-  background: ${Colors.background};
+  background: rgba(61,39,22,0.06);
   border-radius: 10px;
-  border: 1px solid ${Colors.black50};
+  border: 1px solid rgba(61,39,22,0.22);
 `
 
 const StatValue = styled.div`
@@ -85,14 +87,14 @@ const StatLabel = styled.div`
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: ${Colors.white30};
+  color: ${Colors.inkSoft};
 `
 
 const Unlocked = styled.div`
   margin: 0 0 20px;
   padding: 12px;
   background: rgba(255, 208, 80, 0.1);
-  border: 1px solid ${Colors.yellow};
+  border: 1px solid ${Colors.wood};
   border-radius: 10px;
 `
 
@@ -100,7 +102,7 @@ const UnlockedTitle = styled.div`
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: ${Colors.yellow};
+  color: ${Colors.wood};
   margin-bottom: 8px;
 `
 
@@ -109,7 +111,7 @@ const UnlockedItem = styled.div`
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
   padding: 2px 0;
 `
 
@@ -128,13 +130,13 @@ export const DeathScreen = ({ summary, onReplay, onMenu }) => {
     <Overlay>
       <Panel>
         <Skull>{won ? '🏆' : '💀'}</Skull>
-        <Title style={won ? { color: Colors.yellow } : undefined}>
+        <Title style={won ? { color: '#c98a24' } : { color: Colors.ember }}>
           {won ? 'Victoire !' : 'Vous êtes mort'}
         </Title>
         <Sub>{won ? 'Vous avez vaincu le Seigneur du Donjon !' : 'Le donjon vous a eu... pour cette fois.'}</Sub>
         <Stats>
           <Stat>
-            <StatValue tint={Colors.blueLight}>{summary.depth}</StatValue>
+            <StatValue tint={'#2f6db8'}>{summary.depth}</StatValue>
             <StatLabel>Profondeur</StatLabel>
           </Stat>
           <Stat>
@@ -142,7 +144,7 @@ export const DeathScreen = ({ summary, onReplay, onMenu }) => {
             <StatLabel>Kills</StatLabel>
           </Stat>
           <Stat>
-            <StatValue tint={Colors.yellow}>{summary.gold}</StatValue>
+            <StatValue tint={Colors.wood}>{summary.gold}</StatValue>
             <StatLabel>Or gagné</StatLabel>
           </Stat>
         </Stats>
@@ -159,8 +161,8 @@ export const DeathScreen = ({ summary, onReplay, onMenu }) => {
           </Unlocked>
         )}
         <Actions>
-          <Button onClick={onReplay}>Rejouer</Button>
-          <Button onClick={onMenu}>Menu principal</Button>
+          <GameButton variant="primary" size="md" style={{ width: '100%' }} onClick={onReplay}>Rejouer</GameButton>
+          <GameButton variant="wood" size="md" style={{ width: '100%' }} onClick={onMenu}>Menu principal</GameButton>
         </Actions>
       </Panel>
     </Overlay>

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Colors from '../../Helper/Colors'
+import { parchmentFill, BODY_FONT } from '../theme'
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -31,29 +32,38 @@ const Wrapper = styled.div`
 
 const _Modal = styled.div`
   z-index: 100;
-  background-color: ${Colors.dark1};
+  ${parchmentFill}
+  color: ${Colors.ink};
+  font-family: ${BODY_FONT};
   position: relative;
   margin: auto;
-  border-radius: 5px;
+  border: 3px solid ${Colors.woodDark};
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 2px ${Colors.parchmentDark};
   max-width: 500px;
   width: 80%;
-  padding: 1rem;
+  padding: 1rem 1.1rem 1.2rem;
 `
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
+  border-bottom: 2px solid rgba(61, 39, 22, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
 `
 
 const CloseButton = styled.div`
   font-size: 1.4rem;
-  font-weight: 700;
-  color: #000;
+  font-weight: 800;
+  line-height: 1;
+  color: ${Colors.woodDark};
   cursor: pointer;
   border: none;
   background: transparent;
+  &:hover { color: ${Colors.ember}; }
 `
 
 export const Modal = ({

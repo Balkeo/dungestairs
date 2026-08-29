@@ -26,7 +26,7 @@ const Title = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
 `
 
 const StatGrid = styled.div`
@@ -37,7 +37,7 @@ const StatGrid = styled.div`
 `
 
 const Stat = styled.div`
-  background: ${Colors.background};
+  background: rgba(61,39,22,0.06);
   border-radius: 8px;
   padding: 10px 6px;
   text-align: center;
@@ -47,7 +47,7 @@ const StatValue = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 800;
-  color: ${Colors.yellow};
+  color: ${Colors.wood};
   font-variant-numeric: tabular-nums;
 `
 
@@ -56,7 +56,7 @@ const StatLabel = styled.div`
   font-size: 10px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: ${Colors.white30};
+  color: ${Colors.inkSoft};
   margin-top: 2px;
 `
 
@@ -65,7 +65,7 @@ const SectionTitle = styled.div`
   font-size: 12px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   margin-bottom: 8px;
 `
 
@@ -74,7 +74,7 @@ const Ach = styled.div`
   align-items: center;
   gap: 10px;
   padding: 8px 0;
-  border-bottom: 1px solid ${Colors.black30};
+  border-bottom: 1px solid rgba(61,39,22,0.18);
   opacity: ${({ done }) => (done ? 1 : 0.5)};
 `
 
@@ -93,19 +93,19 @@ const AchBody = styled.div`
 const AchName = styled.div`
   font-size: 14px;
   font-weight: 700;
-  color: ${({ done }) => (done ? Colors.white100 : Colors.white50)};
+  color: ${({ done }) => (done ? Colors.ink : Colors.inkSoft)};
 `
 
 const AchDesc = styled.div`
   font-size: 11px;
-  color: ${Colors.white30};
+  color: ${Colors.inkSoft};
 `
 
 const AchReward = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 12px;
   font-weight: 700;
-  color: ${({ done }) => (done ? Colors.green : Colors.white30)};
+  color: ${({ done }) => (done ? Colors.green : Colors.inkSoft)};
   white-space: nowrap;
 `
 

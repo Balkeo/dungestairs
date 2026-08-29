@@ -28,7 +28,7 @@ const Title = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
 `
 
 const Row = styled.div`
@@ -36,20 +36,20 @@ const Row = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 14px 0;
-  border-bottom: 1px solid ${Colors.black30};
+  border-bottom: 1px solid rgba(61,39,22,0.18);
   font-family: Helvetica, sans-serif;
-  color: ${Colors.white75};
+  color: ${Colors.ink};
 `
 
 const Label = styled.div`
   font-size: 15px;
   font-weight: 600;
-  color: ${Colors.white100};
+  color: ${Colors.ink};
 `
 
 const Sub = styled.div`
   font-size: 12px;
-  color: ${Colors.white30};
+  color: ${Colors.inkSoft};
   margin-top: 2px;
 `
 
@@ -57,15 +57,15 @@ const Toggle = styled.button`
   min-width: 96px;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 2px solid ${({ danger }) => (danger ? Colors.red : Colors.white30)};
-  background: ${Colors.background};
-  color: ${({ danger }) => (danger ? Colors.red : Colors.white75)};
+  border: 2px solid ${({ danger }) => (danger ? Colors.red : Colors.inkSoft)};
+  background: rgba(61,39,22,0.06);
+  color: ${({ danger }) => (danger ? Colors.red : Colors.ink)};
   font-family: Helvetica, sans-serif;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { color: ${Colors.white100}; border-color: ${({ danger }) => (danger ? Colors.red : Colors.white75)}; }
+  &:hover { color: ${Colors.ink}; border-color: ${({ danger }) => (danger ? Colors.red : Colors.ink)}; }
 `
 
 const readMuted = () => {

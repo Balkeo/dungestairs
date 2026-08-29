@@ -3,22 +3,23 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
+import { DISPLAY_FONT } from '../Guideline/theme'
 
 const Title = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: Helvetica, sans-serif;
+  font-family: ${DISPLAY_FONT};
   font-size: 20px;
   font-weight: 800;
-  color: ${Colors.white100};
+  color: ${Colors.woodDark};
 `
 
 const Text = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  color: ${Colors.white75};
+  color: ${Colors.ink};
   margin: 12px 2px 14px;
 `
 
@@ -32,9 +33,9 @@ const Choice = styled.button`
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid ${({ disabled }) => (disabled ? Colors.white10 : Colors.white30)};
-  background: ${({ disabled }) => (disabled ? Colors.white5 : Colors.dark1)};
-  color: ${({ disabled }) => (disabled ? Colors.white30 : Colors.white100)};
+  border: 2px solid ${({ disabled }) => (disabled ? 'rgba(61,39,22,0.2)' : Colors.woodDark)};
+  background: ${({ disabled }) => (disabled ? 'rgba(61,39,22,0.05)' : 'rgba(61,39,22,0.08)')};
+  color: ${({ disabled }) => (disabled ? Colors.inkSoft : Colors.ink)};
   font-family: Helvetica, sans-serif;
   font-size: 15px;
   font-weight: 700;

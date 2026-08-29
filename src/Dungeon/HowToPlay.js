@@ -28,7 +28,7 @@ const Title = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 20px;
   font-weight: 700;
-  color: ${Colors.white100};
+  color: ${Colors.woodDark};
 `
 
 const List = styled.ul`
@@ -44,7 +44,7 @@ const Rule = styled.li`
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  color: ${Colors.white75};
+  color: ${Colors.ink};
   font-family: Helvetica, sans-serif;
   font-size: 14px;
   line-height: 1.4;
@@ -96,7 +96,7 @@ export const HowToPlay = () => {
           {RULES.map(([emoji, name, text]) => (
             <Rule key={name}>
               <Emoji>{emoji}</Emoji>
-              <span><strong style={{ color: Colors.white100 }}>{name}.</strong> {text}</span>
+              <span><strong style={{ color: Colors.woodDark }}>{name}.</strong> {text}</span>
             </Rule>
           ))}
         </List>

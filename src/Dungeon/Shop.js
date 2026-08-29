@@ -5,21 +5,27 @@ import Modal from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
 import { rarityColor } from '../Content/rarity'
 import { itemPrice } from '../Helper/shop'
+import { DISPLAY_FONT } from '../Guideline/theme'
+
+// Rarity colour that stays readable on parchment (common ink instead of white).
+const inkRarity = (rarity) => (rarity === 'common' ? Colors.ink : rarityColor(rarity))
 
 const Title = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: Helvetica, sans-serif;
+  font-family: ${DISPLAY_FONT};
   font-size: 20px;
-  font-weight: 700;
-  color: ${Colors.white100};
+  font-weight: 800;
+  color: ${Colors.woodDark};
 `
 
 const Gold = styled.span`
   margin-left: auto;
+  font-family: ${DISPLAY_FONT};
+  font-weight: 800;
   font-size: 15px;
-  color: ${Colors.yellow};
+  color: ${Colors.wood};
 `
 
 const Tabs = styled.div`
@@ -32,12 +38,12 @@ const Tab = styled.button`
   flex: 1;
   padding: 8px;
   border-radius: 8px;
-  border: 1px solid ${({ active }) => (active ? Colors.white30 : Colors.white10)};
-  background: ${({ active }) => (active ? Colors.white10 : 'transparent')};
-  color: ${({ active }) => (active ? Colors.white100 : Colors.white50)};
-  font-family: Helvetica, sans-serif;
+  border: 2px solid ${({ active }) => (active ? Colors.woodDark : 'rgba(61,39,22,0.25)')};
+  background: ${({ active }) => (active ? Colors.parchmentShade : 'rgba(61,39,22,0.05)')};
+  color: ${({ active }) => (active ? Colors.woodDark : Colors.inkSoft)};
+  font-family: ${DISPLAY_FONT};
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
 `
 
@@ -55,7 +61,7 @@ const Offer = styled.div`
   padding: 8px 10px;
   border: 2px solid ${({ tint }) => tint};
   border-radius: 8px;
-  background: ${Colors.background};
+  background: rgba(61,39,22,0.06);
   opacity: ${({ dimmed }) => (dimmed ? 0.45 : 1)};
 `
 
@@ -82,7 +88,7 @@ const ItemName = styled.div`
 const Desc = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 12px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
 `
 
 const ActionButton = styled.button`
@@ -96,7 +102,7 @@ const ActionButton = styled.button`
   font-size: 13px;
   font-weight: 700;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  color: ${({ disabled }) => (disabled ? Colors.white50 : Colors.white100)};
+  color: ${({ disabled }) => (disabled ? Colors.inkSoft : Colors.white100)};
   background: ${({ disabled, tone }) => (disabled ? Colors.white10 : tone === 'sell' ? Colors.yellow : Colors.green)};
   ${({ tone, disabled }) => tone === 'sell' && !disabled && `color: ${Colors.black100};`}
   transition: filter 0.15s ease;
@@ -106,7 +112,7 @@ const ActionButton = styled.button`
 const Empty = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 14px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   text-align: center;
   padding: 18px 0;
 `
@@ -114,7 +120,7 @@ const Empty = styled.div`
 const Hint = styled.div`
   font-family: Helvetica, sans-serif;
   font-size: 12px;
-  color: ${Colors.white50};
+  color: ${Colors.inkSoft};
   text-align: center;
   margin-top: 4px;
 `
@@ -156,7 +162,7 @@ export const Shop = ({ shop, gold = 0, bagFull = false, bag = [], onBuy, onSell,
           <List>
             {offers.length === 0 && <Empty>Le marchand n’a rien à vendre ici.</Empty>}
             {offers.map((offer, index) => {
-              const tint = rarityColor(offer.rarity)
+              const tint = inkRarity(offer.rarity)
               const disabled = offer.sold || bagFull || gold < offer.price
               return (
                 <Offer key={index} tint={tint} dimmed={offer.sold}>
@@ -181,7 +187,7 @@ export const Shop = ({ shop, gold = 0, bagFull = false, bag = [], onBuy, onSell,
         <List>
           {items.length === 0 && <Empty>Ton sac est vide — rien à vendre.</Empty>}
           {items.map((item, index) => {
-            const tint = rarityColor(item.rarity)
+            const tint = inkRarity(item.rarity)
             return (
               <Offer key={index} tint={tint}>
                 <Glyph>{item.glyph || item.icon || '❔'}</Glyph>
