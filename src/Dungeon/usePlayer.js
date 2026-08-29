@@ -161,5 +161,5 @@ export const usePlayer = () => {
     }
   })
 
-  return { player, addGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill }
+  return { player, addGold, removeGold, selectCharacter, removeSelectedCharacter, restartRun, recordRun, buyCharacter, upgradeCharacterSkill }
 }

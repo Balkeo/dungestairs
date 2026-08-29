@@ -4,18 +4,56 @@ import { useCharacter } from './Character/useCharacter'
 import { resolveFight } from './resolveFight'
 import { eventsToTexts, goldText, itemText, plainText } from './combatText'
 import { rollItemDrop, blessing } from '../Helper/loot'
+import { rollShopStock } from '../Helper/shop'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
 
 const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 
-export const useGame = (player = {}, recordRun = () => []) => {
+export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, removeGold = () => {}) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
   const { character, updateCharacter, addItem } = useCharacter(player.characters[player.selectedCharacter])
 
   const [queuedSpell, setQueuedSpell] = useState(null)
   const queuedSpellRef = useRef(null)
+
+  // Merchant shop: stock is generated once per merchant tile (kept in a ref so
+  // reopening the same trader shows the same, partly-bought stock) and surfaced
+  // through `shop` when the trader is open.
+  const [shop, setShop] = useState(null)
+  const shopStocksRef = useRef({})
+
+  const openMerchant = (cell) => {
+    if (!shopStocksRef.current[cell.offset]) {
+      shopStocksRef.current[cell.offset] = rollShopStock(depth, 3)
+    }
+    setShop({ offset: cell.offset, items: shopStocksRef.current[cell.offset] })
+  }
+  const closeShop = () => setShop(null)
+
+  const buyItem = (index) => {
+    if (!shop) {
+      return
+    }
+    const offer = shop.items[index]
+    if (!offer || offer.sold) {
+      return
+    }
+    const bagFull = (character.items || []).filter(Boolean).length >= 8
+    if (bagFull || player.gold < offer.price) {
+      return
+    }
+    const { sold, price, ...item } = offer // strip shop-only fields before equipping
+    addItem(item)
+    removeGold(offer.price)
+    sfx.loot()
+    const stock = shopStocksRef.current[shop.offset]
+    if (stock && stock[index]) {
+      stock[index].sold = true
+    }
+    setShop({ ...shop, items: shop.items.map((o, i) => (i === index ? { ...o, sold: true } : o)) })
+  }
 
   // Transient visual feedback + run bookkeeping.
   const actionId = useRef(0)
@@ -75,15 +113,6 @@ export const useGame = (player = {}, recordRun = () => []) => {
       sfx.heal()
       return
     }
-    if (cell.type === 'merchant') {
-      // A wandering trader tosses a coin purse that scales with the depth.
-      const amount = 5 + Math.floor(depth / 2) + Math.floor(Math.random() * (5 + depth))
-      addGold(amount)
-      addRunGold(amount)
-      emitCell(cell.offset, [goldText(amount)])
-      sfx.coin()
-      return
-    }
     const item = cell.type === 'knight'
       ? blessing('bless_guard', "Guard's Boon", '🛡️', 'stats.def', '1', '+1 DEF')
       : blessing('bless_arcane', 'Arcane Boon', '🔮', 'stats.atq', '1', '+1 ATQ')
@@ -111,9 +140,16 @@ export const useGame = (player = {}, recordRun = () => []) => {
         openClosedCell(x, y)
         if (cell.type === 'trap') {
           springTrap(cell)
+        } else if (cell.type === 'merchant') {
+          openMerchant(cell)
         } else if (ALLY_TYPES.includes(cell.type)) {
           applyAlly(cell, addGold)
         }
+        return cell
+      }
+      if (cell.type === 'merchant') {
+        // Re-open the trader to keep shopping.
+        openMerchant(cell)
         return cell
       }
       if (cell.type === 'chest') {
@@ -186,6 +222,9 @@ export const useGame = (player = {}, recordRun = () => []) => {
     cellAction,
     characterAction,
     depthBanner,
-    runOver
+    runOver,
+    shop,
+    buyItem,
+    closeShop
   }
 }

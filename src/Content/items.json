@@ -7,7 +7,8 @@
     "rarity": "common",
     "minDepth": 1,
     "weight": 22,
-    "description": "+1 ATQ"
+    "description": "+1 ATQ",
+    "price": 25
   },
   "buckler": {
     "name": "Buckler",
@@ -17,7 +18,8 @@
     "rarity": "common",
     "minDepth": 1,
     "weight": 20,
-    "description": "+1 DEF"
+    "description": "+1 DEF",
+    "price": 25
   },
   "swift_boots": {
     "name": "Swift Boots",
@@ -27,7 +29,8 @@
     "rarity": "common",
     "minDepth": 2,
     "weight": 16,
-    "description": "+1 SPD"
+    "description": "+1 SPD",
+    "price": 30
   },
   "vitality_charm": {
     "name": "Vitality Charm",
@@ -37,7 +40,8 @@
     "rarity": "uncommon",
     "minDepth": 2,
     "weight": 12,
-    "description": "+6 Max HP"
+    "description": "+6 Max HP",
+    "price": 55
   },
   "short_sword": {
     "name": "Short Sword",
@@ -47,7 +51,8 @@
     "rarity": "uncommon",
     "minDepth": 3,
     "weight": 12,
-    "description": "+2 ATQ"
+    "description": "+2 ATQ",
+    "price": 60
   },
   "plate_armor": {
     "name": "Plate Armor",
@@ -57,7 +62,8 @@
     "rarity": "uncommon",
     "minDepth": 4,
     "weight": 10,
-    "description": "+2 DEF"
+    "description": "+2 DEF",
+    "price": 70
   },
   "warlords_ring": {
     "name": "Warlord's Ring",
@@ -67,6 +73,7 @@
     "rarity": "rare",
     "minDepth": 6,
     "weight": 5,
-    "description": "+3 ATQ"
+    "description": "+3 ATQ",
+    "price": 130
   }
 }
