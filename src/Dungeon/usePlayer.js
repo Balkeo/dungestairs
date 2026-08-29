@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Characters from './Character/Characters'
 import { calculate } from '../Helper/CharacterCalculator'
 import { saveGame, loadGame, DEFAULT_STATS } from '../Helper/save'
 import { checkAchievements, achievementById } from '../Helper/achievements'
+import { randomSeed } from '../Helper/rng'
+import { matchChallenge } from '../Helper/challenges'
 
 export const usePlayer = () => {
   const loadedPlayer = loadGame()
@@ -51,12 +53,32 @@ export const usePlayer = () => {
     })
   }
 
-  const selectCharacter = (character = 0) => {
+  // Snapshot of persistent progression taken when a seeded (no-progression) run
+  // starts, so it can be restored untouched when the run ends.
+  const preSeedSnapshotRef = useRef(null)
+
+  const selectCharacter = (character = 0, seedInput = '') => {
+    const forced = String(seedInput || '').trim()
+    const seed = forced || randomSeed()
+    const seeded = !!forced
+    const challenge = matchChallenge(seed)
     setPlayer((previousPlayer) => {
+      preSeedSnapshotRef.current = seeded
+        ? {
+            gold: previousPlayer.gold,
+            stats: previousPlayer.stats,
+            achievements: previousPlayer.achievements,
+            depth: previousPlayer.depth
+          }
+        : null
       return {
         ...previousPlayer,
         selectedCharacter: character,
-        inGame: true
+        inGame: true,
+        seed,
+        seeded,
+        challenge: challenge || null,
+        runId: (previousPlayer.runId || 0) + 1
       }
     })
   }
@@ -65,6 +87,10 @@ export const usePlayer = () => {
   // achievements and pay out their gold rewards. Returns the achievements
   // unlocked by this run so the UI can celebrate them.
   const recordRun = (summary = {}) => {
+    // Seeded / challenge runs don't touch global progression.
+    if (player.seeded) {
+      return []
+    }
     const previousStats = player.stats || { ...DEFAULT_STATS }
     const stats = {
       runs: (previousStats.runs || 0) + 1,
@@ -89,6 +115,10 @@ export const usePlayer = () => {
   // remounts) the Game, giving a new dungeon and a full-HP character.
   const restartRun = (depth) => {
     setPlayer((previousPlayer) => {
+      // A seeded replay keeps the same seed and records no progression.
+      if (previousPlayer.seeded) {
+        return { ...previousPlayer, runId: (previousPlayer.runId || 0) + 1 }
+      }
       return {
         ...previousPlayer,
         runId: (previousPlayer.runId || 0) + 1,
@@ -101,17 +131,24 @@ export const usePlayer = () => {
   }
 
   const removeSelectedCharacter = (depth) => {
+    const snapshot = preSeedSnapshotRef.current
     setPlayer((previousPlayer) => {
+      // Leaving a seeded run restores the pre-run progression, untouched.
+      const restore = previousPlayer.seeded && snapshot ? snapshot : null
       return {
         ...previousPlayer,
+        ...(restore || {}),
         selectedCharacter: null,
         inGame: false,
-        depth: {
-          max: Math.max(previousPlayer.depth.max, depth),
-          previous: depth
-        }
+        seed: null,
+        seeded: false,
+        challenge: null,
+        depth: restore
+          ? restore.depth
+          : { max: Math.max(previousPlayer.depth.max, depth), previous: depth }
       }
     })
+    preSeedSnapshotRef.current = null
   }
 
   const updateCharacters = (index, newCharacter) => {
@@ -175,7 +212,8 @@ export const usePlayer = () => {
   }
 
   useEffect(() => {
-    if (!player.inGame) {
+    // Never persist during a seeded run (it must leave no trace).
+    if (!player.inGame && !player.seeded) {
       saveGame(player)
     }
   })

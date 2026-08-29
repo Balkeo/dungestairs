@@ -8,6 +8,7 @@ import { rollShopStock, itemPrice } from '../Helper/shop'
 import { Relics, Events } from '../Content'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
+import { rng } from '../Helper/rng'
 
 // Sum a numeric field across the relics matching a kind/effect.
 const relicSum = (relics = [], kind, effect) => relics
@@ -18,7 +19,9 @@ const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 
 export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, removeGold = () => {}) => {
   const size = 5
-  const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
+  const modifiers = (player.challenge && player.challenge.modifiers) || {}
+  const goldMult = modifiers.goldMultiplier || 1
+  const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size, 1, player.seed, modifiers)
   const { character, updateCharacter, addItem, removeItem, addBoon, clearBoons, addRelic } = useCharacter(player.characters[player.selectedCharacter])
 
   // A random relic the character does not already own (bosses drop these).
@@ -28,7 +31,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
     if (pool.length === 0) {
       return null
     }
-    return { ...pool[Math.floor(Math.random() * pool.length)] }
+    return { ...pool[Math.floor(rng() * pool.length)] }
   }
 
   // Sell price of an item at a merchant: half its shop value, floored, min 1.
@@ -63,7 +66,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       return
     }
     if (!eventDefsRef.current[cell.offset]) {
-      eventDefsRef.current[cell.offset] = Events[Math.floor(Math.random() * Events.length)]
+      eventDefsRef.current[cell.offset] = Events[Math.floor(rng() * Events.length)]
     }
     setEvent({ offset: cell.offset, def: eventDefsRef.current[cell.offset] })
   }
@@ -102,7 +105,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       case 'random': {
         const options = outcome.options || []
         if (options.length) {
-          const picked = options[Math.floor(Math.random() * options.length)]
+          const picked = options[Math.floor(rng() * options.length)]
           ;(picked.outcomes || []).forEach(applyOutcome)
         }
         break
@@ -175,6 +178,20 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
   const nextId = () => ++actionId.current
   const emitCell = (offset, texts) => setCellAction({ id: nextId(), offset, texts })
 
+  // COMEBACK challenge: each action may bring a slain monster back to life.
+  const maybeRespawn = () => {
+    if (!modifiers.respawn || rng() >= modifiers.respawn) {
+      return
+    }
+    const dead = floor.filter((c) => c && c.type === 'monster' && c.isOpen && c.content && c.content.hp <= 0)
+    if (!dead.length) {
+      return
+    }
+    const target = dead[Math.floor(rng() * dead.length)]
+    updateCell({ ...target, content: { ...target.content, hp: target.content.maxHp } })
+    emitCell(target.offset, [plainText('revient !', Colors.red, 12)])
+  }
+
   const queueSpell = (spellId) => {
     const next = queuedSpellRef.current === spellId ? null : spellId
     queuedSpellRef.current = next
@@ -237,6 +254,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       if (!cell.canClick || cell.isBlocked) {
         return cell
       }
+      maybeRespawn()
       if (!cell.isOpen) {
         openClosedCell(x, y)
         if (cell.type === 'trap') {
@@ -263,7 +281,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
         const chestBonus = cell.content > 0
           ? Math.floor(cell.content * relicSum(character.relics || [], 'onChest', 'gold_bonus'))
           : 0
-        const chestGold = cell.content + chestBonus
+        const chestGold = Math.floor((cell.content + chestBonus) * goldMult)
         if (chestGold > 0) {
           addGold(chestGold)
           addRunGold(chestGold)
@@ -319,7 +337,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
           bumpKills()
           // Elites drop bonus loot: extra gold, a likely item, sometimes a relic.
           if (cell.content && cell.content.isElite) {
-            const bonusGold = 4 + depth * 2
+            const bonusGold = Math.floor((4 + depth * 2) * goldMult)
             addGold(bonusGold)
             addRunGold(bonusGold)
             const eliteTexts = [plainText('★ Élite', Colors.yellow, 12), goldText(bonusGold)]
@@ -329,7 +347,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
               addItem(drop)
               eliteTexts.push(itemText(drop))
             }
-            if (Math.random() < 0.2) {
+            if (rng() < 0.2) {
               const eliteRelic = rollRelic()
               if (eliteRelic) {
                 addRelic(eliteRelic)

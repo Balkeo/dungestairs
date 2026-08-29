@@ -1,4 +1,5 @@
 import { Items } from '../Content'
+import { rng } from './rng'
 
 // Fallback price if an item has no explicit `price` (keyed by rarity).
 const RARITY_PRICE = {
@@ -21,7 +22,7 @@ export const rollShopStock = (depth = 1, count = 3) => {
   const available = [...pool]
   while (stock.length < count && available.length > 0) {
     const total = available.reduce((sum, item) => sum + (item.weight || 1), 0)
-    let roll = Math.random() * total
+    let roll = rng() * total
     let pickIndex = available.length - 1
     for (let i = 0; i < available.length; i++) {
       roll -= available[i].weight || 1

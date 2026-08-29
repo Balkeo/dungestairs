@@ -1,10 +1,11 @@
 import { Items } from '../Content'
+import { rng } from './rng'
 
 // Roll for an item drop appropriate to the current depth. Returns a fresh item
 // object (with its id) or null when nothing drops. Items are weighted and gated
 // by a minimum depth so better gear appears deeper.
 export const rollItemDrop = (depth = 1, chance = 0.45) => {
-  if (Math.random() > chance) {
+  if (rng() > chance) {
     return null
   }
   const pool = Items.filter((item) => (item.minDepth || 1) <= depth)
@@ -12,7 +13,7 @@ export const rollItemDrop = (depth = 1, chance = 0.45) => {
     return null
   }
   const total = pool.reduce((sum, item) => sum + (item.weight || 1), 0)
-  let roll = Math.random() * total
+  let roll = rng() * total
   for (const item of pool) {
     roll -= item.weight || 1
     if (roll <= 0) {

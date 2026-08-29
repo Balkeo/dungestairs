@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { isEqual } from 'lodash'
 import { generateCellForDepth, getEntranceCell } from './useCell'
 import { makeBoss } from './Monster/useMonster'
 import { pickLayout, pickReachableKey } from './layouts'
+import { setSeed, reseed } from '../Helper/rng'
+import { setRunModifiers } from '../Helper/challenges'
 import { EMPTY_CELL } from './Content/constant'
 
 const BOSS_INTERVAL = 5
@@ -50,6 +52,9 @@ const placeBoss = (cells, size, depth, keyCell, voids) => {
 }
 
 const generateCells = (size, depth) => {
+  // Re-seed from (seed, depth) so a floor is reproducible for a given seed,
+  // independent of any randomness spent during earlier floors / combat.
+  reseed(depth)
   const cells = []
   const entranceCell = getEntranceCell(size)
   const isBossFloor = depth % BOSS_INTERVAL === 0
@@ -86,7 +91,15 @@ const generateCells = (size, depth) => {
   return cells
 }
 
-export const useDungeon = (size = 5, dungeonDepth = 1) => {
+export const useDungeon = (size = 5, dungeonDepth = 1, seed = 'default', modifiers = {}) => {
+  // Seed the RNG and activate challenge modifiers once per run, before the first
+  // floor is generated.
+  const seededRef = useRef(null)
+  if (seededRef.current !== seed) {
+    setSeed(seed)
+    setRunModifiers(modifiers)
+    seededRef.current = seed
+  }
   const [depth, setDepth] = useState(() => dungeonDepth)
   let [cells, setCells] = useState(() => generateCells(size, depth))
 

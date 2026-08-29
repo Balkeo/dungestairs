@@ -1,6 +1,8 @@
 import Monsters, { Bosses, FinalBoss } from './Monsters'
 import { calculate } from '../../Helper/CharacterCalculator'
 import { random } from '../../Helper/Utils'
+import { rng } from '../../Helper/rng'
+import { getRunModifiers } from '../../Helper/challenges'
 
 // The floor whose boss is the run's final boss (must be a boss floor, i.e. a
 // multiple of 5). Beating it wins the run.
@@ -14,8 +16,9 @@ export const useMonster = (depth = 1) => {
   monster.level = 1 + Math.floor(depth / 3)
   const calculated = calculate(monster)
 
+  const mods = getRunModifiers()
   const eliteChance = Math.min(0.28, 0.06 + depth * 0.015)
-  if (depth >= 3 && Math.random() < eliteChance) {
+  if (mods.allElite || (depth >= 3 && rng() < eliteChance)) {
     calculated.isElite = true
     calculated.maxHp = Math.round(calculated.maxHp * 2)
     calculated.hp = calculated.maxHp
@@ -24,6 +27,9 @@ export const useMonster = (depth = 1) => {
       atq: calculated.stats.atq + 1 + Math.floor(depth / 6),
       def: calculated.stats.def + 1
     }
+  }
+  if (mods.monsterAtqBonus) {
+    calculated.stats = { ...calculated.stats, atq: calculated.stats.atq + mods.monsterAtqBonus }
   }
   return calculated
 }

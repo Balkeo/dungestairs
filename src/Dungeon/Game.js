@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -16,6 +16,32 @@ import { InventoryModal } from './InventoryModal'
 import { useModal } from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
 import useWindowDimensions from '../useWindowDimensions'
+
+const SeedBadge = styled.button`
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 15px;
+  border: 1px solid ${Colors.white20};
+  background: ${Colors.brown2};
+  color: ${Colors.white75};
+  font-family: Helvetica, monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  &:hover { color: ${Colors.white100}; border-color: ${Colors.white75}; }
+`
+
+const ChallengeMark = styled.span`
+  color: ${Colors.yellow};
+  font-weight: 800;
+`
 
 const InventoryButton = styled.button`
   position: fixed;
@@ -76,9 +102,24 @@ export const Game = ({
   const isMobile = (width <= 768)
   const inventoryModal = useModal()
   const bagFull = (character.items || []).filter(Boolean).length >= 8
+  const [seedCopied, setSeedCopied] = useState(false)
+  const copySeed = () => {
+    try {
+      if (navigator.clipboard) navigator.clipboard.writeText(player.seed || '')
+    } catch (err) { /* clipboard blocked; the seed is still shown */ }
+    setSeedCopied(true)
+    setTimeout(() => setSeedCopied(false), 1200)
+  }
 
   return (
         <Wraper>
+            {player.seed && (
+              <SeedBadge onClick={copySeed} title="Copier la seed pour la partager">
+                {player.challenge && <ChallengeMark>{player.challenge.glyph} {player.challenge.name}</ChallengeMark>}
+                🌱 {player.seed}
+                <span>{seedCopied ? '✓' : '📋'}</span>
+              </SeedBadge>
+            )}
             <InventoryButton title="Équipement" onClick={inventoryModal.toggle}>🎒</InventoryButton>
             <InventoryModal
               isShowing={inventoryModal.isShowing}

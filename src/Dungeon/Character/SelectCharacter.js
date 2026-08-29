@@ -173,6 +173,7 @@ const spellIcon = (spell) => {
 export const SelectCharacter = ({
   characters = [],
   gold = 0,
+  seed = '',
   selectCharacter,
   buyCharacter,
   upgradeCharacterSkill,
@@ -252,7 +253,7 @@ export const SelectCharacter = ({
               <Cta
                 locked={!owned}
                 disabled={!owned && gold < character.price}
-                onClick={() => (owned ? selectCharacter(offset) : buyCharacter(offset))}
+                onClick={() => (owned ? selectCharacter(offset, seed) : buyCharacter(offset))}
               >
                 {owned ? `Jouer ${character.type}` : `Acheter · ${character.price} 🪙`}
               </Cta>
@@ -267,6 +268,7 @@ export const SelectCharacter = ({
 SelectCharacter.propTypes = {
   characters: PropTypes.array,
   gold: PropTypes.number,
+  seed: PropTypes.string,
   selectCharacter: PropTypes.func,
   buyCharacter: PropTypes.func,
   upgradeCharacterSkill: PropTypes.func,

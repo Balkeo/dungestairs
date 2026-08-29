@@ -1,4 +1,5 @@
 import jexl from 'jexl-sync'
+import { rng } from '../Helper/rng'
 import { rollDice } from '../Helper/Utils'
 
 // ---------------------------------------------------------------------------
@@ -170,7 +171,7 @@ const strike = (attacker, defender, attackerStats, defenderStats, attackerSide, 
 
   let isCrit = false
   const critTrigger = triggersFor(attacker, 'attack').find((trigger) => trigger.effect === 'crit')
-  if (critTrigger && Math.random() < evalNumber(critTrigger.amount, attacker)) {
+  if (critTrigger && rng() < evalNumber(critTrigger.amount, attacker)) {
     damage *= 2
     isCrit = true
   }
