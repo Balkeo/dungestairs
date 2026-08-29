@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from '../Guideline/Modal'
 import Colors from '../Helper/Colors'
 import { rarityColor } from '../Content/rarity'
+import { itemPrice } from '../Helper/shop'
 
 const Title = styled.div`
   display: flex;
@@ -21,11 +22,30 @@ const Gold = styled.span`
   color: ${Colors.yellow};
 `
 
+const Tabs = styled.div`
+  display: flex;
+  gap: 6px;
+  margin: 12px 0 4px;
+`
+
+const Tab = styled.button`
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid ${({ active }) => (active ? Colors.white30 : Colors.white10)};
+  background: ${({ active }) => (active ? Colors.white10 : 'transparent')};
+  color: ${({ active }) => (active ? Colors.white100 : Colors.white50)};
+  font-family: Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+`
+
 const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 14px 0 6px;
+  margin: 10px 0 6px;
 `
 
 const Offer = styled.div`
@@ -65,10 +85,10 @@ const Desc = styled.div`
   color: ${Colors.white50};
 `
 
-const BuyButton = styled.button`
+const ActionButton = styled.button`
   margin-left: auto;
   flex: 0 0 auto;
-  min-width: 74px;
+  min-width: 78px;
   padding: 7px 10px;
   border-radius: 8px;
   border: none;
@@ -77,7 +97,8 @@ const BuyButton = styled.button`
   font-weight: 700;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   color: ${({ disabled }) => (disabled ? Colors.white50 : Colors.white100)};
-  background: ${({ disabled }) => (disabled ? Colors.white10 : Colors.green)};
+  background: ${({ disabled, tone }) => (disabled ? Colors.white10 : tone === 'sell' ? Colors.yellow : Colors.green)};
+  ${({ tone, disabled }) => tone === 'sell' && !disabled && `color: ${Colors.black100};`}
   transition: filter 0.15s ease;
   &:hover { filter: ${({ disabled }) => (disabled ? 'none' : 'brightness(1.1)')}; }
 `
@@ -98,6 +119,8 @@ const Hint = styled.div`
   margin-top: 4px;
 `
 
+const sellValue = (item) => Math.max(1, Math.floor(itemPrice(item) / 2))
+
 const buyLabel = (offer, gold, bagFull) => {
   if (offer.sold) return 'Acheté'
   if (bagFull) return 'Sac plein'
@@ -105,10 +128,14 @@ const buyLabel = (offer, gold, bagFull) => {
   return `Acheter ${offer.price} 🪙`
 }
 
-export const Shop = ({ shop, gold = 0, bagFull = false, onBuy, onClose }) => {
+export const Shop = ({ shop, gold = 0, bagFull = false, bag = [], onBuy, onSell, onClose }) => {
   const isShowing = !!shop
-  const items = shop ? shop.items : []
-  const soldOut = items.length > 0 && items.every((o) => o.sold)
+  const [tab, setTab] = useState('buy')
+  useEffect(() => { if (isShowing) setTab('buy') }, [isShowing])
+
+  const offers = shop ? shop.items : []
+  const items = bag.filter(Boolean)
+  const soldOut = offers.length > 0 && offers.every((o) => o.sold)
 
   const title = (
     <Title>
@@ -119,27 +146,57 @@ export const Shop = ({ shop, gold = 0, bagFull = false, onBuy, onClose }) => {
 
   return (
     <Modal title={title} isShowing={isShowing} hide={onClose}>
-      <List>
-        {items.length === 0 && <Empty>Le marchand n’a rien à vendre ici.</Empty>}
-        {items.map((offer, index) => {
-          const tint = rarityColor(offer.rarity)
-          const disabled = offer.sold || bagFull || gold < offer.price
-          return (
-            <Offer key={index} tint={tint} dimmed={offer.sold}>
-              <Glyph>{offer.glyph || '❔'}</Glyph>
-              <Info>
-                <ItemName tint={tint}>{offer.name}</ItemName>
-                <Desc>{offer.description}</Desc>
-              </Info>
-              <BuyButton disabled={disabled} onClick={() => !disabled && onBuy(index)}>
-                {buyLabel(offer, gold, bagFull)}
-              </BuyButton>
-            </Offer>
-          )
-        })}
-      </List>
-      {bagFull && <Hint>Ton sac est plein (8 objets) — impossible d’acheter.</Hint>}
-      {soldOut && !bagFull && <Hint>Le marchand est en rupture de stock.</Hint>}
+      <Tabs>
+        <Tab active={tab === 'buy'} onClick={() => setTab('buy')}>Acheter</Tab>
+        <Tab active={tab === 'sell'} onClick={() => setTab('sell')}>Vendre ({items.length})</Tab>
+      </Tabs>
+
+      {tab === 'buy' && (
+        <>
+          <List>
+            {offers.length === 0 && <Empty>Le marchand n’a rien à vendre ici.</Empty>}
+            {offers.map((offer, index) => {
+              const tint = rarityColor(offer.rarity)
+              const disabled = offer.sold || bagFull || gold < offer.price
+              return (
+                <Offer key={index} tint={tint} dimmed={offer.sold}>
+                  <Glyph>{offer.glyph || '❔'}</Glyph>
+                  <Info>
+                    <ItemName tint={tint}>{offer.name}</ItemName>
+                    <Desc>{offer.description}</Desc>
+                  </Info>
+                  <ActionButton tone="buy" disabled={disabled} onClick={() => !disabled && onBuy(index)}>
+                    {buyLabel(offer, gold, bagFull)}
+                  </ActionButton>
+                </Offer>
+              )
+            })}
+          </List>
+          {bagFull && <Hint>Ton sac est plein (8 objets) — vends-en pour faire de la place.</Hint>}
+          {soldOut && !bagFull && <Hint>Le marchand est en rupture de stock.</Hint>}
+        </>
+      )}
+
+      {tab === 'sell' && (
+        <List>
+          {items.length === 0 && <Empty>Ton sac est vide — rien à vendre.</Empty>}
+          {items.map((item, index) => {
+            const tint = rarityColor(item.rarity)
+            return (
+              <Offer key={index} tint={tint}>
+                <Glyph>{item.glyph || item.icon || '❔'}</Glyph>
+                <Info>
+                  <ItemName tint={tint}>{item.name}</ItemName>
+                  <Desc>{item.description}</Desc>
+                </Info>
+                <ActionButton tone="sell" onClick={() => onSell(index)}>
+                  Vendre {sellValue(item)} 🪙
+                </ActionButton>
+              </Offer>
+            )
+          })}
+        </List>
+      )}
     </Modal>
   )
 }
@@ -148,6 +205,8 @@ Shop.propTypes = {
   shop: PropTypes.object,
   gold: PropTypes.number,
   bagFull: PropTypes.bool,
+  bag: PropTypes.array,
   onBuy: PropTypes.func,
+  onSell: PropTypes.func,
   onClose: PropTypes.func
 }

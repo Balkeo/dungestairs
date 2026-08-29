@@ -4,7 +4,7 @@ import { useCharacter } from './Character/useCharacter'
 import { resolveFight } from './resolveFight'
 import { eventsToTexts, goldText, itemText, plainText } from './combatText'
 import { rollItemDrop, blessing } from '../Helper/loot'
-import { rollShopStock } from '../Helper/shop'
+import { rollShopStock, itemPrice } from '../Helper/shop'
 import { sfx } from '../Helper/sound'
 import Colors from '../Helper/Colors'
 
@@ -13,7 +13,10 @@ const ALLY_TYPES = ['healer', 'mage', 'knight', 'merchant']
 export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, removeGold = () => {}) => {
   const size = 5
   const { floor, openClosedCell, depth, exitToNextDepth, updateCell } = useDungeon(size)
-  const { character, updateCharacter, addItem, addBoon, clearBoons } = useCharacter(player.characters[player.selectedCharacter])
+  const { character, updateCharacter, addItem, removeItem, addBoon, clearBoons } = useCharacter(player.characters[player.selectedCharacter])
+
+  // Sell price of an item at a merchant: half its shop value, floored, min 1.
+  const sellValue = (item) => Math.max(1, Math.floor(itemPrice(item) / 2))
 
   const [queuedSpell, setQueuedSpell] = useState(null)
   const queuedSpellRef = useRef(null)
@@ -53,6 +56,19 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
       stock[index].sold = true
     }
     setShop({ ...shop, items: shop.items.map((o, i) => (i === index ? { ...o, sold: true } : o)) })
+  }
+
+  const sellItem = (index) => {
+    const item = (character.items || []).filter(Boolean)[index]
+    if (!item) {
+      return
+    }
+    const price = sellValue(item)
+    removeItem(index)
+    addGold(price)
+    addRunGold(price)
+    sfx.coin()
+    setCharacterAction({ id: nextId(), texts: [goldText(price)] })
   }
 
   // Transient visual feedback + run bookkeeping.
@@ -223,6 +239,7 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
     runOver,
     shop,
     buyItem,
+    sellItem,
     closeShop
   }
 }

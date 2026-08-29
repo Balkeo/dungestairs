@@ -65,6 +65,7 @@ export const Game = ({
     runOver,
     shop,
     buyItem,
+    sellItem,
     closeShop
   } = useGame(player, recordRun, addGold, removeGold)
   const { width, height } = useWindowDimensions()
@@ -84,7 +85,9 @@ export const Game = ({
               shop={shop}
               gold={player.gold}
               bagFull={bagFull}
+              bag={character.items}
               onBuy={buyItem}
+              onSell={sellItem}
               onClose={closeShop}
             />
             <DepthBanner banner={depthBanner} />

@@ -47,6 +47,27 @@ export const useCharacter = (selectedCharacter) => {
     return added
   }
 
+  // Remove an equipped item (e.g. sold to a merchant): recompute stats, clamping
+  // HP to the possibly-lower max. Returns the removed item, or null.
+  const removeItem = (index) => {
+    let removed = null
+    setCharacter((previousCharacter) => {
+      const items = (previousCharacter.items || []).filter(Boolean)
+      if (index < 0 || index >= items.length) {
+        return previousCharacter
+      }
+      removed = items[index]
+      const nextItems = items.slice()
+      nextItems.splice(index, 1)
+      const recalculated = calculate({ ...previousCharacter, items: nextItems })
+      recalculated.hp = Math.min(previousCharacter.hp, recalculated.maxHp)
+      recalculated.cooldowns = previousCharacter.cooldowns
+      recalculated.activeEffects = previousCharacter.activeEffects
+      return recalculated
+    })
+    return removed
+  }
+
   // Grant a temporary ally boon: recompute stats with the extra boon but keep the
   // current HP. Boons live outside the inventory bag and are wiped on depth change.
   const addBoon = (boon) => {
@@ -77,5 +98,5 @@ export const useCharacter = (selectedCharacter) => {
     })
   }
 
-  return { character, updateCharacter, addItem, addBoon, clearBoons }
+  return { character, updateCharacter, addItem, removeItem, addBoon, clearBoons }
 }
