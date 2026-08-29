@@ -11,11 +11,11 @@ export const CHALLENGES = {
     description: 'Les ennemis vaincus finissent par revenir à la vie. Ne traîne pas.',
     modifiers: { respawn: 0.18 }
   },
-  NIGHTMARE: {
-    id: 'nightmare',
-    name: 'NIGHTMARE',
+  HELLMODE: {
+    id: 'hellmode',
+    name: 'HELLMODE',
     glyph: '😱',
-    title: 'Cauchemar',
+    title: 'Mode Enfer',
     description: 'Chaque monstre est une élite. Bonne chance.',
     modifiers: { allElite: true }
   },

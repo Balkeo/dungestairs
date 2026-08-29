@@ -5,6 +5,7 @@ import { SelectCharacter } from './Character'
 import { Player } from './Player'
 import Colors from '../Helper/Colors'
 import { matchChallenge } from '../Helper/challenges'
+import { SeedInput } from '../Guideline/SeedInput'
 
 const Wraper = styled.div`
   height: 100%;
@@ -25,20 +26,6 @@ const SeedBar = styled.div`
   gap: 10px;
   padding: 10px 16px;
   flex-wrap: wrap;
-`
-
-const SeedField = styled.input`
-  flex: 0 1 220px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid ${Colors.white20};
-  background: ${Colors.carbon};
-  color: ${Colors.white100};
-  font-family: Helvetica, sans-serif;
-  font-size: 14px;
-  letter-spacing: 1px;
-  &::placeholder { color: ${Colors.white30}; letter-spacing: 0; }
-  &:focus { outline: none; border-color: ${Colors.yellow}; }
 `
 
 const SeedLabel = styled.span`
@@ -100,12 +87,7 @@ export const MainMenu = ({
       <Right>
         <SeedBar>
           <SeedLabel>Seed</SeedLabel>
-          <SeedField
-            value={seed}
-            onChange={(e) => setSeed(e.target.value)}
-            placeholder="aléatoire — ou colle une seed / un challenge"
-            spellCheck={false}
-          />
+          <SeedInput value={seed} onChange={setSeed} />
           {seeded && <Clear onClick={() => setSeed('')}>✕</Clear>}
           {challenge
             ? (
