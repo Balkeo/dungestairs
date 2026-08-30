@@ -1,0 +1,61 @@
+{
+  "mysterious_altar": {
+    "glyph": "🔮",
+    "title": "Autel Mystérieux",
+    "text": "Un autel pulse d'une énergie ancienne. Une offrande de sang pourrait t'accorder sa faveur.",
+    "choices": [
+      { "label": "Prier (−6 PV)", "outcomes": [{ "kind": "hp", "amount": -6 }, { "kind": "relic" }] },
+      { "label": "Ignorer", "outcomes": [] }
+    ]
+  },
+  "healing_spring": {
+    "glyph": "⛲",
+    "title": "Source Curative",
+    "text": "Une source claire scintille dans la pénombre. Ses eaux semblent apaisantes.",
+    "choices": [
+      { "label": "Boire (+15 PV)", "outcomes": [{ "kind": "hp", "amount": 15 }] },
+      { "label": "Passer", "outcomes": [] }
+    ]
+  },
+  "dusty_merchant": {
+    "glyph": "🧙",
+    "title": "Étrange Colporteur",
+    "text": "« Un objet, un vrai, contre quelques pièces. Ou file ton chemin. »",
+    "choices": [
+      { "label": "Acheter (−40 or)", "cost": 40, "outcomes": [{ "kind": "item" }] },
+      { "label": "Refuser", "outcomes": [] }
+    ]
+  },
+  "cursed_chest": {
+    "glyph": "🎲",
+    "title": "Coffre Runique",
+    "text": "Un coffre cerclé de runes menaçantes. Le forcer est un pari.",
+    "choices": [
+      { "label": "Forcer (risqué)", "outcomes": [{ "kind": "random", "options": [
+        { "outcomes": [{ "kind": "gold", "amount": 45 }] },
+        { "outcomes": [{ "kind": "hp", "amount": -8 }] },
+        { "outcomes": [{ "kind": "item" }] },
+        { "outcomes": [{ "kind": "gold", "amount": 15 }] }
+      ] }] },
+      { "label": "Laisser", "outcomes": [] }
+    ]
+  },
+  "blessing_font": {
+    "glyph": "✨",
+    "title": "Fontaine Bénie",
+    "text": "Une lueur dorée t'enveloppe. Tu te sens galvanisé pour l'étage.",
+    "choices": [
+      { "label": "Se recueillir", "outcomes": [{ "kind": "boon", "stat": "atq" }] },
+      { "label": "Passer", "outcomes": [] }
+    ]
+  },
+  "wanderer_gift": {
+    "glyph": "🎁",
+    "title": "Don du Voyageur",
+    "text": "Un voyageur reconnaissant t'offre le choix : une relique, ou une bourse d'or.",
+    "choices": [
+      { "label": "La relique", "outcomes": [{ "kind": "relic" }] },
+      { "label": "L'or (+60)", "outcomes": [{ "kind": "gold", "amount": 60 }] }
+    ]
+  }
+}

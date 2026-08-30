@@ -1,79 +1,79 @@
 {
   "rusty_dagger": {
-    "name": "Rusty Dagger",
-    "glyph": "🗡️",
-    "target": "stats.atq",
-    "effect": "1",
-    "rarity": "common",
-    "minDepth": 1,
-    "weight": 22,
-    "description": "+1 ATQ",
-    "price": 25
+    "name": "Rusty Dagger", "glyph": "🗡️", "rarity": "common", "minDepth": 1, "weight": 22, "price": 25,
+    "target": "stats.atq", "effect": "1", "description": "+1 ATQ"
   },
   "buckler": {
-    "name": "Buckler",
-    "glyph": "🛡️",
-    "target": "stats.def",
-    "effect": "1",
-    "rarity": "common",
-    "minDepth": 1,
-    "weight": 20,
-    "description": "+1 DEF",
-    "price": 25
+    "name": "Buckler", "glyph": "🛡️", "rarity": "common", "minDepth": 1, "weight": 20, "price": 25,
+    "target": "stats.def", "effect": "1", "description": "+1 DEF"
+  },
+  "leather_vest": {
+    "name": "Leather Vest", "glyph": "🎽", "rarity": "common", "minDepth": 2, "weight": 16, "price": 40,
+    "effects": [{ "target": "stats.def", "effect": "1" }, { "target": "maxHp", "effect": "4" }],
+    "description": "+1 DEF, +4 PV max"
   },
   "swift_boots": {
-    "name": "Swift Boots",
-    "glyph": "🥾",
-    "target": "stats.spd",
-    "effect": "1",
-    "rarity": "common",
-    "minDepth": 2,
-    "weight": 16,
-    "description": "+1 SPD",
-    "price": 30
+    "name": "Swift Boots", "glyph": "🥾", "rarity": "common", "minDepth": 2, "weight": 16, "price": 30,
+    "target": "stats.spd", "effect": "1", "description": "+1 SPD"
   },
   "vitality_charm": {
-    "name": "Vitality Charm",
-    "glyph": "❤️",
-    "target": "maxHp",
-    "effect": "6",
-    "rarity": "uncommon",
-    "minDepth": 2,
-    "weight": 12,
-    "description": "+6 Max HP",
-    "price": 55
+    "name": "Vitality Charm", "glyph": "❤️", "rarity": "uncommon", "minDepth": 2, "weight": 12, "price": 55,
+    "target": "maxHp", "effect": "6", "description": "+6 PV max"
   },
   "short_sword": {
-    "name": "Short Sword",
-    "glyph": "⚔️",
-    "target": "stats.atq",
-    "effect": "2",
-    "rarity": "uncommon",
-    "minDepth": 3,
-    "weight": 12,
-    "description": "+2 ATQ",
-    "price": 60
+    "name": "Short Sword", "glyph": "⚔️", "rarity": "uncommon", "minDepth": 3, "weight": 12, "price": 60,
+    "target": "stats.atq", "effect": "2", "description": "+2 ATQ"
+  },
+  "hunters_cloak": {
+    "name": "Hunter's Cloak", "glyph": "🧥", "rarity": "uncommon", "minDepth": 3, "weight": 10, "price": 65,
+    "effects": [{ "target": "stats.atq", "effect": "1" }, { "target": "stats.spd", "effect": "1" }],
+    "description": "+1 ATQ, +1 SPD"
   },
   "plate_armor": {
-    "name": "Plate Armor",
-    "glyph": "🦺",
-    "target": "stats.def",
-    "effect": "2",
-    "rarity": "uncommon",
-    "minDepth": 4,
-    "weight": 10,
-    "description": "+2 DEF",
-    "price": 70
+    "name": "Plate Armor", "glyph": "🦺", "rarity": "uncommon", "minDepth": 4, "weight": 10, "price": 70,
+    "target": "stats.def", "effect": "2", "description": "+2 DEF"
+  },
+  "iron_greaves": {
+    "name": "Iron Greaves", "glyph": "🦿", "rarity": "uncommon", "minDepth": 4, "weight": 9, "price": 70,
+    "target": "stats.spd", "effect": "2", "description": "+2 SPD"
+  },
+  "oak_shield": {
+    "name": "Oak Shield", "glyph": "🛡️", "rarity": "rare", "minDepth": 5, "weight": 7, "price": 110,
+    "target": "stats.def", "effect": "3", "description": "+3 DEF"
+  },
+  "vitality_totem": {
+    "name": "Vitality Totem", "glyph": "💗", "rarity": "rare", "minDepth": 5, "weight": 7, "price": 120,
+    "target": "maxHp", "effect": "12", "description": "+12 PV max"
   },
   "warlords_ring": {
-    "name": "Warlord's Ring",
-    "glyph": "💍",
-    "target": "stats.atq",
-    "effect": "3",
-    "rarity": "rare",
-    "minDepth": 6,
-    "weight": 5,
-    "description": "+3 ATQ",
-    "price": 130
+    "name": "Warlord's Ring", "glyph": "💍", "rarity": "rare", "minDepth": 6, "weight": 5, "price": 130,
+    "target": "stats.atq", "effect": "3", "description": "+3 ATQ"
+  },
+  "assassins_edge": {
+    "name": "Assassin's Edge", "glyph": "🔪", "rarity": "rare", "minDepth": 6, "weight": 5, "price": 140,
+    "effects": [{ "target": "stats.atq", "effect": "2" }, { "target": "stats.spd", "effect": "1" }],
+    "description": "+2 ATQ, +1 SPD"
+  },
+  "giants_belt": {
+    "name": "Giant's Belt", "glyph": "🎗️", "rarity": "rare", "minDepth": 7, "weight": 4, "price": 150,
+    "target": "maxHp", "effect": "18", "description": "+18 PV max"
+  },
+  "guardian_aegis": {
+    "name": "Guardian Aegis", "glyph": "🛡️", "rarity": "rare", "minDepth": 7, "weight": 4, "price": 170,
+    "effects": [{ "target": "stats.def", "effect": "3" }, { "target": "maxHp", "effect": "6" }],
+    "description": "+3 DEF, +6 PV max"
+  },
+  "boots_of_haste": {
+    "name": "Boots of Haste", "glyph": "👟", "rarity": "epic", "minDepth": 8, "weight": 3, "price": 200,
+    "target": "stats.spd", "effect": "3", "description": "+3 SPD"
+  },
+  "dragon_fang": {
+    "name": "Dragon Fang", "glyph": "🐲", "rarity": "epic", "minDepth": 9, "weight": 2, "price": 220,
+    "target": "stats.atq", "effect": "4", "description": "+4 ATQ"
+  },
+  "runic_plate": {
+    "name": "Runic Plate", "glyph": "🪬", "rarity": "epic", "minDepth": 9, "weight": 2, "price": 240,
+    "effects": [{ "target": "stats.def", "effect": "3" }, { "target": "stats.atq", "effect": "2" }],
+    "description": "+3 DEF, +2 ATQ"
   }
 }
