@@ -355,31 +355,22 @@ export const useGame = (player = {}, recordRun = () => [], addGold = () => {}, r
           }
           if (cell.content && cell.content.isBoss) {
             bumpBossKills()
-            if (cell.content.isFinalBoss && !runOver) {
-              // Beating the final boss wins the run.
-              const summary = {
-                depth,
-                kills: statsRef.current.kills,
-                gold: statsRef.current.gold,
-                bossKills: statsRef.current.bossKills,
-                won: true
-              }
-              const unlocked = recordRun(summary)
-              setRunOver({ ...summary, unlocked })
+            // The apex boss is a milestone, not an ending: celebrate and descend on.
+            const apexTexts = cell.content.isFinalBoss
+              ? [plainText('★ Seigneur du Donjon vaincu !', Colors.yellow, 14)]
+              : []
+            // Bosses drop a relic — or a gold purse if you already hold your relic.
+            const relic = rollRelic()
+            if (relic) {
+              addRelic(relic)
+              apexTexts.push(plainText('✦ Relique', Colors.yellow, 13), itemText(relic))
             } else {
-              // Regular bosses drop a relic — or a gold purse if you already hold
-              // your one relic.
-              const relic = rollRelic()
-              if (relic) {
-                addRelic(relic)
-                emitCell(offset, [plainText('✦ Relique', Colors.yellow, 13), itemText(relic)])
-              } else {
-                const purse = Math.floor((20 + depth * 3) * goldMult)
-                addGold(purse)
-                addRunGold(purse)
-                emitCell(offset, [goldText(purse)])
-              }
+              const purse = Math.floor((20 + depth * 3) * goldMult)
+              addGold(purse)
+              addRunGold(purse)
+              apexTexts.push(goldText(purse))
             }
+            emitCell(offset, apexTexts)
           }
         }
         if (spellId) {

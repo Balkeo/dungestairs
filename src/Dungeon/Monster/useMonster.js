@@ -4,9 +4,10 @@ import { random } from '../../Helper/Utils'
 import { rng } from '../../Helper/rng'
 import { getRunModifiers } from '../../Helper/challenges'
 
-// The floor whose boss is the run's final boss (must be a boss floor, i.e. a
-// multiple of 5). Beating it wins the run.
-export const FINAL_DEPTH = 20
+// The run is endless (die-and-retry): you descend as deep as you can. The
+// "Seigneur du Donjon" apex boss guards every APEX_INTERVAL floors as a
+// milestone; beating it is celebrated but the descent continues.
+export const APEX_INTERVAL = 20
 
 // Regular monster: its level rises every few floors so its HP and ATQ scale.
 // From depth 3 on, a monster can roll into an "elite" variant: much tankier and
@@ -48,12 +49,12 @@ export const makeBoss = (depth = 1) => {
     calc.hp = calc.maxHp
     return calc
   }
-  if (depth >= FINAL_DEPTH) {
-    const finalBoss = Object.assign({}, FinalBoss)
-    finalBoss.level = 1 + Math.floor(depth / 3)
-    finalBoss.isBoss = true
-    finalBoss.isFinalBoss = true
-    return scaleHp(finalBoss)
+  if (depth % APEX_INTERVAL === 0) {
+    const apex = Object.assign({}, FinalBoss)
+    apex.level = 1 + Math.floor(depth / 3)
+    apex.isBoss = true
+    apex.isFinalBoss = true
+    return scaleHp(apex)
   }
   const index = Math.max(0, Math.floor(depth / 5) - 1) % Bosses.length
   const boss = Object.assign({}, Bosses[index])
